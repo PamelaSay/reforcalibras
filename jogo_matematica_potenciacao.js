@@ -198,7 +198,7 @@ const bancoDeQuestoes = {
                 "Dois elevado ao cubo",
                 "Dois vezes três",
                 "Três elevado ao quadrado",
-                "Dois elevado a três vezes"
+                "Dois elevado a um"
             ],
             correta: "Dois elevado ao cubo",
             dica:
@@ -260,7 +260,7 @@ const bancoDeQuestoes = {
             pergunta:
                 "Qual potência representa o produto 3 × 3 × 3 × 3?",
             representacao: "3 × 3 × 3 × 3",
-            alternativas: ["3⁴", "4³", "3 × 4", "12²"],
+            alternativas: ["3⁴", "4³", "3 × 5", "12²"],
             correta: "3⁴",
             dica:
                 "Conte quantas vezes o fator 3 aparece.",
@@ -346,7 +346,7 @@ const bancoDeQuestoes = {
             nivel: 2,
             pergunta:
                 "Qual das potências possui o maior valor?",
-            representacao: "2⁴     3²     5¹     2³",
+            representacao: "2⁴ ,    3²  ,  5¹  ,   2³",
             alternativas: ["2⁴", "3²", "5¹", "2³"],
             correta: "2⁴",
             dica:
@@ -389,12 +389,7 @@ const bancoDeQuestoes = {
             pergunta:
                 "Um cubo possui aresta medindo 4 cm. Qual é o seu volume?",
             representacao: "Volume do cubo = aresta³",
-            alternativas: [
-                "64 cm³",
-                "16 cm³",
-                "12 cm³",
-                "8 cm³"
-            ],
+            alternativas: ["64 cm³", "16 cm³", "12 cm³", "8 cm³" ],
             correta: "64 cm³",
             dica:
                 "Multiplique 4 por ele mesmo três vezes.",
@@ -422,7 +417,7 @@ const bancoDeQuestoes = {
             nivel: 1,
             pergunta: "Qual é o valor de 8⁰?",
             representacao: "8⁰",
-            alternativas: ["1", "0", "8", "80"],
+            alternativas: ["1", "0", "9", "80"],
             correta: "1",
             dica:
                 "Considere a regra das potências de base não nula e expoente zero.",
@@ -500,7 +495,7 @@ const bancoDeQuestoes = {
             id: "esp-05",
             topico: "Expoente zero",
             nivel: 2,
-            pergunta: "Qual igualdade está correta?",
+            pergunta: "Se a ≠ 0, -1 e 1, qual das igualdades está correta?",
             representacao: "a ≠ 0",
             alternativas: [
                 "a⁰ = 1",
@@ -585,11 +580,11 @@ const bancoDeQuestoes = {
             id: "esp-09",
             topico: "Comparação de sinais",
             nivel: 3,
-            pergunta: "Qual afirmação está correta?",
-            representacao: "(−4)²     −4²",
+            pergunta: "Das expressões abaixo afirmação está correta?",
+            representacao: "(−4)²  ,   −4²",
             alternativas: [
                 "(−4)² = 16 e −4² = −16",
-                "As duas expressões são iguais a 16",
+                "As duas expressões são iguais a 4",
                 "As duas expressões são iguais a −16",
                 "(−4)² = −16 e −4² = 16"
             ],
