@@ -21,6 +21,17 @@ const modalTermos = document.getElementById("modalTermos");
 const abrirTermos = document.getElementById("abrirTermos");
 const fecharTermos = document.getElementById("fecharTermos");
 const concordarTermos = document.getElementById("concordarTermos");
+const fecharSemConcordar = document.getElementById("fecharSemConcordar");
+
+const VIDEOS_LIBRAS_INTERFACE = {
+    login: "videos/libras/login.mp4",
+    cadastro: "videos/libras/cadastro.mp4",
+    termo: "videos/libras/termo-consentimento.mp4",
+    alerta: "videos/libras/alerta-geral.mp4",
+    "excluir-conta": "videos/libras/excluir-conta.mp4",
+    "conta-excluida": "videos/libras/conta-excluida.mp4",
+    "recuperar-senha": "videos/libras/recuperar-senha.mp4"
+};
 
 
 // ==========================================
@@ -112,6 +123,20 @@ if (concordarTermos) {
     };
 }
 
+if (fecharSemConcordar) {
+    fecharSemConcordar.onclick = function () {
+        const aceite = document.getElementById("aceitarTermos");
+
+        if (aceite) {
+            aceite.checked = false;
+        }
+
+        if (modalTermos) {
+            modalTermos.style.display = "none";
+        }
+    };
+}
+
 
 // ==========================================
 // USUÁRIO SALVO NO NAVEGADOR
@@ -182,16 +207,6 @@ async function cadastrar() {
         return;
     }
 
-    if (!aceiteInput.checked) {
-        exibirAlerta(
-            "warning",
-            "Aceite necessário",
-            "Leia e aceite o Código de Ética e os termos de participação."
-        );
-
-        return;
-    }
-
     if (!auth || !db) {
         exibirAlerta(
             "error",
@@ -231,6 +246,8 @@ async function cadastrar() {
          * Dados que serão armazenados no Firestore.
          * Observe que não existe nenhum campo chamado "senha".
          */
+        const participaPesquisa = aceiteInput.checked;
+
         const dadosUsuario = {
             uid: usuarioCriado.uid,
             nome: nome,
@@ -241,11 +258,13 @@ async function cadastrar() {
             jogos: 0,
             participarRanking: participarRanking,
 
-            termosAceitos: true,
+            termosAceitos: participaPesquisa,
+            consentimentoPesquisa: participaPesquisa,
             versaoTermos: VERSAO_TERMOS,
 
-            dataAceiteTermos:
-                firebase.firestore.FieldValue.serverTimestamp(),
+            dataAceiteTermos: participaPesquisa
+                ? firebase.firestore.FieldValue.serverTimestamp()
+                : null,
 
             dataCriacao:
                 firebase.firestore.FieldValue.serverTimestamp()
@@ -836,17 +855,22 @@ async function excluirConta() {
     const resultado = await Swal.fire({
         title: "Excluir conta?",
         html: montarConteudoAlertaLibras(
-            "Seu cadastro, seu progresso e seus comentários serão apagados permanentemente."
+            "Seu cadastro, seu progresso e seus comentários serão apagados permanentemente.",
+            "excluir-conta"
         ),
         icon: "warning",
 
         showCancelButton: true,
 
-        confirmColor: "#d33",
-        cancelColor: "#3085d6",
+        confirmButtonColor: "#b00020",
+        cancelButtonColor: "#247ba0",
 
         confirmButtonText: "Sim, excluir",
-        cancelButtonText: "Cancelar"
+        cancelButtonText: "Cancelar",
+        customClass: { popup: "alerta-reforca-acessivel" },
+        didOpen: function (popup) {
+            prepararVideosLibras(popup);
+        }
     });
 
     if (!resultado.isConfirmed) {
@@ -900,9 +924,13 @@ async function excluirConta() {
         await Swal.fire({
             icon: "success",
             title: "Conta excluída",
-            html: montarConteudoAlertaLibras("Seu cadastro foi removido."),
-            timer: 1500,
-            showConfirmButton: false
+            html: montarConteudoAlertaLibras("Seu cadastro foi removido.", "conta-excluida"),
+            showConfirmButton: true,
+            confirmButtonText: "Entendi",
+            customClass: { popup: "alerta-reforca-acessivel" },
+            didOpen: function (popup) {
+                prepararVideosLibras(popup);
+            }
         });
 
         window.location.reload();
@@ -1049,10 +1077,10 @@ async function esqueceuSenha(evento) {
 
     const resultado = await Swal.fire({
         title: "Recuperar senha",
-
-        text:
-            "Informe o e-mail usado no cadastro para receber " +
-            "o link de redefinição.",
+        html: montarConteudoAlertaLibras(
+            "Informe o e-mail usado no cadastro para receber o link de redefinição.",
+            "recuperar-senha"
+        ),
 
         input: "email",
         inputValue: email,
@@ -1063,6 +1091,10 @@ async function esqueceuSenha(evento) {
 
         confirmButtonText: "Enviar",
         cancelButtonText: "Cancelar",
+        customClass: { popup: "alerta-reforca-acessivel" },
+        didOpen: function (popup) {
+            prepararVideosLibras(popup);
+        },
 
         inputValidator: function (valor) {
             if (!valor) {
@@ -1191,15 +1223,23 @@ function exibirAlerta(
     title,
     text,
     timer = null,
-    callback = null
+    callback = null,
+    chaveVideo = "alerta"
 ) {
     if (typeof Swal !== "undefined") {
         Swal.fire({
             icon: icon,
             title: title,
-            html: montarConteudoAlertaLibras(text),
-            timer: timer,
-            showConfirmButton: !timer
+            html: montarConteudoAlertaLibras(text, chaveVideo),
+            timer: null,
+            showConfirmButton: true,
+            confirmButtonText: "Entendi",
+            customClass: {
+                popup: "alerta-reforca-acessivel"
+            },
+            didOpen: function (popup) {
+                prepararVideosLibras(popup);
+            }
         }).then(function () {
             if (callback) {
                 callback();
@@ -1221,16 +1261,73 @@ function escaparHtml(valor) {
     return elemento.innerHTML;
 }
 
-function montarConteudoAlertaLibras(texto) {
+function montarConteudoAlertaLibras(texto, chaveVideo = "alerta") {
+    const endereco = VIDEOS_LIBRAS_INTERFACE[chaveVideo] || "";
+    const video = endereco
+        ? '<video class="video-libras-alerta" controls playsinline preload="metadata" hidden>' +
+            '<source src="' + escaparHtml(endereco) + '" type="video/mp4">' +
+          '</video>'
+        : "";
+
     return (
         '<div class="alerta-conteudo-acessivel">' +
             '<div class="janela-libras-alerta" aria-label="Janela de tradução em Libras">' +
-                '<span aria-hidden="true">🤟</span>' +
                 '<strong>Janela de Libras</strong>' +
+                video +
+                '<p class="libras-video-pendente">A tradução deste aviso em Libras será inserida aqui.</p>' +
+                '<button type="button" class="repetir-video-interface" hidden>↻ Repetir tradução</button>' +
             '</div>' +
             '<p>' + escaparHtml(texto) + '</p>' +
         '</div>'
     );
+}
+
+function prepararVideosLibras(raiz = document) {
+    raiz.querySelectorAll("video").forEach(function (video) {
+        if (video.dataset.librasPreparado === "true") return;
+        if (!video.querySelector("source")) return;
+
+        video.dataset.librasPreparado = "true";
+
+        const caixa = video.closest(".libras-video-box, .janela-libras-alerta, .janela-libras-interface");
+        const pendente = caixa ? caixa.querySelector(".libras-video-pendente") : null;
+        const botao = caixa ? caixa.querySelector(".repetir-video-interface") : null;
+
+        video.addEventListener("loadedmetadata", function () {
+            video.hidden = false;
+            if (pendente) pendente.hidden = true;
+            if (botao) botao.hidden = false;
+        });
+
+        video.addEventListener("error", function () {
+            video.hidden = true;
+            if (pendente) pendente.hidden = false;
+            if (botao) botao.hidden = true;
+        }, true);
+
+        if (video.readyState >= 1) {
+            video.hidden = false;
+            if (pendente) pendente.hidden = true;
+            if (botao) botao.hidden = false;
+        }
+    });
+
+    raiz.querySelectorAll(".repetir-video-interface").forEach(function (botao) {
+        if (botao.dataset.repetirPreparado === "true") return;
+        botao.dataset.repetirPreparado = "true";
+
+        botao.addEventListener("click", function () {
+            const idVideo = botao.dataset.videoId;
+            const caixa = botao.closest(".janela-libras-alerta, .janela-libras-interface");
+            const video = idVideo
+                ? document.getElementById(idVideo)
+                : caixa && caixa.querySelector("video");
+
+            if (!video) return;
+            video.currentTime = 0;
+            video.play().catch(function () {});
+        });
+    });
 }
 
 
@@ -1569,6 +1666,69 @@ async function registrarVideoConcluido(
         .collection("atividades")
         .add(atividade);
 }
+
+
+// ==========================================
+// CONTADOR PÚBLICO DE VISITAS DO INDEX
+// ==========================================
+
+const CHAVE_NAO_CONTAR_VISITAS = "reforcaNaoContarEsteDispositivo";
+
+function configurarExclusaoDoContador() {
+    const parametros = new URLSearchParams(window.location.search);
+
+    if (parametros.get("nao-contar-visita") === "1") {
+        localStorage.setItem(CHAVE_NAO_CONTAR_VISITAS, "true");
+        parametros.delete("nao-contar-visita");
+
+        const novaConsulta = parametros.toString();
+        const enderecoLimpo = window.location.pathname +
+            (novaConsulta ? "?" + novaConsulta : "") +
+            window.location.hash;
+
+        window.history.replaceState({}, document.title, enderecoLimpo);
+    }
+}
+
+async function atualizarContadorDeVisitas() {
+    const numeroVisitas = document.getElementById("numeroVisitas");
+    if (!numeroVisitas || !db) return;
+
+    configurarExclusaoDoContador();
+
+    const ignorarEsteDispositivo =
+        localStorage.getItem(CHAVE_NAO_CONTAR_VISITAS) === "true";
+
+    const referencia = db.collection("estatisticas").doc("visitas-index");
+
+    try {
+        if (!ignorarEsteDispositivo) {
+            await referencia.set({
+                total: firebase.firestore.FieldValue.increment(1),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        }
+
+        const documento = await referencia.get();
+        const total = documento.exists
+            ? Number(documento.data().total) || 0
+            : 0;
+
+        numeroVisitas.textContent = total.toLocaleString("pt-BR");
+    } catch (erro) {
+        console.error("Erro ao atualizar o contador de visitas:", erro);
+        numeroVisitas.textContent = "Indisponível";
+    }
+}
+
+
+// ==========================================
+// INICIAR RECURSOS ACESSÍVEIS DA INTERFACE
+// ==========================================
+
+prepararVideosLibras(document);
+atualizarContadorDeVisitas();
+
 // ==========================================
 // disciplina suspenso
 // ==========================================
