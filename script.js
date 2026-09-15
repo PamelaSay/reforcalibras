@@ -1673,6 +1673,7 @@ async function registrarVideoConcluido(
 // ==========================================
 
 const CHAVE_NAO_CONTAR_VISITAS = "reforcaNaoContarEsteDispositivo";
+const CHAVE_VISITA_INDEX_NA_SESSAO = "reforcaVisitaIndexRegistrada";
 
 function configurarExclusaoDoContador() {
     const parametros = new URLSearchParams(window.location.search);
@@ -1699,14 +1700,26 @@ async function atualizarContadorDeVisitas() {
     const ignorarEsteDispositivo =
         localStorage.getItem(CHAVE_NAO_CONTAR_VISITAS) === "true";
 
+    const visitaJaRegistradaNestaSessao =
+        sessionStorage.getItem(CHAVE_VISITA_INDEX_NA_SESSAO) === "true";
+
     const referencia = db.collection("estatisticas").doc("visitas-index");
 
     try {
-        if (!ignorarEsteDispositivo) {
+        if (!ignorarEsteDispositivo && !visitaJaRegistradaNestaSessao) {
             await referencia.set({
                 total: firebase.firestore.FieldValue.increment(1),
                 atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
+
+            /*
+             * A marcação só acontece depois que o Firebase confirma a gravação.
+             * Atualizar a página não soma outra visita na mesma sessão.
+             */
+            sessionStorage.setItem(
+                CHAVE_VISITA_INDEX_NA_SESSAO,
+                "true"
+            );
         }
 
         const documento = await referencia.get();
