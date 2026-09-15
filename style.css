@@ -676,6 +676,308 @@ body {
     background: red !important;
 }
 
+/* ==========================
+   INTERFACE ACESSÍVEL EM LIBRAS
+========================== */
+.modal .modal-acessivel-box {
+    width: min(920px, 94vw);
+    max-height: 92vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(280px, 0.9fr);
+    align-items: start;
+    gap: 26px;
+    text-align: left;
+}
+
+.modal-formulario {
+    min-width: 0;
+}
+
+.modal-formulario h2,
+.janela-libras-interface h3 {
+    text-align: center;
+}
+
+.janela-libras-interface {
+    min-width: 0;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--navy-dark, #1d3557);
+    border: 3px solid var(--gold-primary, #ffd700);
+    border-radius: 22px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.janela-libras-interface h3 {
+    margin: 0 0 12px;
+    color: var(--navy-dark, #1d3557);
+}
+
+.libras-video-box {
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #101827;
+    border: 3px solid #5fa8d3;
+    border-radius: 18px;
+}
+
+.libras-video-box video,
+.video-libras-alerta {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    background: #000;
+    object-fit: contain;
+}
+
+.libras-video-pendente {
+    margin: 0;
+    padding: 22px;
+    color: #fff;
+    font-weight: 800;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.modal .perfil-box .repetir-video-interface,
+.repetir-video-interface {
+    width: 100%;
+    margin-top: 12px;
+    padding: 11px 16px;
+    background: #dff4ff;
+    color: #1d3557;
+    border: 2px solid #5fa8d3;
+    border-radius: 14px;
+    font-weight: 900;
+}
+
+.aviso-consentimento {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: rgba(223, 244, 255, 0.16);
+    border-left: 4px solid var(--gold-primary, #ffd700);
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.aceite-termos {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 12px;
+    line-height: 1.4;
+}
+
+.modal .perfil-box .aceite-termos input {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    margin: 2px 0 0;
+}
+
+.modal .perfil-box .link-termos {
+    width: auto;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: #b9ff66;
+    border: 0;
+    border-radius: 0;
+    text-decoration: underline;
+}
+
+#fecharTermos {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.modal .termos-box {
+    width: min(1120px, 96vw);
+    max-height: 94vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.termos-box > h2 {
+    padding-right: 34px;
+    text-align: center;
+}
+
+.termos-layout {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+    gap: 22px;
+    margin-top: 16px;
+}
+
+.texto-termos {
+    max-height: 57vh;
+    overflow-y: auto;
+    padding: 18px;
+    background: #fff;
+    color: #243247;
+    border: 2px solid #b9d9ea;
+    border-radius: 18px;
+    line-height: 1.55;
+}
+
+.texto-termos section + section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #d9e6ee;
+}
+
+.texto-termos h3 {
+    margin: 0 0 7px;
+    color: #1d3557;
+    font-size: 17px;
+}
+
+.texto-termos p {
+    margin: 0;
+}
+
+.texto-termos a {
+    color: #075e91;
+    font-weight: 900;
+}
+
+.janela-libras-termo {
+    align-self: start;
+}
+
+.termos-acoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal .perfil-box .termos-acoes button {
+    min-height: 48px;
+    border-radius: 16px;
+}
+
+#fecharSemConcordar {
+    background: #e7edf2;
+    color: #1d3557;
+}
+
+#concordarTermos {
+    background: var(--gold-primary, #ffd700);
+    color: #172033;
+}
+
+.alerta-reforca-acessivel {
+    width: min(94vw, 620px) !important;
+    border: 3px solid var(--gold-primary, #ffd700) !important;
+    border-radius: 24px !important;
+    font-family: var(--font-main, "Nunito", Arial, sans-serif) !important;
+}
+
+.alerta-conteudo-acessivel {
+    display: grid;
+    gap: 14px;
+    text-align: left;
+}
+
+.alerta-conteudo-acessivel > p {
+    margin: 0;
+    padding: 12px;
+    background: #f2fbff;
+    color: #172033;
+    border-left: 5px solid #5fa8d3;
+    border-radius: 12px;
+    line-height: 1.5;
+}
+
+.janela-libras-alerta {
+    display: grid;
+    gap: 10px;
+    overflow: hidden;
+    padding: 12px;
+    background: #101827;
+    color: #fff;
+    border: 3px solid #5fa8d3;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.janela-libras-alerta .libras-video-pendente {
+    min-height: 150px;
+    display: grid;
+    place-items: center;
+}
+
+.alerta-reforca-acessivel .swal2-actions button,
+.swal2-actions .swal2-styled {
+    min-height: 44px;
+    padding: 10px 22px;
+    border-radius: 14px !important;
+    font-weight: 900;
+}
+
+/* CONTADOR DE ACESSOS */
+.contador-visitas {
+    text-align: center;
+}
+
+.contador-visitas strong {
+    display: block;
+    margin: 8px 0 2px;
+    color: var(--navy-dark, #1d3557);
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 900;
+}
+
+.contador-visitas span {
+    color: #5b6573;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 760px) {
+    .modal .modal-acessivel-box,
+    .termos-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .modal .modal-acessivel-box,
+    .modal .termos-box {
+        width: 96vw;
+        max-height: 96vh;
+        padding: 25px 18px;
+        overflow-y: auto;
+    }
+
+    .janela-libras-interface {
+        order: -1;
+    }
+
+    .libras-video-box {
+        min-height: 180px;
+    }
+
+    .texto-termos {
+        max-height: none;
+    }
+
+    .termos-acoes {
+        grid-template-columns: 1fr;
+    }
+}
+
 #barraPerfil {
     height: 100%;
     width: 0%;
