@@ -1,3 +1,4 @@
+        correta: configuracao.correta,
 "use strict";
 
 
@@ -77,24 +78,24 @@ const bancoDeQuestoes = {
 
     revisaoMultiplicacao: [
         criarQuestao({
-            id: "mult-01", topico: "Significado", nivel: 1,
-            pergunta: "Há 4 pacotes com 2 figurinhas em cada pacote. Quantas figurinhas há ao todo?",
-            representacao: "📦 2   📦 2   📦 2   📦 2",
+            id: "mult-01", topico: "Adição de parcelas iguais", nivel: 1,
+            pergunta: "Qual é o resultado desta adição?",
+            representacao: "2 + 2 + 2 + 2",
             alternativas: ["6", "8", "4", "10"], correta: "8",
-            dica: "Some a quantidade de figurinhas dos quatro pacotes.",
-            explicacao: "São 4 grupos com 2 figurinhas: 2 + 2 + 2 + 2 = 8. Também escrevemos 4 × 2 = 8."
+            dica: "Some as quatro parcelas iguais a 2.",
+            explicacao: "2 + 2 + 2 + 2 = 8. Essa adição também pode ser escrita como 4 × 2 = 8."
         }),
         criarQuestao({
-            id: "mult-02", topico: "Significado", nivel: 1,
-            pergunta: "Ana organizou 3 caixas com 5 lápis em cada uma. Quantos lápis ela organizou?",
-            representacao: "✏️✏️✏️✏️✏️   ✏️✏️✏️✏️✏️   ✏️✏️✏️✏️✏️",
-            alternativas: ["8", "10", "15", "20"], correta: "15",
-            dica: "São três grupos com cinco lápis em cada grupo.",
-            explicacao: "Somamos três grupos de cinco: 5 + 5 + 5 = 15. Portanto, 3 × 5 = 15."
+            id: "mult-02", topico: "Adição de parcelas iguais", nivel: 1,
+            pergunta: "Qual multiplicação representa esta adição?",
+            representacao: "5 + 5 + 5",
+            alternativas: ["5 × 5", "3 × 5", "5 × 3 × 5", "3 + 5"], correta: "3 × 5",
+            dica: "Conte quantas vezes a parcela 5 aparece.",
+            explicacao: "A parcela 5 aparece três vezes. Portanto, 5 + 5 + 5 = 3 × 5."
         }),
         criarQuestao({
             id: "mult-03", topico: "Adição repetida", nivel: 1,
-            pergunta: "Qual multiplicação representa 2 + 2 + 2 + 2 + 2?",
+            pergunta: "Qual multiplicação representa esta adição?",
             representacao: "2 + 2 + 2 + 2 + 2",
             alternativas: ["2 × 2", "5 × 2", "2 × 5 × 2", "5 + 2"], correta: "5 × 2",
             dica: "Conte quantas vezes a parcela 2 aparece.",
@@ -102,7 +103,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-04", topico: "Representação", nivel: 1,
-            pergunta: "Qual adição representa 6 × 3?",
+            pergunta: "Qual adição representa esta multiplicação?",
             representacao: "6 grupos de 3",
             alternativas: ["6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
             dica: "Escreva seis parcelas iguais a 3.",
@@ -110,14 +111,14 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-05", topico: "Representação", nivel: 1,
-            pergunta: "Qual multiplicação representa 7 + 7 + 7?",
+            pergunta: "Qual multiplicação representa esta adição?",
             representacao: "7 + 7 + 7",
             alternativas: ["7 × 7", "3 × 7", "7 × 3 × 7", "3 + 7"], correta: "3 × 7",
             dica: "Conte quantas vezes a parcela 7 aparece.",
             explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7 = 21."
         }),
         criarQuestao({
-            id: "mult-06", topico: "Cálculo", nivel: 1,
+            id: "mult-06", topico: "Cálculo", nivel: 2,
             pergunta: "Qual é o resultado de 4 × 5?",
             representacao: "5 + 5 + 5 + 5",
             alternativas: ["9", "15", "20", "25"], correta: "20",
@@ -125,29 +126,29 @@ const bancoDeQuestoes = {
             explicacao: "Quatro grupos de cinco formam 20: 5 + 5 + 5 + 5 = 20."
         }),
         criarQuestao({
-            id: "mult-07", topico: "Tabuada", nivel: 2,
-            pergunta: "Quanto é 7 × 6?", representacao: "7 × 6 = ?",
-            alternativas: ["36", "40", "42", "48"], correta: "42",
-            dica: "Você pode somar sete parcelas iguais a 6.",
-            explicacao: "Sete grupos de seis totalizam 42. Logo, 7 × 6 = 42."
+            id: "mult-07", topico: "Cálculo", nivel: 2,
+            pergunta: "Qual é o resultado de 3 × 6?", representacao: "3 × 6",
+            alternativas: ["9", "12", "18", "21"], correta: "18",
+            dica: "Some três parcelas iguais a 6.",
+            explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18."
         }),
         criarQuestao({
             id: "mult-08", topico: "Tabuada", nivel: 2,
-            pergunta: "Quanto é 8 × 4?", representacao: "8 × 4 = ?",
+            pergunta: "Qual é o resultado de 8 × 4?", representacao: "8 × 4",
             alternativas: ["24", "28", "32", "36"], correta: "32",
             dica: "Você pode calcular o dobro de 4 × 4.",
             explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32."
         }),
         criarQuestao({
-            id: "mult-09", topico: "Tabuada", nivel: 2,
-            pergunta: "Quanto é 9 × 3?", representacao: "9 × 3 = ?",
+            id: "mult-09", topico: "Tabuada", nivel: 3,
+            pergunta: "Qual é o resultado de 9 × 3?", representacao: "9 × 3",
             alternativas: ["18", "21", "27", "30"], correta: "27",
             dica: "Some nove parcelas iguais a 3.",
             explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27."
         }),
         criarQuestao({
-            id: "mult-10", topico: "Tabuada", nivel: 2,
-            pergunta: "Quanto é 10 × 7?", representacao: "10 × 7 = ?",
+            id: "mult-10", topico: "Tabuada", nivel: 3,
+            pergunta: "Qual é o resultado de 10 × 7?", representacao: "10 × 7",
             alternativas: ["17", "60", "70", "80"], correta: "70",
             dica: "Multiplicar por 10 acrescenta um zero ao número natural.",
             explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70."
@@ -1244,8 +1245,17 @@ function embaralhar(lista) {
 }
 
 function prepararPartida(questoesDoModulo) {
-    return embaralhar(questoesDoModulo)
-        .slice(0, QUANTIDADE_POR_PARTIDA)
+    const selecionadas = questoesDoModulo
+        .slice(0, QUANTIDADE_POR_PARTIDA);
+
+    return [1, 2, 3]
+        .flatMap(function (nivel) {
+            return embaralhar(
+                selecionadas.filter(function (questao) {
+                    return questao.nivel === nivel;
+                })
+            );
+        })
         .map(function (questao) {
             return {
                 ...questao,
