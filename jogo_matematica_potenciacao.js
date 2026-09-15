@@ -1,8 +1,5 @@
 "use strict";
 
-const VIDEO_PADRAO_LIBRAS =
-    "https://www.youtube.com/embed/r9AoQVkUUvU";
-
 
 /* =====================================================
    FUNÇÃO DE CRIAÇÃO DAS QUESTÕES
@@ -19,12 +16,9 @@ function criarQuestao(configuracao) {
         correta: configuracao.correta,
         dica: configuracao.dica,
         explicacao: configuracao.explicacao,
-        videoPergunta:
-            configuracao.videoPergunta || VIDEO_PADRAO_LIBRAS,
-        videoDica:
-            configuracao.videoDica || VIDEO_PADRAO_LIBRAS,
-        videoExplicacao:
-            configuracao.videoExplicacao || VIDEO_PADRAO_LIBRAS
+        videoPergunta: configuracao.videoPergunta || "",
+        videoDica: configuracao.videoDica || "",
+        videoExplicacao: configuracao.videoExplicacao || ""
     };
 }
 
@@ -36,9 +30,9 @@ function criarQuestao(configuracao) {
 const configuracaoModulos = {
     revisaoMultiplicacao: {
         titulo: "Revisão de multiplicação",
-        conteudo: "Significado, adição de parcelas iguais e tabuada",
+        conteudo: "Adição de parcelas iguais e cálculo",
         instrucao:
-            "Relembre a multiplicação e escolha a alternativa correta."
+            "Observe a operação e escolha a alternativa correta."
     },
 
     potenciacao: {
@@ -83,20 +77,26 @@ const bancoDeQuestoes = {
 
     revisaoMultiplicacao: [
         criarQuestao({
-            id: "mult-01", topico: "Adição de parcelas iguais", nivel: 1,
+            id: "mult-01", topico: "Adição repetida", nivel: 1,
             pergunta: "Qual é o resultado desta adição?",
             representacao: "2 + 2 + 2 + 2",
             alternativas: ["6", "8", "4", "10"], correta: "8",
             dica: "Some as quatro parcelas iguais a 2.",
-            explicacao: "2 + 2 + 2 + 2 = 8. Essa adição também pode ser escrita como 4 × 2 = 8."
+            explicacao: "2 + 2 + 2 + 2 = 8. Também podemos escrever 4 × 2 = 8.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
-            id: "mult-02", topico: "Adição de parcelas iguais", nivel: 1,
+            id: "mult-02", topico: "Adição repetida", nivel: 1,
             pergunta: "Qual multiplicação representa esta adição?",
             representacao: "5 + 5 + 5",
             alternativas: ["5 × 5", "3 × 5", "5 × 3 × 5", "3 + 5"], correta: "3 × 5",
             dica: "Conte quantas vezes a parcela 5 aparece.",
-            explicacao: "A parcela 5 aparece três vezes. Portanto, 5 + 5 + 5 = 3 × 5."
+            explicacao: "A parcela 5 aparece três vezes. Portanto, 5 + 5 + 5 = 3 × 5.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-03", topico: "Adição repetida", nivel: 1,
@@ -104,15 +104,21 @@ const bancoDeQuestoes = {
             representacao: "2 + 2 + 2 + 2 + 2",
             alternativas: ["2 × 2", "5 × 2", "2 × 5 × 2", "5 + 2"], correta: "5 × 2",
             dica: "Conte quantas vezes a parcela 2 aparece.",
-            explicacao: "A parcela 2 aparece cinco vezes. Por isso, representamos a soma por 5 × 2."
+            explicacao: "A parcela 2 aparece cinco vezes. Portanto, a multiplicação é 5 × 2.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-04", topico: "Representação", nivel: 1,
             pergunta: "Qual adição representa esta multiplicação?",
-            representacao: "6 grupos de 3",
+            representacao: "6 × 3",
             alternativas: ["6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
             dica: "Escreva seis parcelas iguais a 3.",
-            explicacao: "Em 6 × 3, temos seis grupos com três unidades: 3 + 3 + 3 + 3 + 3 + 3 = 18."
+            explicacao: "6 × 3 representa seis parcelas iguais a 3.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-05", topico: "Representação", nivel: 1,
@@ -120,43 +126,60 @@ const bancoDeQuestoes = {
             representacao: "7 + 7 + 7",
             alternativas: ["7 × 7", "3 × 7", "7 × 3 × 7", "3 + 7"], correta: "3 × 7",
             dica: "Conte quantas vezes a parcela 7 aparece.",
-            explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7 = 21."
+            explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-06", topico: "Cálculo", nivel: 2,
-            pergunta: "Qual é o resultado de 4 × 5?",
-            representacao: "5 + 5 + 5 + 5",
+            pergunta: "Qual é o resultado de 4 × 5?", representacao: "4 × 5",
             alternativas: ["9", "15", "20", "25"], correta: "20",
             dica: "Some quatro parcelas iguais a 5.",
-            explicacao: "Quatro grupos de cinco formam 20: 5 + 5 + 5 + 5 = 20."
+            explicacao: "5 + 5 + 5 + 5 = 20. Logo, 4 × 5 = 20.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-07", topico: "Cálculo", nivel: 2,
             pergunta: "Qual é o resultado de 3 × 6?", representacao: "3 × 6",
             alternativas: ["9", "12", "18", "21"], correta: "18",
             dica: "Some três parcelas iguais a 6.",
-            explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18."
+            explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
-            id: "mult-08", topico: "Tabuada", nivel: 2,
+            id: "mult-08", topico: "Cálculo", nivel: 2,
             pergunta: "Qual é o resultado de 8 × 4?", representacao: "8 × 4",
             alternativas: ["24", "28", "32", "36"], correta: "32",
-            dica: "Você pode calcular o dobro de 4 × 4.",
-            explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32."
+            dica: "Some oito parcelas iguais a 4.",
+            explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-09", topico: "Tabuada", nivel: 3,
             pergunta: "Qual é o resultado de 9 × 3?", representacao: "9 × 3",
             alternativas: ["18", "21", "27", "30"], correta: "27",
             dica: "Some nove parcelas iguais a 3.",
-            explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27."
+            explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
         criarQuestao({
             id: "mult-10", topico: "Tabuada", nivel: 3,
             pergunta: "Qual é o resultado de 10 × 7?", representacao: "10 × 7",
             alternativas: ["17", "60", "70", "80"], correta: "70",
-            dica: "Multiplicar por 10 acrescenta um zero ao número natural.",
-            explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70."
+            dica: "Observe o que acontece quando multiplicamos por 10.",
+            explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         })
     ],
 
@@ -1091,7 +1114,7 @@ const bancoDeQuestoes = {
 const QUANTIDADE_POR_PARTIDA = 10;
 const TOTAL_VIDAS = 3;
 
-let moduloAtual = "revisaoMultiplicacao";
+let moduloAtual = "potenciacao";
 let questoesDaPartida = [];
 let indiceQuestao = 0;
 let pontos = 0;
@@ -1117,10 +1140,13 @@ function iniciarAplicacao() {
     localizarElementos();
     adicionarEventos();
     carregarModulosConcluidos();
-    const moduloSolicitado = new URLSearchParams(window.location.search).get("modulo");
+    const moduloSolicitado =
+        new URLSearchParams(window.location.search).get("modulo");
+
     if (bancoDeQuestoes[moduloSolicitado]) {
         moduloAtual = moduloSolicitado;
     }
+
     iniciarPartida(moduloAtual);
 }
 
@@ -2255,8 +2281,10 @@ async function atualizarMelhorPontuacao(
 
 async function finalizarPartida(concluiu) {
     if (moduloAtual === "revisaoMultiplicacao") {
-        concluiu = resultadosDaPartida.length === questoesDaPartida.length;
+        concluiu =
+            resultadosDaPartida.length === questoesDaPartida.length;
     }
+
     pararVideoPrincipal();
 
     const resultado =
@@ -2266,6 +2294,7 @@ async function finalizarPartida(concluiu) {
 
     if (concluiu) {
         marcarModuloConcluido(moduloAtual);
+
         if (moduloAtual === "revisaoMultiplicacao") {
             liberarAulaDois();
         }
@@ -2273,7 +2302,10 @@ async function finalizarPartida(concluiu) {
 
     salvarResultadoFirebase(resultado);
 
-    const titulo = moduloAtual === "revisaoMultiplicacao" && concluiu
+    const revisaoConcluida =
+        moduloAtual === "revisaoMultiplicacao" && concluiu;
+
+    const titulo = revisaoConcluida
         ? "Revisão de multiplicação concluída!"
         : concluiu
         ? "Módulo concluído!"
@@ -2291,8 +2323,6 @@ async function finalizarPartida(concluiu) {
         "Aproveitamento: <strong>" +
         resultado.percentual +
         "%</strong>.";
-
-    const revisaoConcluida = moduloAtual === "revisaoMultiplicacao" && concluiu;
 
     const resposta = await Swal.fire({
         icon: concluiu
@@ -2335,6 +2365,7 @@ async function finalizarPartida(concluiu) {
             window.location.href = "potenciacao.html#aula-2";
             return;
         }
+
         iniciarPartida(moduloAtual);
         return;
     }
@@ -2367,9 +2398,19 @@ function liberarAulaDois() {
         };
     }
 
-    if (!progresso.aulasAssistidas.includes(1)) progresso.aulasAssistidas.push(1);
-    if (!progresso.concluidas.includes(1)) progresso.concluidas.push(1);
-    progresso.etapaLiberada = Math.max(Number(progresso.etapaLiberada) || 1, 2);
+    if (!progresso.aulasAssistidas.includes(1)) {
+        progresso.aulasAssistidas.push(1);
+    }
+
+    if (!progresso.concluidas.includes(1)) {
+        progresso.concluidas.push(1);
+    }
+
+    progresso.etapaLiberada = Math.max(
+        Number(progresso.etapaLiberada) || 1,
+        2
+    );
+
     localStorage.setItem(chave, JSON.stringify(progresso));
 }
 

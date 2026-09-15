@@ -836,14 +836,6 @@ video:focus-visible {
     line-height: 1.45;
 }
 
-.alerta-reforca .swal2-actions button,
-.alerta-reforca .swal2-styled {
-    min-height: 44px;
-    padding: 10px 22px;
-    border-radius: 14px !important;
-    font-weight: 900;
-}
-
 .explicacao-resposta {
     display: grid;
     gap: 13px;
