@@ -337,7 +337,7 @@ function abrirVideoaula(numero, videoId) {
     titulo.textContent =
         "Aula " +
         numero +
-        " — Multiplicação";
+        " — Potenciação;
 
     if (aviso) {
         const aulaJaConcluida =
