@@ -28,6 +28,13 @@ function criarQuestao(configuracao) {
 ===================================================== */
 
 const configuracaoModulos = {
+    revisaoMultiplicacao: {
+        titulo: "Revisão de multiplicação",
+        conteudo: "Significado, adição de parcelas iguais e tabuada",
+        instrucao:
+            "Relembre a multiplicação e escolha a alternativa correta."
+    },
+
     potenciacao: {
         titulo: "Potenciação",
         conteudo: "Base, expoente, leitura e cálculo",
@@ -65,7 +72,90 @@ const configuracaoModulos = {
 const bancoDeQuestoes = {
 
     /* =================================================
-       MÓDULO 1 — POTENCIAÇÃO
+       MÓDULO 1 — REVISÃO DE MULTIPLICAÇÃO
+    ================================================= */
+
+    revisaoMultiplicacao: [
+        criarQuestao({
+            id: "mult-01", topico: "Significado", nivel: 1,
+            pergunta: "Há 4 pacotes com 2 figurinhas em cada pacote. Quantas figurinhas há ao todo?",
+            representacao: "📦 2   📦 2   📦 2   📦 2",
+            alternativas: ["6", "8", "4", "10"], correta: "8",
+            dica: "Some a quantidade de figurinhas dos quatro pacotes.",
+            explicacao: "São 4 grupos com 2 figurinhas: 2 + 2 + 2 + 2 = 8. Também escrevemos 4 × 2 = 8."
+        }),
+        criarQuestao({
+            id: "mult-02", topico: "Significado", nivel: 1,
+            pergunta: "Ana organizou 3 caixas com 5 lápis em cada uma. Quantos lápis ela organizou?",
+            representacao: "✏️✏️✏️✏️✏️   ✏️✏️✏️✏️✏️   ✏️✏️✏️✏️✏️",
+            alternativas: ["8", "10", "15", "20"], correta: "15",
+            dica: "São três grupos com cinco lápis em cada grupo.",
+            explicacao: "Somamos três grupos de cinco: 5 + 5 + 5 = 15. Portanto, 3 × 5 = 15."
+        }),
+        criarQuestao({
+            id: "mult-03", topico: "Adição repetida", nivel: 1,
+            pergunta: "Qual multiplicação representa 2 + 2 + 2 + 2 + 2?",
+            representacao: "2 + 2 + 2 + 2 + 2",
+            alternativas: ["2 × 2", "5 × 2", "2 × 5 × 2", "5 + 2"], correta: "5 × 2",
+            dica: "Conte quantas vezes a parcela 2 aparece.",
+            explicacao: "A parcela 2 aparece cinco vezes. Por isso, representamos a soma por 5 × 2."
+        }),
+        criarQuestao({
+            id: "mult-04", topico: "Representação", nivel: 1,
+            pergunta: "Qual adição representa 6 × 3?",
+            representacao: "6 grupos de 3",
+            alternativas: ["6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
+            dica: "Escreva seis parcelas iguais a 3.",
+            explicacao: "Em 6 × 3, temos seis grupos com três unidades: 3 + 3 + 3 + 3 + 3 + 3 = 18."
+        }),
+        criarQuestao({
+            id: "mult-05", topico: "Representação", nivel: 1,
+            pergunta: "Qual multiplicação representa 7 + 7 + 7?",
+            representacao: "7 + 7 + 7",
+            alternativas: ["7 × 7", "3 × 7", "7 × 3 × 7", "3 + 7"], correta: "3 × 7",
+            dica: "Conte quantas vezes a parcela 7 aparece.",
+            explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7 = 21."
+        }),
+        criarQuestao({
+            id: "mult-06", topico: "Cálculo", nivel: 1,
+            pergunta: "Qual é o resultado de 4 × 5?",
+            representacao: "5 + 5 + 5 + 5",
+            alternativas: ["9", "15", "20", "25"], correta: "20",
+            dica: "Some quatro parcelas iguais a 5.",
+            explicacao: "Quatro grupos de cinco formam 20: 5 + 5 + 5 + 5 = 20."
+        }),
+        criarQuestao({
+            id: "mult-07", topico: "Tabuada", nivel: 2,
+            pergunta: "Quanto é 7 × 6?", representacao: "7 × 6 = ?",
+            alternativas: ["36", "40", "42", "48"], correta: "42",
+            dica: "Você pode somar sete parcelas iguais a 6.",
+            explicacao: "Sete grupos de seis totalizam 42. Logo, 7 × 6 = 42."
+        }),
+        criarQuestao({
+            id: "mult-08", topico: "Tabuada", nivel: 2,
+            pergunta: "Quanto é 8 × 4?", representacao: "8 × 4 = ?",
+            alternativas: ["24", "28", "32", "36"], correta: "32",
+            dica: "Você pode calcular o dobro de 4 × 4.",
+            explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32."
+        }),
+        criarQuestao({
+            id: "mult-09", topico: "Tabuada", nivel: 2,
+            pergunta: "Quanto é 9 × 3?", representacao: "9 × 3 = ?",
+            alternativas: ["18", "21", "27", "30"], correta: "27",
+            dica: "Some nove parcelas iguais a 3.",
+            explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27."
+        }),
+        criarQuestao({
+            id: "mult-10", topico: "Tabuada", nivel: 2,
+            pergunta: "Quanto é 10 × 7?", representacao: "10 × 7 = ?",
+            alternativas: ["17", "60", "70", "80"], correta: "70",
+            dica: "Multiplicar por 10 acrescenta um zero ao número natural.",
+            explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70."
+        })
+    ],
+
+    /* =================================================
+       MÓDULO 2 — POTENCIAÇÃO
     ================================================= */
 
     potenciacao: [
@@ -995,7 +1085,7 @@ const bancoDeQuestoes = {
 const QUANTIDADE_POR_PARTIDA = 10;
 const TOTAL_VIDAS = 3;
 
-let moduloAtual = "potenciacao";
+let moduloAtual = "revisaoMultiplicacao";
 let questoesDaPartida = [];
 let indiceQuestao = 0;
 let pontos = 0;
@@ -1021,6 +1111,10 @@ function iniciarAplicacao() {
     localizarElementos();
     adicionarEventos();
     carregarModulosConcluidos();
+    const moduloSolicitado = new URLSearchParams(window.location.search).get("modulo");
+    if (bancoDeQuestoes[moduloSolicitado]) {
+        moduloAtual = moduloSolicitado;
+    }
     iniciarPartida(moduloAtual);
 }
 
@@ -1433,7 +1527,9 @@ async function verificarResposta(
         pontos += pontosDaQuestao;
     } else {
         sequenciaAcertos = 0;
-        vidas -= 1;
+        if (moduloAtual !== "revisaoMultiplicacao") {
+            vidas -= 1;
+        }
     }
 
     resultadosDaPartida.push({
@@ -2143,6 +2239,9 @@ async function atualizarMelhorPontuacao(
 ===================================================== */
 
 async function finalizarPartida(concluiu) {
+    if (moduloAtual === "revisaoMultiplicacao") {
+        concluiu = resultadosDaPartida.length === questoesDaPartida.length;
+    }
     pararVideoPrincipal();
 
     const resultado =
@@ -2152,11 +2251,16 @@ async function finalizarPartida(concluiu) {
 
     if (concluiu) {
         marcarModuloConcluido(moduloAtual);
+        if (moduloAtual === "revisaoMultiplicacao") {
+            liberarAulaDois();
+        }
     }
 
     salvarResultadoFirebase(resultado);
 
-    const titulo = concluiu
+    const titulo = moduloAtual === "revisaoMultiplicacao" && concluiu
+        ? "Revisão de multiplicação concluída!"
+        : concluiu
         ? "Módulo concluído!"
         : "Suas vidas terminaram";
 
@@ -2173,6 +2277,8 @@ async function finalizarPartida(concluiu) {
         resultado.percentual +
         "%</strong>.";
 
+    const revisaoConcluida = moduloAtual === "revisaoMultiplicacao" && concluiu;
+
     const resposta = await Swal.fire({
         icon: concluiu
             ? "success"
@@ -2183,8 +2289,9 @@ async function finalizarPartida(concluiu) {
         showDenyButton: true,
         showCancelButton: true,
 
-        confirmButtonText:
-            "Jogar novamente",
+        confirmButtonText: revisaoConcluida
+            ? "Continuar para a Aula 2"
+            : "Jogar novamente",
 
         denyButtonText:
             "Escolher outro módulo",
@@ -2209,6 +2316,10 @@ async function finalizarPartida(concluiu) {
     });
 
     if (resposta.isConfirmed) {
+        if (revisaoConcluida) {
+            window.location.href = "potenciacao.html#aula-2";
+            return;
+        }
         iniciarPartida(moduloAtual);
         return;
     }
@@ -2220,6 +2331,31 @@ async function finalizarPartida(concluiu) {
 
     window.location.href =
         "index.html#avaliacao";
+}
+
+function liberarAulaDois() {
+    const chave = obterChaveLocal("progressoCursoPotenciacao");
+    let progresso;
+
+    try {
+        progresso = JSON.parse(localStorage.getItem(chave));
+    } catch (erro) {
+        progresso = null;
+    }
+
+    if (!progresso || progresso.versao !== 2) {
+        progresso = {
+            versao: 2,
+            etapaLiberada: 1,
+            aulasAssistidas: [1],
+            concluidas: []
+        };
+    }
+
+    if (!progresso.aulasAssistidas.includes(1)) progresso.aulasAssistidas.push(1);
+    if (!progresso.concluidas.includes(1)) progresso.concluidas.push(1);
+    progresso.etapaLiberada = Math.max(Number(progresso.etapaLiberada) || 1, 2);
+    localStorage.setItem(chave, JSON.stringify(progresso));
 }
 
 function rolarParaMapaNoCelular() {
