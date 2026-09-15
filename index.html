@@ -71,8 +71,9 @@
 
             <!-- MODAL LOGIN -->
                 <div id="modalLogin" class="modal">
-                    <div class="perfil-box">
+                    <div class="perfil-box modal-acessivel-box">
                          <span class="fechar" id="fecharLogin">&times;</span>
+                         <div class="modal-formulario">
                          <img src="logo.png" alt="Logo Reforça Libras">
                          <h2>Entrar</h2>
 
@@ -94,13 +95,28 @@
                             Primeiro acesso?
                             <button type="button" id="abrirCadastro">Cadastrar</button>
                          </p>
+                         </div>
+
+                         <aside class="janela-libras-interface" aria-labelledby="tituloLibrasLogin">
+                            <h3 id="tituloLibrasLogin">🤟 Acesso em Libras</h3>
+                            <div class="libras-video-box">
+                                <video id="videoLibrasLogin" controls playsinline preload="metadata" hidden>
+                                    <source src="videos/libras/login.mp4" type="video/mp4">
+                                </video>
+                                <p class="libras-video-pendente">O vídeo em Libras do login será inserido aqui.</p>
+                            </div>
+                            <button type="button" class="repetir-video-interface" data-video-id="videoLibrasLogin" hidden>
+                                ↻ Repetir tradução
+                            </button>
+                         </aside>
                     </div>
                 </div>
                        
 <!-- MODAL CADASTRO -->
 <div id="modalCadastro" class="modal">
-    <div class="perfil-box">
+    <div class="perfil-box modal-acessivel-box">
         <span class="fechar" id="fecharCadastro">&times;</span>
+        <div class="modal-formulario">
         <img src="logo.png" alt="Logo Reforça Libras">
         <h2>Criar cadastro</h2>
 
@@ -117,15 +133,33 @@
             <label class="aceite-termos">
                 <input type="checkbox" id="aceitarTermos">
                 <span>
-                    Li e concordo com o
+                    Li as informações acima e concordo voluntariamente em participar da
                     <button type="button" id="abrirTermos" class="link-termos">
-                        Código de Ética e os termos de participação
+                        pesquisa
                     </button>
                 </span>
             </label>
 
+            <p class="aviso-consentimento">
+                A participação na pesquisa é opcional e não impede o uso da plataforma.
+            </p>
+
             <button type="submit">Cadastre-se</button>
         </form>
+        </div>
+
+        <aside class="janela-libras-interface" aria-labelledby="tituloLibrasCadastro">
+            <h3 id="tituloLibrasCadastro">🤟 Cadastro em Libras</h3>
+            <div class="libras-video-box">
+                <video id="videoLibrasCadastro" controls playsinline preload="metadata" hidden>
+                    <source src="videos/libras/cadastro.mp4" type="video/mp4">
+                </video>
+                <p class="libras-video-pendente">O vídeo em Libras do cadastro será inserido aqui.</p>
+            </div>
+            <button type="button" class="repetir-video-interface" data-video-id="videoLibrasCadastro" hidden>
+                ↻ Repetir tradução
+            </button>
+        </aside>
     </div>
 </div>
 
@@ -133,29 +167,64 @@
 <div id="modalTermos" class="modal">
     <div class="perfil-box termos-box">
         <span class="fechar" id="fecharTermos">&times;</span>
-        <h2>Código de Ética e termos de participação</h2>
+        <h2>Termo de Consentimento para Participação na Pesquisa</h2>
 
-        <div class="texto-termos">
-            <p><strong>Versão 1.0</strong></p>
+        <div class="termos-layout">
+            <div class="texto-termos" tabindex="0" aria-label="Texto do termo de consentimento">
+                <section>
+                    <h3>1. Sobre a pesquisa</h3>
+                    <p>A atividade que você realizará na plataforma Reforça Libras faz parte de uma pesquisa vinculada ao projeto Matemática Inclusiva para Todos (MIT), desenvolvido na Universidade Federal do Rio Grande – FURG, no Instituto de Matemática, Estatística e Física – IMEF.</p>
+                </section>
 
-            <p>
-                Insira aqui o texto definitivo do seu Código de Ética e do
-                consentimento para participação.
-            </p>
+                <section>
+                    <h3>2. Dados coletados</h3>
+                    <p>A pesquisa busca contribuir para o desenvolvimento de práticas inclusivas no ensino de Matemática. Nesta atividade, serão coletados, para fins de pesquisa, os registros das resoluções das atividades realizadas e os comentários e impressões dos participantes sobre a experiência com os materiais disponibilizados na plataforma.</p>
+                </section>
 
-            <p>
-                Explique quais dados serão coletados, para qual finalidade serão
-                utilizados, por quanto tempo serão mantidos e como o participante
-                poderá solicitar a exclusão.
-            </p>
+                <section>
+                    <h3>3. Utilização e proteção dos dados</h3>
+                    <p>Os dados coletados poderão ser utilizados em trabalhos acadêmicos e publicações científicas relacionados à pesquisa. A identidade dos participantes será preservada, não sendo divulgadas informações que permitam sua identificação.</p>
+                </section>
 
-            <p>
-                A participação é voluntária. O participante poderá deixar de usar
-                a plataforma e solicitar a exclusão de seus dados.
-            </p>
+                <section>
+                    <h3>4. Participação voluntária</h3>
+                    <p>Sua participação é voluntária. Você pode optar por não participar da pesquisa ou retirar seu consentimento a qualquer momento, sem qualquer prejuízo.</p>
+                </section>
+
+                <section>
+                    <h3>5. Aprovação pelo Comitê de Ética</h3>
+                    <p>A pesquisa foi aprovada pelo Comitê de Ética em Pesquisa da Universidade Federal do Rio Grande – CEP-FURG, sob o número 491124.7.0000.5324.</p>
+                </section>
+
+                <section>
+                    <h3>6. Contato para dúvidas</h3>
+                    <p>Em caso de dúvidas sobre a pesquisa, você poderá entrar em contato com a equipe responsável pelo e-mail <a href="mailto:mitfurg@gmail.com">mitfurg@gmail.com</a>.</p>
+                </section>
+
+                <section>
+                    <h3>7. Declaração de consentimento</h3>
+                    <p>Ao selecionar a opção abaixo, você declara que leu e compreendeu as informações apresentadas e concorda voluntariamente em participar da pesquisa e com a utilização dos dados produzidos durante as atividades para os fins acadêmicos e científicos descritos acima.</p>
+                </section>
+            </div>
+
+            <aside class="janela-libras-interface janela-libras-termo" aria-labelledby="tituloLibrasTermo">
+                <h3 id="tituloLibrasTermo">🤟 Termo em Libras</h3>
+                <div class="libras-video-box">
+                    <video id="videoLibrasTermo" controls playsinline preload="metadata" hidden>
+                        <source src="videos/libras/termo-consentimento.mp4" type="video/mp4">
+                    </video>
+                    <p class="libras-video-pendente">O vídeo com a tradução completa deste termo será inserido aqui.</p>
+                </div>
+                <button type="button" class="repetir-video-interface" data-video-id="videoLibrasTermo" hidden>
+                    ↻ Repetir tradução
+                </button>
+            </aside>
         </div>
 
-        <button type="button" id="concordarTermos">Li e concordo</button>
+        <div class="termos-acoes">
+            <button type="button" id="fecharSemConcordar">Continuar sem participar da pesquisa</button>
+            <button type="button" id="concordarTermos">Li as informações acima e concordo em participar da pesquisa</button>
+        </div>
     </div>
 </div>
 
@@ -547,6 +616,12 @@
 </div>
 
 </div>
+
+<section class="box contador-visitas" aria-labelledby="tituloContadorVisitas">
+    <h3 id="tituloContadorVisitas">👥 Visitas ao Reforça Libras</h3>
+    <strong id="numeroVisitas" aria-live="polite">Carregando...</strong>
+    <span>acessos à página inicial</span>
+</section>
 
     </section>
 </aside>
