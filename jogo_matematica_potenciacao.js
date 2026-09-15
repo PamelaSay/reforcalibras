@@ -1,5 +1,7 @@
-        correta: configuracao.correta,
 "use strict";
+
+const VIDEO_PADRAO_LIBRAS =
+    "https://www.youtube.com/embed/r9AoQVkUUvU";
 
 
 /* =====================================================
@@ -17,9 +19,12 @@ function criarQuestao(configuracao) {
         correta: configuracao.correta,
         dica: configuracao.dica,
         explicacao: configuracao.explicacao,
-        videoPergunta: configuracao.videoPergunta || "",
-        videoDica: configuracao.videoDica || "",
-        videoExplicacao: configuracao.videoExplicacao || ""
+        videoPergunta:
+            configuracao.videoPergunta || VIDEO_PADRAO_LIBRAS,
+        videoDica:
+            configuracao.videoDica || VIDEO_PADRAO_LIBRAS,
+        videoExplicacao:
+            configuracao.videoExplicacao || VIDEO_PADRAO_LIBRAS
     };
 }
 
