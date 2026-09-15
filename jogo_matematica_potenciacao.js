@@ -31,8 +31,7 @@ const configuracaoModulos = {
     revisaoMultiplicacao: {
         titulo: "Revisão de multiplicação",
         conteudo: "Adição de parcelas iguais e cálculo",
-        instrucao:
-            "Observe a operação e escolha a alternativa correta."
+        instrucao: "Observe a operação e escolha a alternativa correta."
     },
 
     potenciacao: {
