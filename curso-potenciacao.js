@@ -106,6 +106,7 @@ function registrarAulaAssistida(numero) {
 
     salvarProgressoCurso(progresso);
     atualizarCursoNaTela();
+    atualizarAcompanhamentoDaTrilha();
 }
 
 
@@ -490,42 +491,6 @@ function verificarEstadoDoVideo(evento) {
     );
 
     fecharModalVideoaula();
-
-    /* A revisão da multiplicação é uma etapa preparatória. */
-    if (etapaAssistida === 1) {
-        if (!aulaJaConcluida) {
-            concluirEtapaPotenciacao(1);
-        }
-
-        if (typeof Swal !== "undefined") {
-            Swal.fire({
-                icon: "success",
-                title: aulaJaConcluida
-                    ? "Revisão concluída!"
-                    : "Preparação concluída!",
-                html: conteudoAlertaComLibras(
-                    aulaJaConcluida
-                        ? "Você terminou de rever a multiplicação."
-                        : "A revisão da multiplicação foi concluída. A Aula 2 está liberada."
-                ),
-                confirmButtonText: "Continuar trilha",
-                confirmButtonColor: "#1d3557",
-                allowOutsideClick: false,
-                customClass: {
-                    popup: "alerta-reforca"
-                },
-                didOpen: ativarVideoDoAlerta,
-                willClose: pararVideoDoAlerta
-            });
-        } else {
-            alert(
-                "Preparação concluída!\n\n" +
-                "A Aula 2 está liberada."
-            );
-        }
-
-        return;
-    }
 
     /*
      * FLUXO DE REVISÃO:
