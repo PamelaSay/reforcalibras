@@ -1120,6 +1120,44 @@ let resultadosDaPartida = [];
 
 const elementos = {};
 
+/* =====================================================
+   ARQUIVOS E TÍTULOS DOS MÓDULOS
+===================================================== */
+
+const arquivosDosModulos = {
+    revisaoMultiplicacao: "jogo_potenciacao_revisao_multiplicacao.html",
+    potenciacao: "jogo_potenciacao.html",
+    casosEspeciais: "jogo_potenciacao_casos_especiais.html",
+    baseDez: "jogo_potenciacao_base_10.html",
+    propriedades: "jogo_potenciacao_propriedades.html"
+};
+
+function obterModuloPelaUrl() {
+    const moduloDaConsulta =
+        new URLSearchParams(window.location.search).get("modulo");
+
+    if (bancoDeQuestoes[moduloDaConsulta]) {
+        return moduloDaConsulta;
+    }
+
+    const arquivoAtual = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
+
+    return Object.keys(arquivosDosModulos).find(function (modulo) {
+        return arquivosDosModulos[modulo] === arquivoAtual;
+    }) || null;
+}
+
+function atualizarTituloDaAba(modulo) {
+    const configuracao = configuracaoModulos[modulo];
+
+    if (!configuracao) return;
+
+    document.title = configuracao.titulo + " | Reforça Libras";
+}
+
 
 /* =====================================================
    INICIALIZAÇÃO
@@ -1134,8 +1172,7 @@ function iniciarAplicacao() {
     localizarElementos();
     adicionarEventos();
     carregarModulosConcluidos();
-    const moduloSolicitado =
-        new URLSearchParams(window.location.search).get("modulo");
+    const moduloSolicitado = obterModuloPelaUrl();
 
     if (bancoDeQuestoes[moduloSolicitado]) {
         moduloAtual = moduloSolicitado;
@@ -1306,6 +1343,7 @@ function iniciarPartida(modulo) {
     );
 
     atualizarModuloAtivo();
+    atualizarTituloDaAba(moduloAtual);
     mostrarQuestao();
 }
 

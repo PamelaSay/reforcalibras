@@ -1,0 +1,36 @@
+JOGOS DO REFORÇA LIBRAS — TODOS NA MESMA PASTA
+
+Coloque todos os arquivos deste pacote na pasta principal do seu repositório
+Reforca-Libras, no mesmo local em que estão o CSS, as imagens e os demais
+arquivos usados pelo jogo.
+
+Não crie uma pasta para cada jogo e não renomeie os arquivos como index.html.
+
+Arquivos e endereços:
+
+1. Revisão de multiplicação
+   Arquivo: jogo_potenciacao_revisao_multiplicacao.html
+   Endereço: https://www.reforcalibras.com.br/jogo_potenciacao_revisao_multiplicacao.html
+
+2. Potenciação
+   Arquivo: jogo_potenciacao.html
+   Endereço: https://www.reforcalibras.com.br/jogo_potenciacao.html
+
+3. Casos especiais
+   Arquivo: jogo_potenciacao_casos_especiais.html
+   Endereço: https://www.reforcalibras.com.br/jogo_potenciacao_casos_especiais.html
+
+4. Potências de base 10
+   Arquivo: jogo_potenciacao_base_10.html
+   Endereço: https://www.reforcalibras.com.br/jogo_potenciacao_base_10.html
+
+5. Propriedades da potenciação
+   Arquivo: jogo_potenciacao_propriedades.html
+   Endereço: https://www.reforcalibras.com.br/jogo_potenciacao_propriedades.html
+
+O JavaScript identifica o módulo pelo nome do arquivo e abre o conteúdo correto.
+O nome da aba também muda automaticamente.
+
+IMPORTANTE: os cinco HTML usam o mesmo arquivo
+jogo_matematica_potenciacao.js. Portanto, quando você atualizar as questões,
+basta atualizar esse JavaScript uma vez.

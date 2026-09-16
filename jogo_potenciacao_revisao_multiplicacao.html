@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Jogo acessível de potenciação do Reforça Libras"
+    >
+
+    <title>Jogo de Potenciação | Reforça Libras</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="jogo_matematica_potenciacao.css"
+    >
+</head>
+
+<body>
+
+    <!-- TOPO DO JOGO -->
+    <header class="topo-jogo">
+
+        <button
+            id="botaoVoltar"
+            class="botao-voltar"
+            type="button"
+            aria-label="Voltar para a trilha de potenciação"
+            title="Voltar para a trilha"
+        >
+            <img
+                src="botao_retornar.png"
+                alt=""
+                class="imagem-voltar"
+            >
+        </button>
+
+        <section
+            class="caixa-status"
+            aria-label="Pontuação atual"
+        >
+            <strong>
+                🏆 <span id="pontos">0</span>
+            </strong>
+
+            <span>PONTOS</span>
+        </section>
+
+        <div class="titulo-jogo">
+            <span aria-hidden="true">⚡</span>
+
+            <div>
+                <p>OPERAÇÃO POTÊNCIA</p>
+                <h1 id="tituloModulo">Potenciação</h1>
+            </div>
+
+            <span aria-hidden="true">⚡</span>
+        </div>
+
+        <section
+            class="caixa-status"
+            aria-label="Questão atual"
+        >
+            <strong>
+                <span id="questaoAtual">1</span>/<span id="totalQuestoes">10</span>
+            </strong>
+
+            <span>DESAFIO</span>
+        </section>
+
+    </header>
+
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="jogo">
+
+        <section class="painel-jogo">
+
+            <!-- PAINEL ESQUERDO -->
+            <aside
+                class="mapa-modulos" 
+                aria-labelledby="tituloMapa"
+            >
+                <div class="cabecalho-mapa">
+                    <span aria-hidden="true">🧭</span>
+                    <h2 id="tituloMapa">Mapa da missão</h2>
+                </div>
+
+                <p class="orientacao-mapa">
+                    Escolha um módulo para iniciar.
+                </p>
+
+                <nav
+                    class="lista-modulos"
+                    aria-label="Módulos do jogo de potenciação"
+                >
+
+                    <button
+                        class="botao-modulo ativo" type="button" data-modulo="revisaoMultiplicacao" aria-pressed="true" >
+                         <span class="numero-modulo">1</span>
+
+                        <span class="texto-modulo">
+                            <strong>Revisão de multiplicação</strong>
+                            <small>Adição repetida e cálculo</small>
+                        </span>
+
+                        <span
+                            class="estado-modulo"
+                            aria-hidden="true"
+                        >
+                            ▶
+                        </span>
+                    </button>
+
+                    <button
+                        class="botao-modulo"
+                        type="button"
+                        data-modulo="potenciacao"
+                        aria-pressed="false"
+                    >
+                        <span class="numero-modulo">2</span>
+
+                        <span class="texto-modulo">
+                            <strong>Potenciação</strong>
+                            <small>Base, expoente e cálculo</small>
+                        </span>
+
+                        <span
+                            class="estado-modulo"
+                            aria-hidden="true"
+                        >
+                            ▶
+                        </span>
+                    </button>
+
+                    <button
+                        class="botao-modulo"
+                        type="button"
+                        data-modulo="casosEspeciais"
+                        aria-pressed="false"
+                    >
+                        <span class="numero-modulo">3</span>
+
+                        <span class="texto-modulo">
+                            <strong>Casos especiais</strong>
+                            <small>Expoentes e bases especiais</small>
+                        </span>
+
+                        <span
+                            class="estado-modulo"
+                            aria-hidden="true"
+                        >
+                            ○
+                        </span>
+                    </button>
+
+                    <button
+                        class="botao-modulo"
+                        type="button"
+                        data-modulo="baseDez"
+                        aria-pressed="false"
+                    >
+                        <span class="numero-modulo">4</span>
+
+                        <span class="texto-modulo">
+                            <strong>Base 10</strong>
+                            <small>Potências e escrita numérica</small>
+                        </span>
+
+                        <span
+                            class="estado-modulo"
+                            aria-hidden="true"
+                        >
+                            ○
+                        </span>
+                    </button>
+
+                    <button
+                        class="botao-modulo"
+                        type="button"
+                        data-modulo="propriedades"
+                        aria-pressed="false"
+                    >
+                        <span class="numero-modulo">5</span>
+
+                        <span class="texto-modulo">
+                            <strong>Propriedades</strong>
+                            <small>Produtos, quocientes e potências</small>
+                        </span>
+
+                        <span
+                            class="estado-modulo"
+                            aria-hidden="true"
+                        >
+                            ○
+                        </span>
+                    </button>
+
+                </nav>
+
+                <div
+                    class="sequencia"
+                    aria-label="Sequência de respostas corretas"
+                >
+                    <span aria-hidden="true">🔥</span>
+
+                    <div>
+                        <strong id="valorSequencia">0</strong>
+                        <small>sequência de acertos</small>
+                    </div>
+                </div>
+            </aside>
+
+
+            <!-- QUESTÃO -->
+            <section
+                class="area-desafio"
+                aria-labelledby="textoPergunta"
+            >
+
+                <div class="cabecalho-desafio">
+
+                    <span
+                        id="topicoPergunta"
+                        class="etiqueta-topico"
+                    >
+                        POTENCIAÇÃO
+                    </span>
+
+                    <span
+                        id="nivelPergunta"
+                        class="etiqueta-nivel"
+                    >
+                        NÍVEL 1
+                    </span>
+
+                </div>
+
+                <p
+                    id="instrucao"
+                    class="instrucao"
+                >
+                    Analise a questão e escolha uma alternativa.
+                </p>
+
+                <h2 id="textoPergunta">
+                    Carregando desafio...
+                </h2>
+
+                <!--
+                    Esta área não apresenta a regra nem entrega a resposta.
+                    Ela mostra apenas a expressão ou representação necessária.
+                -->
+                <div
+                    id="representacaoDesafio"
+                    class="representacao-desafio"
+                    aria-label="Representação matemática da questão"
+                >
+                    Aguarde...
+                </div>
+
+                <div
+                    id="alternativas"
+                    class="alternativas"
+                    role="group"
+                    aria-label="Alternativas da questão"
+                >
+                    <!-- Criadas pelo JavaScript -->
+                </div>
+
+                <div class="acoes-desafio">
+
+                    <button
+                        id="botaoDica"
+                        class="botao-dica"
+                        type="button"
+                        aria-expanded="false"
+                        aria-controls="areaDica"
+                    >
+                        💡 Ver dica
+                    </button>
+
+                    <p class="aviso-primeira-resposta">
+                        A primeira resposta será registrada.
+                    </p>
+
+                </div>
+
+                <section
+                    id="areaDica"
+                    class="area-dica"
+                    hidden
+                    aria-live="polite"
+                >
+                    <div class="icone-dica" aria-hidden="true">
+                        💡
+                    </div>
+
+                    <div>
+                        <strong>Dica</strong>
+                        <p id="textoDica"></p>
+                    </div>
+                </section>
+
+            </section>
+
+
+            <!-- PAINEL DE LIBRAS -->
+            <aside
+                class="painel-libras"
+                aria-labelledby="tituloLibras"
+            >
+
+                <div class="cabecalho-libras">
+                    <span aria-hidden="true">🤟</span>
+                    <h2 id="tituloLibras">Tradução em Libras</h2>
+                </div>
+
+                <div
+                    id="areaVideoLibras"
+                    class="area-video"
+                >
+                    <iframe
+                        id="videoLibras"
+                        class="video-libras"
+                        src=""
+                        title="Tradução da questão em Libras"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        hidden
+                    ></iframe>
+                    <div
+                        id="videoIndisponivel"
+                        class="video-indisponivel"
+                    >
+                        <span aria-hidden="true">🎥</span>
+
+                        <p>
+                            O vídeo em Libras desta questão será inserido aqui.
+                        </p>
+                    </div>
+                </div>
+
+                <button
+                    id="botaoRepetirLibras"
+                    class="botao-repetir"
+                    type="button"
+                    hidden
+                >
+                    ↻ Repetir tradução
+                </button>
+
+                <p class="orientacao-libras">
+                    A tradução apresenta a pergunta e as alternativas.
+                </p>
+
+            </aside>
+
+        </section>
+
+
+        <!-- RODAPÉ -->
+        <footer class="rodape-jogo">
+
+            <button
+                id="botaoSair"
+                class="botao-sair"
+                type="button"
+            >
+                ← Sair do jogo
+            </button>
+
+            <section
+                class="area-progresso"
+                aria-label="Progresso da partida"
+            >
+                <div class="texto-progresso">
+                    <strong>PROGRESSO</strong>
+                    <span id="porcentagemProgresso">0%</span>
+                </div>
+
+                <div
+                    id="barraProgresso"
+                    class="barra-progresso"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                >
+                    <div id="preenchimentoProgresso"></div>
+                </div>
+            </section>
+
+            <section
+                class="area-vidas"
+                aria-label="Vidas restantes"
+            >
+                <strong>VIDAS</strong>
+
+                <div id="vidas" aria-live="polite">
+                    <span aria-hidden="true">❤️</span>
+                    <span aria-hidden="true">❤️</span>
+                    <span aria-hidden="true">❤️</span>
+
+                    <span class="somente-leitor">
+                        3 vidas restantes
+                    </span>
+                </div>
+            </section>
+
+        </footer>
+
+    </main>
+
+
+    <!-- SWEETALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script src="firebase-config.js"></script>
+
+    <script src="storage-utils.js"></script>
+
+
+    <!-- MOTOR E QUESTÕES DO JOGO -->
+    <script src="jogo_matematica_potenciacao.js"></script>
+
+</body>
+</html>
