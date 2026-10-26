@@ -82,9 +82,9 @@ const bancoDeQuestoes = {
             alternativas: ["6", "8", "4", "10"], correta: "8",
             dica: "Some as quatro parcelas iguais a 2.",
             explicacao: "2 + 2 + 2 + 2 = 8. Também podemos escrever 4 × 2 = 8.",
-            videoPergunta: "https://youtu.be/-6u4QD4OnQI",
-            videoDica: "https://youtu.be/ZQ4wg02Hwwo",
-            videoExplicacao: "https://youtu.be/7GFY3TXrcIY"
+            videoPergunta: "https://www.youtube.com/embed/-6u4QD4OnQI",
+            videoDica: "https://www.youtube.com/embed/ZQ4wg02Hwwo",
+            videoExplicacao: "https://www.youtube.com/embed/7GFY3TXrcIY"
         }),
         criarQuestao({
             id: "mult-02", topico: "Adição repetida", nivel: 1,
@@ -93,9 +93,9 @@ const bancoDeQuestoes = {
             alternativas: ["5 × 5", "3 × 5", "5 × 3 × 5", "3 + 5"], correta: "3 × 5",
             dica: "Conte quantas vezes a parcela 5 aparece.",
             explicacao: "A parcela 5 aparece três vezes. Portanto, 5 + 5 + 5 = 3 × 5.",
-            videoPergunta: "https://youtu.be/sPoVZRSrS-k",
-            videoDica: "https://youtu.be/0EcivcmAy-w",
-            videoExplicacao: "https://youtu.be/po5XgPMmAQc"
+            videoPergunta: "https://www.youtube.com/embed/sPoVZRSrS-k",
+            videoDica: "https://www.youtube.com/embed/0EcivcmAy-w",
+            videoExplicacao: "https://www.youtube.com/embed/po5XgPMmAQc"
         }),
         criarQuestao({
             id: "mult-03", topico: "Adição repetida", nivel: 1,
