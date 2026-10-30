@@ -194,23 +194,13 @@ const bancoDeQuestoes = {
             nivel: 1,
             pergunta: "Como se lê corretamente a potência 2³?",
             representacao: "2³",
-            alternativas: [
-                "Dois elevado ao cubo",
-                "Dois vezes três",
-                "Três elevado ao quadrado",
-                "Dois elevado a um"
-            ],
+            alternativas: [ "Dois elevado ao cubo", "Dois vezes três", "Três elevado ao quadrado", "Dois elevado a um" ],
             correta: "Dois elevado ao cubo",
-            dica:
-                "O número pequeno indica o expoente da potência.",
-            explicacao:
-                "A expressão 2³ é lida como dois elevado à terceira potência ou dois elevado ao cubo.",
-            videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+            dica:"O número pequeno indica o expoente da potência.",
+            explicacao: "A expressão 2³ é lida como dois elevado à terceira potência ou dois elevado ao cubo.",
+            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
 
         criarQuestao({
@@ -1494,17 +1484,10 @@ function criarAlternativas(questao) {
 
             botao.append(letra, texto);
 
-            botao.addEventListener(
-                "click",
-                function () {
-                    verificarResposta(
-                        alternativa,
-                        botao
-                    );
-                }
-            );
-
-            elementos.alternativas.appendChild(botao);
+            botao.addEventListener( "click", function () {
+                 verificarResposta( alternativa, botao );} );
+          
+                 elementos.alternativas.appendChild(botao);
         }
     );
 }
