@@ -104,9 +104,9 @@ const bancoDeQuestoes = {
             alternativas: ["2 × 2", "5 × 2", "2 × 5 × 2", "5 + 2"], correta: "5 × 2",
             dica: "Conte quantas vezes a parcela 2 aparece.",
             explicacao: "A parcela 2 aparece cinco vezes. Portanto, a multiplicação é 5 × 2.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/FzNoIt6SvrA",
+            videoDica: "https://www.youtube.com/embed/wgmU7Zty4h4",
+            videoExplicacao: "https://www.youtube.com/embed/2l-bT3238kU"
         }),
         criarQuestao({
             id: "mult-04", topico: "Representação", nivel: 1,
@@ -115,9 +115,9 @@ const bancoDeQuestoes = {
             alternativas: ["6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
             dica: "Escreva seis parcelas iguais a 3.",
             explicacao: "6 × 3 representa seis parcelas iguais a 3.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/XpJg0IovWuA",
+            videoDica: "https://www.youtube.com/embed/Cfh0qVNYJM",
+            videoExplicacao: "https://www.youtube.com/embed/vHfbc39mVSg"
         }),
         criarQuestao({
             id: "mult-05", topico: "Representação", nivel: 1,
