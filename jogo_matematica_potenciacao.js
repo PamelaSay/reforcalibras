@@ -104,9 +104,9 @@ const bancoDeQuestoes = {
             alternativas: ["2 × 2", "5 × 2", "2 × 5 × 2", "5 + 2"], correta: "5 × 2",
             dica: "Conte quantas vezes a parcela 2 aparece.",
             explicacao: "A parcela 2 aparece cinco vezes. Portanto, a multiplicação é 5 × 2.",
-            videoPergunta: "https://www.youtube.com/embed/FzNoIt6SvrA",
-            videoDica: "https://www.youtube.com/embed/wgmU7Zty4h4",
-            videoExplicacao: "https://www.youtube.com/embed/2l-bT3238kU"
+            videoPergunta: "https://www.youtube.com/embed/quo6FoHyPW8",
+            videoDica: "https://www.youtube.com/embed/DsUUR-c_dSs",
+            videoExplicacao: "https://www.youtube.com/embed/vrB0fwgEpmM"
         }),
         criarQuestao({
             id: "mult-04", topico: "Representação", nivel: 1,
@@ -126,9 +126,9 @@ const bancoDeQuestoes = {
             alternativas: ["7 × 7", "3 × 7", "7 × 3 × 7", "3 + 7"], correta: "3 × 7",
             dica: "Conte quantas vezes a parcela 7 aparece.",
             explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/-uXnpH6WKtk",
+            videoDica: "https://www.youtube.com/embed/xNY-QozaZbAr9AoQVkUUvU",
+            videoExplicacao: "https://www.youtube.com/embed/5eqZJtetFc8"
         }),
         criarQuestao({
             id: "mult-06", topico: "Cálculo", nivel: 2,
@@ -136,9 +136,9 @@ const bancoDeQuestoes = {
             alternativas: ["9", "15", "20", "25"], correta: "20",
             dica: "Some quatro parcelas iguais a 5.",
             explicacao: "5 + 5 + 5 + 5 = 20. Logo, 4 × 5 = 20.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/9s51hPrcAzM",
+            videoDica: "https://www.youtube.com/embed/y4VXQi9glTc",
+            videoExplicacao: "https://www.youtube.com/embed/D4yuKenlc14"
         }),
         criarQuestao({
             id: "mult-07", topico: "Cálculo", nivel: 2,
@@ -146,9 +146,9 @@ const bancoDeQuestoes = {
             alternativas: ["9", "12", "18", "21"], correta: "18",
             dica: "Some três parcelas iguais a 6.",
             explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/yA63YcvtX-A",
+            videoDica: "https://www.youtube.com/embed/UDV3Lzk6fLg",
+            videoExplicacao: "https://www.youtube.com/embed/2Z39JmFYkAA"
         }),
         criarQuestao({
             id: "mult-08", topico: "Cálculo", nivel: 2,
@@ -156,9 +156,9 @@ const bancoDeQuestoes = {
             alternativas: ["24", "28", "32", "36"], correta: "32",
             dica: "Some oito parcelas iguais a 4.",
             explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/EkrCZavOEEg",
+            videoDica: "https://www.youtube.com/embed/VPBAaK5q-UQ",
+            videoExplicacao: "https://www.youtube.com/embed/hBxd9gNrsqo"
         }),
         criarQuestao({
             id: "mult-09", topico: "Tabuada", nivel: 3,
@@ -166,9 +166,9 @@ const bancoDeQuestoes = {
             alternativas: ["18", "21", "27", "30"], correta: "27",
             dica: "Some nove parcelas iguais a 3.",
             explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/xz55KkpVaxY",
+            videoDica:  "https://www.youtube.com/embed/MpTx4A4DPbQ",
+            videoExplicacao:"https://www.youtube.com/embed/4WHP2jxaieQ"
         }),
         criarQuestao({
             id: "mult-10", topico: "Tabuada", nivel: 3,
@@ -176,9 +176,9 @@ const bancoDeQuestoes = {
             alternativas: ["17", "60", "70", "80"], correta: "70",
             dica: "Observe o que acontece quando multiplicamos por 10.",
             explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70.",
-            videoPergunta: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoDica: "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/r9AoQVkUUvU"
+            videoPergunta: "https://www.youtube.com/embed/1nyBbLIILOg",
+            videoDica: "https://www.youtube.com/embed/qPhheHd_Mbk",
+            videoExplicacao: "https://www.youtube.com/embed/lx8GrcN3RGg"
         })
     ],
 
