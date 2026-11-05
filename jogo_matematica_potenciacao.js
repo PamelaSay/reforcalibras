@@ -414,11 +414,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Toda potência de base diferente de zero e expoente zero é igual a 1. Portanto, 8⁰ = 1.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/_BbVKO21PCs",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/SAl3LZOjVbI",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/zDaA8TKfiug"
         }),
 
         criarQuestao({
@@ -434,11 +434,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Toda potência de expoente 1 é igual à própria base. Portanto, 12¹ = 12.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/DGkRb2qj85A",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/VebefsEQAOg",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/Ic_Bl2g3cjE"
         }),
 
         criarQuestao({
@@ -454,11 +454,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Uma potência de base 1 é sempre igual a 1. Portanto, 1⁹ = 1.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/rUl_l_R6AQ0",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/yijquaZmU6M",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/bH4i9UAjOmo"
         }),
 
         criarQuestao({
@@ -474,11 +474,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Zero elevado a um expoente natural positivo é igual a zero. Portanto, 0⁵ = 0.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/XPsWa8dfEDc",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/VeMzGdpgD6s",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/u_WHOcIohcAU"
         }),
 
         criarQuestao({
@@ -519,11 +519,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "(−3)² = (−3) × (−3) = 9.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/-Bia5vg_2b0",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/evfcybpoD68",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/tvG4yalDQ_w"
         }),
 
         criarQuestao({
@@ -539,11 +539,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "(−2)³ = (−2) × (−2) × (−2) = −8.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/11xcveIgils",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/3zOLoiNDP1I",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/pnMmk8L5DDk"
         }),
 
         criarQuestao({
@@ -559,11 +559,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Em −2², calculamos primeiro 2² = 4 e depois aplicamos o sinal negativo. Assim, −2² = −4.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/ba2gl9Sqs5Y",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/ntzfg8JcctI",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/yWe9NXBS-TU"
         }),
 
         criarQuestao({
@@ -584,11 +584,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Em (−4)², a base é −4 e o resultado é 16. Em −4², apenas o 4 é elevado ao quadrado, resultando em −16.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/-UuYjbAeWwI",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/250NLyascHw",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/7RytNiG3eFk"
         }),
 
         criarQuestao({
@@ -604,11 +604,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como 15 é diferente de zero, 15⁰ = 1.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/3zH5oxLEWVw",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/8bzw_6EAokk",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/VoqZyYGBUnU"
         })
     ],
 
