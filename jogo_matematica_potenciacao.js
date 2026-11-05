@@ -632,11 +632,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "10² = 10 × 10 = 100.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/JwIaG4nLJGQ",
             videoDica:
                 "https://www.youtube.com/embed/Ay2kLJ3Nkds",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/jt-eWTkFxEc"
         }),
 
         criarQuestao({
@@ -657,7 +657,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "10⁴ = 10 × 10 × 10 × 10 = 10 000.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/Hn7UtWxsOok",
             videoDica:
                 "https://www.youtube.com/embed/1JgztJTooGI",
             videoExplicacao:
@@ -678,7 +678,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "O número 1 000 possui três zeros. Portanto, 1 000 = 10³.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/3DVd4mWmnkY",
             videoDica:
                 "https://www.youtube.com/embed/1M5AXHagu9g",
             videoExplicacao:
@@ -704,7 +704,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "10⁵ é igual ao número 1 seguido de cinco zeros: 100 000.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/bUYNcR7T1yY",
             videoDica:
                 "https://www.youtube.com/embed/JDKeO9odjQs",
             videoExplicacao:
@@ -724,7 +724,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como 10³ = 1 000, temos 4 × 1 000 = 4 000.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/6xrfvZFkF5w",
             videoDica:
                 "https://www.youtube.com/embed/Bqa-_YLDPuM",
             videoExplicacao:
@@ -750,7 +750,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como 10⁴ = 10 000, então 7 × 10⁴ = 70 000.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/4khMBdRHn5I",
             videoDica:
                 "https://www.youtube.com/embed/W2JVT3cEfcs",
             videoExplicacao:
@@ -776,7 +776,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "O algarismo 6 representa 6 000, que pode ser escrito como 6 × 10³.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/4aR1n25ng6s",
             videoDica:
                 "https://www.youtube.com/embed/eC1ejo-K5vM",
             videoExplicacao:
@@ -803,7 +803,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "3 205 = 3 × 1 000 + 2 × 100 + 0 × 10 + 5 × 1. Portanto, 3 205 = 3 × 10³ + 2 × 10² + 5 × 10⁰.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/OvOFJnhz8-c",
             videoDica:
                 "https://www.youtube.com/embed/zZLFPxHlt4g",
             videoExplicacao:
@@ -824,7 +824,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como todas possuem base 10, a potência de maior expoente possui o maior valor. Portanto, 10⁵ é a maior.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/lUWQDtK5nVs",
             videoDica:
                 "https://www.youtube.com/embed/_wSNSLLAMu8",
             videoExplicacao:
@@ -850,7 +850,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como 10⁶ = 1 000 000, temos 2 × 10⁶ = 2 000 000 bytes.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/AOT5yHzOP7o",
             videoDica:
                 "https://www.youtube.com/embed/lRBAx_XexEQ",
             videoExplicacao:
@@ -881,7 +881,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/kkAt8rUu0UE",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
