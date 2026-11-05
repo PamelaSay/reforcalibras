@@ -903,7 +903,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/R9RC1MVKvdM",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/4PIwQeTXyjY"
         }),
 
         criarQuestao({
@@ -944,7 +944,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/YarXV2Fv5Qg",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/TjXUWR1zoV0"
         }),
 
         criarQuestao({
@@ -986,7 +986,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/PEaeJW0SzzI",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/Zgf4TNlta4M"
         }),
 
         criarQuestao({
@@ -1012,7 +1012,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/lmBfOXMCsgA",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/oHIGPv1BWs4"
         }),
 
         criarQuestao({
@@ -1038,7 +1038,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/n1ORbGoqKek",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/mz32irQDnrQ"
         }),
 
         criarQuestao({
@@ -1059,7 +1059,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/ba7kWMY7psc",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/dWVJNxEHg4Y"
         }),
 
         criarQuestao({
@@ -1085,7 +1085,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/4PIwQeTXyjY",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/Y__7hA-fKck"
         })
     ]
 };
