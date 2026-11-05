@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Aprenda Matemática em Libras com o Reforça Libras! Aulas em vídeo, atividades e jogos sobre potenciação e radiciação.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reforca Libras</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- MENU -->
+    <header class="menu">
+    <div class="container menu-content">
+
+        <!-- Logo -->
+        <div class="logo-area">
+            <img src="logo.png" alt="Logo Reforça Libras">
+        </div>
+
+        <!-- Menu -->
+        <nav id="menu-links">
+            <a href="index.html" aria-current="page">🏠 Início</a>
+                <!-- DROPDOWN DISCIPLINAS (Texto simples sem formato de botão) -->
+                     <div class="dropdown">
+                         <button type="button" class="dropbtn">
+                             📚 Disciplinas ▼
+                         </button>
+
+                            <div class="dropdown-content">
+                                <!-- MATEMÁTICA -->
+                                    <div class="submenu">
+                                        <button type="button" class="item-menu">
+                                        Matemática <span>▶</span>
+                                        </button>
+                                        <div class="submenu-content">
+                                            <a href="potenciacao.html">Potenciação </a>
+                                            <a href="radiciacao.html">Radiciação </a>
+                                            <a href="matematica.html" class="ler-mais"> ➕ Ver todas as temáticas </a>
+                                        </div>
+                                    </div>
+
+                                <!-- BIOLOGIA -->
+                                    <div class="submenu">
+                                        <button type="button" class="item-menu">
+                                            Biologia <span>▶</span>
+                                        </button>
+
+                                        <div class="submenu-content">
+                                            <span class="item-indisponivel">Conteúdos em breve</span>
+                                        </div>
+                                    </div>
+                            </div>
+                     </div>
+                <a href="#">🎮 Jogos</a>
+                <a href="comentarios.html">💬 Comentários </a>
+
+        </nav>
+
+        <!-- Pesquisa -->
+              <div class="pesquisa-box">
+                 <input type="text" id="campoPesquisa" placeholder="🔎Buscar..." autocomplete="off">
+                 <button onclick="pesquisarConteudo()">Pesquisar</button>
+             </div>
+
+        <!-- Login -->
+        <button id="btnLogin" class="login-btn">👤 Entrar </button>
+
+    </div>
+
+            <!-- MODAL LOGIN -->
+                <div id="modalLogin" class="modal">
+                    <div class="perfil-box modal-acessivel-box">
+                         <span class="fechar" id="fecharLogin">&times;</span>
+                         <div class="modal-formulario">
+                         <img src="logo.png" alt="Logo Reforça Libras">
+                         <h2>Entrar</h2>
+
+                         <form id="formLogin" autocomplete="off">
+                            <label for="loginEmail">E-mail</label>
+                            <input id="loginEmail"type="email"placeholder="E-mail" autocomplete="email"required>
+                          <div class="campo-senha">
+                             <input id="senhaLogin" type="password" placeholder="Senha" autocomplete="current-password" required >
+                                <span  class="icone-olho" onclick="alternarSenha('senhaLogin', this)"  role="button" tabindex="0" aria-label="Mostrar senha" title="Mostrar senha" >
+                                    👁️
+                                </span>
+                            </div>
+                                <a href="#" class="esqueceu-senha" onclick="esqueceuSenha(event)" >
+                                    Esqueceu sua senha?
+                                </a>
+                            <button type="submit">Entrar</button>
+                         </form>
+                         <p>
+                            Primeiro acesso?
+                            <button type="button" id="abrirCadastro">Cadastrar</button>
+                         </p>
+                         </div>
+
+                         <aside class="janela-libras-interface" aria-labelledby="tituloLibrasLogin">
+                            <h3 id="tituloLibrasLogin">🤟 Acesso em Libras</h3>
+                            <div class="libras-video-box">
+                                <video id="videoLibrasLogin" controls playsinline preload="metadata" hidden>
+                                    <source src="videos/libras/login.mp4" type="video/mp4">
+                                </video>
+                                <p class="libras-video-pendente">O vídeo em Libras do login será inserido aqui.</p>
+                            </div>
+                            <button type="button" class="repetir-video-interface" data-video-id="videoLibrasLogin" hidden>
+                                ↻ Repetir tradução
+                            </button>
+                         </aside>
+                    </div>
+                </div>
+                       
+<!-- MODAL CADASTRO -->
+<div id="modalCadastro" class="modal">
+    <div class="perfil-box modal-acessivel-box">
+        <span class="fechar" id="fecharCadastro">&times;</span>
+        <div class="modal-formulario">
+        <img src="logo.png" alt="Logo Reforça Libras">
+        <h2>Criar cadastro</h2>
+
+        <form id="formCadastro" autocomplete="off">
+            <label for="nomeCadastro">Nome</label>
+            <input id="nomeCadastro" type="text" placeholder="Digite seu nome" required autocomplete="name"           >
+
+            <label for="perfilComunidade">Como você se identifica em relação à comunidade surda?
+            </label>
+
+                <select id="perfilComunidade" name="perfilComunidade">
+                    <option value="" selected>Selecione uma opção</option>
+                     <option value="pessoa_surda">Pessoa surda</option>
+                    <option value="deficiencia_auditiva">Pessoa com deficiência auditiva</option>
+                    <option value="pessoa_surdocega">Pessoa surdocega</option>
+                    <option value="coda">Pessoa CODA — ouvinte, filha(0) de pais surdos</option>
+                    <option value="pessoa_ouvinte">Pessoa ouvinte</option>
+                    <option value="familiar">Familiar de pessoa surda</option>
+                    <option value="professor">Professor(a)</option>
+                    <option value="interprete">Tradutor(a) ou intérprete de Libras</option>
+                    <option value="estudante_libras">Estudante de Libras</option>
+                    <option value="prefiro_nao_informar">Prefiro não informar</option>
+                </select>
+
+                <small> Informação opcional, utilizada somente de forma agrupada na pesquisa.
+                </small> <br>
+
+            <label for="emailCadastro">E-mail</label>
+            <input id="emailCadastro" type="email" placeholder="Digite seu e-mail" required autocomplete="email" >
+
+            <label for="senhaCadastro">Senha</label>
+            <input id="senhaCadastro" type="password" placeholder="Crie uma senha com pelo menos 6 caracteres" required minlength="6" autocomplete="new-password">
+
+            <label class="aceite-termos">
+                <input type="checkbox" id="aceitarTermos">
+                <span>
+                    Li as informações acima e concordo voluntariamente em participar da
+                    <button type="button" id="abrirTermos" class="link-termos">
+                        pesquisa
+                    </button>
+                </span>
+            </label>
+
+            <p class="aviso-consentimento">
+                A participação na pesquisa é opcional e não impede o uso da plataforma.
+            </p>
+
+            <button type="submit">Cadastre-se</button>
+        </form>
+        </div>
+
+        <aside class="janela-libras-interface" aria-labelledby="tituloLibrasCadastro">
+            <h3 id="tituloLibrasCadastro">🤟 Cadastro em Libras</h3>
+            <div class="libras-video-box">
+                <video id="videoLibrasCadastro" controls playsinline preload="metadata" hidden>
+                    <source src="videos/libras/cadastro.mp4" type="video/mp4">
+                </video>
+                <p class="libras-video-pendente">O vídeo em Libras do cadastro será inserido aqui.</p>
+            </div>
+            <button type="button" class="repetir-video-interface" data-video-id="videoLibrasCadastro" hidden>
+                ↻ Repetir tradução
+            </button>
+        </aside>
+    </div>
+</div>
+
+<!-- COLOQUE ESTE MODAL LOGO DEPOIS DO MODAL DE CADASTRO -->
+<div id="modalTermos" class="modal" data-nosnippet>
+    <div class="perfil-box termos-box">
+        <span class="fechar" id="fecharTermos">&times;</span>
+        <h2>Termo de Consentimento para Participação na Pesquisa</h2>
+
+        <div class="termos-layout">
+            <div class="texto-termos" tabindex="0" aria-label="Texto do termo de consentimento">
+                <section>
+                    <h3>1. Sobre a pesquisa</h3>
+                    <p>A atividade que você realizará na plataforma Reforça Libras faz parte de uma pesquisa vinculada ao projeto Matemática Inclusiva para Todos (MIT), desenvolvido na Universidade Federal do Rio Grande – FURG, no Instituto de Matemática, Estatística e Física – IMEF.</p>
+                </section>
+
+                <section>
+                    <h3>2. Dados coletados</h3>
+                    <p>A pesquisa busca contribuir para o desenvolvimento de práticas inclusivas no ensino de Matemática. Nesta atividade, serão coletados, para fins de pesquisa, os registros das resoluções das atividades realizadas e os comentários e impressões dos participantes sobre a experiência com os materiais disponibilizados na plataforma.</p>
+                </section>
+
+                <section>
+                    <h3>3. Utilização e proteção dos dados</h3>
+                    <p>Os dados coletados poderão ser utilizados em trabalhos acadêmicos e publicações científicas relacionados à pesquisa. A identidade dos participantes será preservada, não sendo divulgadas informações que permitam sua identificação.</p>
+                </section>
+
+                <section>
+                    <h3>4. Participação voluntária</h3>
+                    <p>Sua participação é voluntária. Você pode optar por não participar da pesquisa ou retirar seu consentimento a qualquer momento, sem qualquer prejuízo.</p>
+                </section>
+
+                <section>
+                    <h3>5. Aprovação pelo Comitê de Ética</h3>
+                    <p>A pesquisa foi aprovada pelo Comitê de Ética em Pesquisa da Universidade Federal do Rio Grande – CEP-FURG, sob o número 491124.7.0000.5324.</p>
+                </section>
+
+                <section>
+                    <h3>6. Contato para dúvidas</h3>
+                    <p>Em caso de dúvidas sobre a pesquisa, você poderá entrar em contato com a equipe responsável pelo e-mail <a href="mailto:mitfurg@gmail.com">mitfurg@gmail.com</a>.</p>
+                </section>
+
+                <section>
+                    <h3>7. Declaração de consentimento</h3>
+                    <p>Ao selecionar a opção abaixo, você declara que leu e compreendeu as informações apresentadas e concorda voluntariamente em participar da pesquisa e com a utilização dos dados produzidos durante as atividades para os fins acadêmicos e científicos descritos acima.</p>
+                </section>
+            </div>
+
+            <aside class="janela-libras-interface janela-libras-termo" aria-labelledby="tituloLibrasTermo">
+                <h3 id="tituloLibrasTermo">🤟 Termo em Libras</h3>
+                <div class="libras-video-box">
+                    <video id="videoLibrasTermo" controls playsinline preload="metadata" hidden>
+                        <source src="videos/libras/termo-consentimento.mp4" type="video/mp4">
+                    </video>
+                    <p class="libras-video-pendente">O vídeo com a tradução completa deste termo será inserido aqui.</p>
+                </div>
+                <button type="button" class="repetir-video-interface" data-video-id="videoLibrasTermo" hidden>
+                    ↻ Repetir tradução
+                </button>
+            </aside>
+        </div>
+
+        <div class="termos-acoes">
+            <button type="button" id="fecharSemConcordar">Continuar sem participar da pesquisa</button>
+            <button type="button" id="concordarTermos">Li as informações acima e concordo em participar da pesquisa</button>
+        </div>
+    </div>
+</div>
+
+<!-- PERFIL DO ALUNO -->
+
+<div id="modalPerfil" class="modal">
+
+    <div class="perfil-painel">
+
+        <button
+            type="button"
+            class="fechar fechar-perfil"
+            id="fecharPerfil"
+            aria-label="Fechar perfil"
+        >
+            &times;
+        </button>
+
+        <!-- IDENTIFICAÇÃO -->
+
+        <header class="perfil-cabecalho">
+
+            <div class="icone-usuario">
+                👤
+            </div>
+
+            <div class="perfil-identificacao">
+
+                <span>
+                    PERFIL DO ALUNO
+                </span>
+
+                <h2 id="nomeUsuario">
+                    Usuário
+                </h2>
+
+                <p>
+                    Seu nome será usado no ranking público.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- RESUMO -->
+
+        <section class="perfil-resumo">
+
+            <article class="perfil-indicador">
+
+                <span class="perfil-indicador-icone">
+                    📚
+                </span>
+
+                <div>
+                    <strong id="perfilAulas">
+                        0
+                    </strong>
+
+                    <span>
+                        Aulas concluídas
+                    </span>
+                </div>
+
+            </article>
+
+
+            <article class="perfil-indicador">
+
+                <span class="perfil-indicador-icone">
+                    🎮
+                </span>
+
+                <div>
+                    <strong id="perfilTestes">
+                        0
+                    </strong>
+
+                    <span>
+                        Testes realizados
+                    </span>
+                </div>
+
+            </article>
+
+
+            <article class="perfil-indicador">
+
+                <span class="perfil-indicador-icone">
+                    📈
+                </span>
+
+                <div>
+                    <strong id="perfilMedia">
+                        0%
+                    </strong>
+
+                    <span>
+                        Média de acertos
+                    </span>
+                </div>
+
+            </article>
+
+
+            <article class="perfil-indicador">
+
+                <span class="perfil-indicador-icone">
+                    ⭐
+                </span>
+
+                <div>
+                    <strong id="perfilPontos">
+                        0
+                    </strong>
+
+                    <span>
+                        Pontuação
+                    </span>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- CONTEÚDO DO PERFIL -->
+
+        <div class="perfil-conteudo">
+
+            <!-- COLUNA ESQUERDA -->
+
+            <section class="perfil-secao">
+
+                <div class="perfil-titulo-secao">
+
+                    <div>
+                        <span>
+                            MINHAS TRILHAS
+                        </span>
+
+                        <h3>
+                            Andamento nos conteúdos
+                        </h3>
+                    </div>
+
+                </div>
+
+
+                <!-- POTENCIAÇÃO -->
+
+                <article class="perfil-curso">
+
+                    <div class="perfil-curso-topo">
+
+                        <div>
+                            <span class="perfil-curso-icone">
+                                ⚡
+                            </span>
+
+                            <strong>
+                                Potenciação
+                            </strong>
+                        </div>
+
+                        <span id="perfilPotenciacaoTexto">
+                            0 de 4 etapas
+                        </span>
+
+                    </div>
+
+                    <div class="perfil-barra">
+
+                        <div
+                            id="perfilPotenciacaoBarra"
+                            style="width: 0%"
+                        ></div>
+
+                    </div>
+
+                    <div class="perfil-curso-rodape">
+
+                        <span id="perfilPotenciacaoMedia">
+                            Sem resultados
+                        </span>
+
+                        <a href="potenciacao.html">
+                            Continuar →
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <!-- RADICIAÇÃO -->
+
+                <article class="perfil-curso">
+
+                    <div class="perfil-curso-topo">
+
+                        <div>
+                            <span class="perfil-curso-icone">
+                                √
+                            </span>
+
+                            <strong>
+                                Radiciação
+                            </strong>
+                        </div>
+
+                        <span id="perfilRadiciacaoTexto">
+                            0 de 4 etapas
+                        </span>
+
+                    </div>
+
+                    <div class="perfil-barra">
+
+                        <div
+                            id="perfilRadiciacaoBarra"
+                            style="width: 0%"
+                        ></div>
+
+                    </div>
+
+                    <div class="perfil-curso-rodape">
+
+                        <span id="perfilRadiciacaoMedia">
+                            Sem resultados
+                        </span>
+
+                        <a href="radiciacao.html">
+                            Continuar →
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- COLUNA DIREITA -->
+
+            <section class="perfil-secao">
+
+                <div class="perfil-titulo-secao">
+
+                    <div>
+                        <span>
+                            DIAGNÓSTICO
+                        </span>
+
+                        <h3>
+                            Minha aprendizagem
+                        </h3>
+                    </div>
+
+                </div>
+
+
+                <div class="perfil-diagnostico">
+
+                    <article class="diagnostico-bloco dominio">
+
+                        <h4>
+                            ✅ Bom desempenho
+                        </h4>
+
+                        <div id="perfilPontosFortes">
+
+                            <p>
+                                Realize as verificações
+                                para visualizar seus resultados.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="diagnostico-bloco revisar">
+
+                        <h4>
+                            💡 Preciso revisar
+                        </h4>
+
+                        <div id="perfilRecomendacoes">
+
+                            <p>
+                                Nenhuma recomendação disponível.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- AÇÕES -->
+
+        <footer class="perfil-acoes">
+
+            <button type="button" class="perfil-btn-sair"onclick="sair()">
+                🚪 Sair
+            </button>
+
+            <button type="button" class="excluir perfil-btn-excluir" onclick="excluirConta()" >
+                🗑 Excluir conta
+            </button>
+
+        </footer>
+
+    </div>
+
+</div>
+
+</header>
+
+   
+
+        <!-- BANNER -->
+        <section class="hero">
+         
+
+         <div class="hero-img">
+                <img src="banner.png">
+         </div>
+        </section>
+                      
+   <main>
+         <section class="conteudo-home">
+                <section class="em-alta">
+                    <h2>🔥 Em Alta</h2>
+                    <div class="cards">
+                
+                        <!-- CARD POTENCIAÇÃO -->
+                    <div class="card" data-nome="potenciacao matematica">
+                        <img src="capa_potenciacao.png" alt="Potenciação">
+                        <div class="card-content">
+                            <h3>Potenciação</h3>
+                            <p>Aprenda potência de forma divertida.</p>
+                            <div class="buttons">
+                                <a href="potenciacao.html">
+                                    Acessar conteúdo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- CARD RADICIAÇÃO -->
+
+                    <div class="card" data-nome="radiciacao matematica">
+                        <img src="capa_radiciacao.png" alt="Radiciação">
+                        <div class="card-content">
+                            <h3>Radiciação</h3>
+                            <p>Descubra as raízes matemáticas.</p>
+                            <div class="buttons">
+                                <a href="radiciacao.html">
+                                    Acessar conteúdo
+                                </a>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+  <!-- PROGRESSO E RANKING -->
+    <aside class="lateral">
+ <section id="continuarEstudando">
+        <!-- Aparece somente quando logado -->
+    </section>
+
+<div class="box">
+
+<h3>🏆 Ranking</h3>
+<div id="rankingLista" data-nosnippet aria-live="polite">
+    <p>Carregando ranking...</p>
+</div>
+
+</div>
+
+<section class="box contador-visitas" aria-labelledby="tituloContadorVisitas">
+    <h3 id="tituloContadorVisitas">👥 Visitas ao Reforça Libras</h3>
+    <strong id="numeroVisitas" aria-live="polite">Carregando...</strong>
+    <span>acessos à página inicial</span>
+</section>
+
+    </section>
+</aside>
+  
+
+  <!-- COMENTÁRIOS -->
+      <section class="container-comentarios-page">
+
+    <!-- 1. FORMULÁRIO DE AVALIAÇÃO NO TOPO -->
+    <div class="form-comentario-box">
+        <h2>Avalie sua experiência</h2>
+        <p>Sua opinião é muito importante para nós!</p>
+
+        <!-- Estrelas -->
+        <div class="estrelas-input">
+            <span class="estrela" data-nota="1">★</span>
+            <span class="estrela" data-nota="2">★</span>
+            <span class="estrela" data-nota="3">★</span>
+            <span class="estrela" data-nota="4">★</span>
+            <span class="estrela" data-nota="5">★</span>
+        </div>
+
+        <!-- Campo de texto -->
+        <textarea id="comentario" placeholder="Escreva aqui sua avaliação..."></textarea>
+
+        <!-- Botão enviar -->
+        <button type="button" onclick="salvarComentario()">Enviar Avaliação</button>
+    </div>
+
+    <hr class="divisor-pagina">
+    <section class="comentarios-home">
+    <h2>O que os alunos dizem</h2>
+
+    <!-- O JS vai preencher no máximo 3 cards aqui -->
+    <div id="ultimos-comentarios" class="comentarios-grid"></div>
+
+    <!-- Botão que leva para a página completa -->
+    <div class="ver-mais-box">
+        <a href="comentarios.html" class="btn-ver-todos">Ler todos os comentários</a>
+    </div>
+</section>
+
+</section>
+    <!-- FOOTER -->
+    <footer>
+        <p>
+            © 2026 Reforça Libras - Todos os direitos reservados.
+        </p>
+    </footer>
+
+        <!-- Bibliotecas do Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+        <script src="firebase-config.js"></script>
+        <script src="storage-utils.js"></script>
+
+    <!-- Biblioteca de Alertas Bonitos SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script src="script.js"></script>
+        <script src="comentarios.js"></script>
+</body>
+</html>
