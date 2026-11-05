@@ -216,7 +216,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Em 5⁴, a base é 5 e o expoente é 4.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/38WCJWFEwn8",
             videoDica:
                 "https://www.youtube.com/embed/_ynhWxETUc8",
             videoExplicacao:
@@ -236,7 +236,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Em 7², o número 7 é a base e o número 2 é o expoente.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/m1T_5b9KwyA",
             videoDica:
                 "https://www.youtube.com/embed/U0B-MnIfwhE",
             videoExplicacao:
@@ -257,7 +257,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "O fator 3 aparece quatro vezes. Portanto, 3 × 3 × 3 × 3 = 3⁴.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/tEVXavW2ZCE",
             videoDica:
                 "https://www.youtube.com/embed/ThcSzrKvk3s",
             videoExplicacao:
@@ -283,7 +283,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Em 4³, a base 4 aparece três vezes como fator: 4 × 4 × 4.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/XzDyvJIZkb8",
             videoDica:
                 "https://www.youtube.com/embed/Gjr00RQ9EIY",
             videoExplicacao:
@@ -303,7 +303,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "3³ = 3 × 3 × 3 = 27.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/i-YKgIPXd6o",
             videoDica:
                 "https://www.youtube.com/embed/KtV8qNSHVCM",
             videoExplicacao:
@@ -323,7 +323,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "2⁵ = 2 × 2 × 2 × 2 × 2 = 32.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/PIYPcwKCv6s",
             videoDica:
                 "https://www.youtube.com/embed/BiOsrFJzBwc",
             videoExplicacao:
@@ -344,7 +344,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "2⁴ = 16, 3² = 9, 5¹ = 5 e 2³ = 8. Portanto, 2⁴ possui o maior valor.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/O7eZGbqsy2o",
             videoDica:
                 "https://www.youtube.com/embed/3Tvt4RnnBJA",
             videoExplicacao:
@@ -365,7 +365,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como a área é 6 × 6, podemos representá-la por 6².",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/X21zjMGwSlc",
             videoDica:
                 "https://www.youtube.com/embed/7yuO8i6WcVQ",
             videoExplicacao:
@@ -386,7 +386,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "O volume é 4³ = 4 × 4 × 4 = 64 cm³.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/e5KxYZiWl1o",
             videoDica:
                 "https://www.youtube.com/embed/LJNcxy4WpJY",
             videoExplicacao:
