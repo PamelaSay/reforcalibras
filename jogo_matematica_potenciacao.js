@@ -901,7 +901,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/R9RC1MVKvdM",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -942,7 +942,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/YarXV2Fv5Qg",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -963,7 +963,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/xn1DayHwMrA",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -984,7 +984,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/PEaeJW0SzzI",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -1010,7 +1010,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/lmBfOXMCsgA",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -1036,7 +1036,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/n1ORbGoqKek",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -1057,7 +1057,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/ba7kWMY7psc",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -1083,7 +1083,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/4PIwQeTXyjY",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         })
