@@ -634,7 +634,7 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/Ay2kLJ3Nkds",
             videoExplicacao:
                 "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
@@ -659,9 +659,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/1JgztJTooGI",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/mt5rVcP_eX4"
         }),
 
         criarQuestao({
@@ -680,9 +680,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/1M5AXHagu9g",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/-M86QwTTUSI"
         }),
 
         criarQuestao({
@@ -706,9 +706,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/JDKeO9odjQs",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/6JuI4ljjp40"
         }),
 
         criarQuestao({
@@ -726,9 +726,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/Bqa-_YLDPuM",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/DT5nDcetZHg"
         }),
 
         criarQuestao({
@@ -752,9 +752,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/W2JVT3cEfcs",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/24xPARAM1iU"
         }),
 
         criarQuestao({
@@ -778,9 +778,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/eC1ejo-K5vM",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/d6muu2wfMR4"
         }),
 
         criarQuestao({
@@ -805,9 +805,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/zZLFPxHlt4g",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/oseqxXhFC-E"
         }),
 
         criarQuestao({
@@ -826,9 +826,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/_wSNSLLAMu8",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/lvwbHlWd9ec"
         }),
 
         criarQuestao({
@@ -852,9 +852,9 @@ const bancoDeQuestoes = {
             videoPergunta:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/lRBAx_XexEQ",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/OvCJ92o3PR8"
         })
     ],
 
