@@ -49,6 +49,7 @@ let indice = 0;
 let pontos = 0;
 let vidas = TOTAL_VIDAS;
 let sequencia = 0;
+let partidaFinalizada = false;
 let bloqueado = false;
 let dicaUsada = false;
 let resultados = [];
@@ -89,6 +90,7 @@ function embaralhar(lista) {
 }
 
 function iniciarPartida(modulo) {
+    partidaFinalizada = false;
     moduloAtual = modulo;
     indice = 0; pontos = 0; vidas = TOTAL_VIDAS; sequencia = 0;
     bloqueado = false; dicaUsada = false; resultados = [];
@@ -99,11 +101,25 @@ function iniciarPartida(modulo) {
 
 async function selecionarModulo(modulo) {
     if (!bancoDeQuestoes[modulo] || modulo === moduloAtual) return;
-    if (resultados.length) {
-        const resposta = await Swal.fire({icon:"question",title:"Trocar de módulo?",html:htmlAlertaTraducao("O progresso desta partida será perdido.", "Troca de módulo em Libras"),showCancelButton:true,confirmButtonText:"Trocar",cancelButtonText:"Continuar aqui",confirmButtonColor:"#1d3557",didOpen:ativarRepeticaoAlerta});
-        if (!resposta.isConfirmed) return;
-    }
-    iniciarPartida(modulo);
+    if (partidaFinalizada) { location.replace("radiciacao.html"); return; }
+    const resposta = await Swal.fire({
+        icon: "question", title: "Trocar de exercício?",
+        html: montarAvisoTrocaExercicio(),
+        showCancelButton: true, confirmButtonText: "Voltar à trilha",
+        cancelButtonText: "Continuar aqui", confirmButtonColor: "#1d3557",
+        allowOutsideClick: false, allowEscapeKey: false,
+        customClass: { popup: "alerta-reforca" }
+    });
+    if (resposta.isConfirmed) location.replace("radiciacao.html");
+}
+
+// Inserir aqui o link /embed/ da tradução específica deste aviso.
+const VIDEO_TROCA_EXERCICIO = "";
+function montarAvisoTrocaExercicio() {
+    const traducao = VIDEO_TROCA_EXERCICIO
+        ? `<iframe class="video-explicacao" src="${urlVideo(VIDEO_TROCA_EXERCICIO)}" title="Troca de exercício em Libras" allowfullscreen></iframe>`
+        : `<div class="video-explicacao" role="region" aria-label="Janela de Libras" style="display:flex;align-items:center;justify-content:center;padding:20px;background:#edf4f8;color:#1d3557">Janela de Libras — tradução deste aviso aguardando vídeo.</div>`;
+    return `<div class="explicacao-resposta"><div class="texto-explicacao">Para fazer outro exercício, volte à trilha e assista à aula correspondente. Se sair agora, esta partida em andamento não será salva.</div>${traducao}</div>`;
 }
 
 function atualizarModulo() {
@@ -264,15 +280,17 @@ function salvarFirebase(resultado) {
 }
 
 async function finalizar(concluido) {
-    if (!resultados.length) return;
+    if (!resultados.length || partidaFinalizada) return;
+    partidaFinalizada = true;
     const resultado=salvarResultado(concluido);
-    const resposta=await Swal.fire({icon:concluido?"success":"warning",title:concluido?"Módulo concluído!":"Suas vidas terminaram",html:`<div class="explicacao-resposta"><div class="texto-explicacao">Você acertou <strong>${resultado.acertos} de ${resultado.totalRespondido}</strong> desafios.<br>Pontuação: <strong>${pontos}</strong>.<br>Aproveitamento: <strong>${resultado.percentual}%</strong>.</div><iframe id="videoFinal" class="video-explicacao" src="${urlVideo(V)}" title="Resultado do jogo em Libras" allowfullscreen></iframe><button id="repetirFinal" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`,showDenyButton:true,showCancelButton:true,confirmButtonText:"Voltar para a trilha",denyButtonText:"Jogar novamente",cancelButtonText:"Avaliar o jogo",confirmButtonColor:"#1d3557",denyButtonColor:"#5fa8d3",cancelButtonColor:"#d9a900",allowOutsideClick:false,allowEscapeKey:false,customClass:{popup:"alerta-reforca"},didOpen:()=>{const v=document.getElementById("videoFinal");const b=document.getElementById("repetirFinal");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo(V,true),100);};}});
+    const resposta=await Swal.fire({icon:concluido?"success":"warning",title:concluido?"Exercício concluído!":"Suas vidas terminaram",html:`<div class="explicacao-resposta"><div class="texto-explicacao">Você acertou <strong>${resultado.acertos} de ${resultado.totalRespondido}</strong> desafios.<br>Pontuação: <strong>${pontos}</strong>.<br>Aproveitamento: <strong>${resultado.percentual}%</strong>.</div><iframe id="videoFinal" class="video-explicacao" src="${urlVideo(V)}" title="Resultado do jogo em Libras" allowfullscreen></iframe><button id="repetirFinal" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`,showDenyButton:true,showCancelButton:true,confirmButtonText:"Voltar para a trilha",denyButtonText:"Jogar novamente",cancelButtonText:"Avaliar o jogo",confirmButtonColor:"#1d3557",denyButtonColor:"#5fa8d3",cancelButtonColor:"#d9a900",allowOutsideClick:false,allowEscapeKey:false,customClass:{popup:"alerta-reforca"},didOpen:()=>{const v=document.getElementById("videoFinal");const b=document.getElementById("repetirFinal");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo(V,true),100);};}});
     if(resposta.isConfirmed)location.replace("radiciacao.html");
     else if(resposta.isDenied)iniciarPartida(moduloAtual);
     else location.href="index.html#avaliacao";
 }
 
 async function confirmarSaida() {
+    if (partidaFinalizada) { location.replace("radiciacao.html"); return; }
     const mensagem=resultados.length?"O progresso desta partida será perdido.":"Deseja voltar para a trilha de Radiciação?";
     const resposta=await Swal.fire({icon:"question",title:"Sair do jogo?",html:htmlAlertaTraducao(mensagem, "Saída do jogo em Libras"),showCancelButton:true,confirmButtonText:"Sim, sair",cancelButtonText:"Continuar jogando",confirmButtonColor:"#d94b4b",cancelButtonColor:"#1d3557",didOpen:ativarRepeticaoAlerta});
     if(resposta.isConfirmed)location.replace("radiciacao.html");

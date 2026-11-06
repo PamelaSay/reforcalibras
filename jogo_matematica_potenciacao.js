@@ -1104,6 +1104,7 @@ let indiceQuestao = 0;
 let pontos = 0;
 let vidas = TOTAL_VIDAS;
 let sequenciaAcertos = 0;
+let partidaFinalizada = false;
 let respostaBloqueada = false;
 let dicaUtilizada = false;
 let resultadosDaPartida = [];
@@ -1319,6 +1320,7 @@ function prepararPartida(questoesDoModulo) {
 }
 
 function iniciarPartida(modulo) {
+    partidaFinalizada = false;
     moduloAtual = modulo;
     indiceQuestao = 0;
     pontos = 0;
@@ -1343,32 +1345,35 @@ function iniciarPartida(modulo) {
 ===================================================== */
 
 async function selecionarModulo(novoModulo) {
-    if (!bancoDeQuestoes[novoModulo]) return;
-    if (novoModulo === moduloAtual) return;
-
-    if (resultadosDaPartida.length === 0) {
-        iniciarPartida(novoModulo);
+    if (!bancoDeQuestoes[novoModulo] || novoModulo === moduloAtual) return;
+    // A lateral retorna às aulas; nunca inicia outro exercício diretamente.
+    if (partidaFinalizada) {
+        voltarParaTrilha();
         return;
     }
-
     const resposta = await Swal.fire({
         icon: "question",
-        title: "Trocar de módulo?",
-        text:
-            "A partida atual será encerrada e o novo módulo começará com outra ordem de questões.",
+        title: "Trocar de exercício?",
+        html: montarAvisoTrocaExercicio(),
         showCancelButton: true,
-        confirmButtonText: "Trocar módulo",
+        confirmButtonText: "Voltar à trilha",
         cancelButtonText: "Continuar aqui",
         confirmButtonColor: "#1d3557",
-        cancelButtonColor: "#64748b",
-        customClass: {
-            popup: "alerta-reforca"
-        }
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        customClass: { popup: "alerta-reforca" }
     });
+    if (resposta.isConfirmed) voltarParaTrilha();
+    // Cancelar não altera questões, bloqueio de resposta, pontos ou vidas.
+}
 
-    if (resposta.isConfirmed) {
-        iniciarPartida(novoModulo);
-    }
+// Inserir aqui o link /embed/ da tradução específica deste aviso.
+const VIDEO_TROCA_EXERCICIO = "";
+function montarAvisoTrocaExercicio() {
+    const traducao = VIDEO_TROCA_EXERCICIO
+        ? `<iframe class="video-explicacao" src="${criarEnderecoYouTube(VIDEO_TROCA_EXERCICIO)}" title="Troca de exercício em Libras" allowfullscreen></iframe>`
+        : `<div class="video-explicacao" role="region" aria-label="Janela de Libras" style="display:flex;align-items:center;justify-content:center;padding:20px;background:#edf4f8;color:#1d3557">Janela de Libras — tradução deste aviso aguardando vídeo.</div>`;
+    return `<div class="explicacao-resposta"><div class="texto-explicacao">Para fazer outro exercício, volte à trilha e assista à aula correspondente. Se sair agora, esta partida em andamento não será salva.</div>${traducao}</div>`;
 }
 
 function atualizarModuloAtivo() {
@@ -2295,6 +2300,8 @@ async function atualizarMelhorPontuacao(
 ===================================================== */
 
 async function finalizarPartida(concluiu) {
+    if (partidaFinalizada) return;
+    partidaFinalizada = true;
     if (moduloAtual === "revisaoMultiplicacao") {
         concluiu =
             resultadosDaPartida.length === questoesDaPartida.length;
@@ -2323,7 +2330,7 @@ async function finalizarPartida(concluiu) {
     const titulo = revisaoConcluida
         ? "Revisão de multiplicação concluída!"
         : concluiu
-        ? "Módulo concluído!"
+        ? "Exercício concluído!"
         : "Suas vidas terminaram";
 
     const mensagem =
@@ -2351,10 +2358,10 @@ async function finalizarPartida(concluiu) {
 
         confirmButtonText: revisaoConcluida
             ? "Continuar para a Aula 2"
-            : "Jogar novamente",
+            : "Voltar à trilha",
 
         denyButtonText:
-            "Escolher outro módulo",
+            "Jogar novamente",
 
         cancelButtonText:
             "Avaliar o jogo",
@@ -2369,6 +2376,7 @@ async function finalizarPartida(concluiu) {
             "#d9a900",
 
         allowOutsideClick: false,
+        allowEscapeKey: false,
 
         customClass: {
             popup: "alerta-reforca"
@@ -2381,12 +2389,12 @@ async function finalizarPartida(concluiu) {
             return;
         }
 
-        iniciarPartida(moduloAtual);
+        voltarParaTrilha();
         return;
     }
 
     if (resposta.isDenied) {
-        rolarParaMapaNoCelular();
+        iniciarPartida(moduloAtual);
         return;
     }
 
@@ -2479,6 +2487,7 @@ function montarConteudoSaida(mensagem) {
 }
 
 async function sairDoJogo() {
+    if (partidaFinalizada) { voltarParaTrilha(); return; }
     const mensagem = resultadosDaPartida.length > 0
         ? "O progresso desta partida ainda não foi concluído."
         : "Deseja sair do jogo e voltar para a trilha de Potenciação?";
