@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Aprenda Matemática em Libras com o Reforça Libras! Aulas em vídeo, atividades e jogos.">
+    <meta name="description" content="Aprenda Matemática em Libras com o Reforça Libras! Aulas em vídeo, atividades e jogos sobre potenciação e radiciação.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reforca Libras</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,12 +128,13 @@
             <label for="perfilComunidade">Como você se identifica em relação à comunidade surda?
             </label>
 
+            <div class="campo-lista">
                 <select id="perfilComunidade" name="perfilComunidade">
                     <option value="" selected>Selecione uma opção</option>
                      <option value="pessoa_surda">Pessoa surda</option>
                     <option value="deficiencia_auditiva">Pessoa com deficiência auditiva</option>
                     <option value="pessoa_surdocega">Pessoa surdocega</option>
-                    <option value="coda">Pessoa CODA — ouvinte, filha(0) de pais surdos</option>
+                    <option value="coda">Pessoa CODA — ouvinte, filha(o) de pais surdos</option>
                     <option value="pessoa_ouvinte">Pessoa ouvinte</option>
                     <option value="familiar">Familiar de pessoa surda</option>
                     <option value="professor">Professor(a)</option>
@@ -140,9 +142,11 @@
                     <option value="estudante_libras">Estudante de Libras</option>
                     <option value="prefiro_nao_informar">Prefiro não informar</option>
                 </select>
+            </div>
 
-                <small> Informação opcional, utilizada somente de forma agrupada na pesquisa.
-                </small> <br>
+            <small class="ajuda-campo">
+                Informação opcional, utilizada somente de forma agrupada na pesquisa.
+            </small>
 
             <label for="emailCadastro">E-mail</label>
             <input id="emailCadastro" type="email" placeholder="Digite seu e-mail" required autocomplete="email" >
@@ -184,7 +188,7 @@
 </div>
 
 <!-- COLOQUE ESTE MODAL LOGO DEPOIS DO MODAL DE CADASTRO -->
-<div id="modalTermos" class="modal" data-nosnippet>
+<div id="modalTermos" class="modal">
     <div class="perfil-box termos-box">
         <span class="fechar" id="fecharTermos">&times;</span>
         <h2>Termo de Consentimento para Participação na Pesquisa</h2>
