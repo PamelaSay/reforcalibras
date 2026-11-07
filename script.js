@@ -174,7 +174,7 @@ async function cadastrar() {
     const nome = nomeInput.value.trim();
     const email = emailInput.value.trim().toLowerCase();
     const senha = senhaInput.value;
-    // O ranking público usa um código de participante, sem e-mail ou nome completo.
+    // O ranking público usa apenas primeiro e último nome, sem e-mail ou nomes do meio.
     const participarRanking = true;
 
     if (!nome) {
@@ -616,7 +616,7 @@ function obterResumoAprendizagem() {
         assistidas: potenciacao.assistidas.length + radiciacao.assistidas.length,
         jogos: todosResultados.length,
         media: valores.length ? Math.round(valores.reduce((a,b)=>a+b,0)/valores.length) : 0,
-        pontos: todosResultados.reduce((s,r)=>s+pontosDoResultado(r),0),
+        pontos: somarUltimasNotas(todosResultados),
         potenciacao, radiciacao
     };
 }

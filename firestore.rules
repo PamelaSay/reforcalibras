@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function logado() { return request.auth != null; }
+    function dono(uid) { return logado() && request.auth.uid == uid; }
+    function admin() {
+      return logado() && exists(/databases/$(database)/documents/administradores/$(request.auth.uid))
+        && get(/databases/$(database)/documents/administradores/$(request.auth.uid)).data.ativo == true;
+    }
+    function numeroValido(uid) {
+      let antes = get(/databases/$(database)/documents/usuarios/$(uid)).data;
+      let depois = getAfter(/databases/$(database)/documents/usuarios/$(uid)).data;
+      let contador = /databases/$(database)/documents/controle/participantes;
+      return !antes.keys().hasAny(['numeroParticipante'])
+        && depois.numeroParticipante is int && depois.numeroParticipante > 0
+        && getAfter(contador).data.ultimo == depois.numeroParticipante
+        && ((!exists(contador) && depois.numeroParticipante == 1)
+          || (exists(contador) && get(contador).data.ultimo + 1 == depois.numeroParticipante));
+    }
+    match /usuarios/{uid} {
+      allow get: if dono(uid) || admin();
+      allow list: if admin();
+      allow create: if dono(uid) && !request.resource.data.keys().hasAny(['numeroParticipante']);
+      allow update: if admin() || (dono(uid) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['numeroParticipante']) || numeroValido(uid)));
+      allow delete: if dono(uid) || admin();
+      match /{colecao}/{id} {
+        allow read: if dono(uid) || admin();
+        allow create, update, delete: if (dono(uid) || admin())
+          && colecao in ['resultados','acessos','conteudosAcessados','atividades','melhoresResultados','aulasAssistidas'];
+      }
+    }
+    // Somente o total do contador é consultável por contas conectadas; cadastros continuam privados.
+    match /controle/participantes {
+      allow get: if logado();
+      allow list: if false;
+      allow create: if admin() || (logado() && request.resource.data.keys().hasOnly(['ultimo'])
+        && request.resource.data.ultimo == 1 && numeroValido(request.auth.uid));
+      allow update: if admin() || (logado() && request.resource.data.keys().hasOnly(['ultimo'])
+        && request.resource.data.ultimo == resource.data.ultimo + 1 && numeroValido(request.auth.uid));
+      allow delete: if false;
+    }
+    match /rankingPublico/{uid} {
+      allow read: if true;
+      allow create, update: if admin() || (dono(uid)
+        && request.resource.data.keys().hasOnly(['ownerUid','nome','pontos','atualizadoEm'])
+        && request.resource.data.ownerUid == uid
+        && request.resource.data.nome is string && request.resource.data.nome.size() > 0 && request.resource.data.nome.size() <= 120
+        && request.resource.data.nome.matches('[^ @\\r\\n]+( [^ @\\r\\n]+)?')
+        && request.resource.data.pontos is number && request.resource.data.pontos >= 0
+        && request.resource.data.pontos == get(/databases/$(database)/documents/usuarios/$(uid)).data.pontos
+        && get(/databases/$(database)/documents/usuarios/$(uid)).data.participarRanking == true);
+      allow delete: if dono(uid) || admin();
+    }
+    match /comentarios/{id} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['nome','nota','texto','dataCriacao'])
+        && request.resource.data.nome is string && request.resource.data.nome.matches('Participante( [0-9]+)?')
+        && request.resource.data.texto is string && request.resource.data.texto.size() > 0 && request.resource.data.texto.size() <= 1000
+        && request.resource.data.nota is int && request.resource.data.nota >= 1 && request.resource.data.nota <= 5;
+      allow update: if admin();
+      allow delete: if admin() || (logado() &&
+        get(/databases/$(database)/documents/comentariosPrivados/$(id)).data.usuarioId == request.auth.uid);
+    }
+    match /comentariosPrivados/{id} {
+      allow read: if admin() || (logado() && resource.data.usuarioId == request.auth.uid);
+      allow create: if admin() || (logado() && request.resource.data.keys().hasOnly(['usuarioId','criadoEm'])
+        && request.resource.data.usuarioId == request.auth.uid
+        && !exists(/databases/$(database)/documents/comentarios/$(id))
+        && existsAfter(/databases/$(database)/documents/comentarios/$(id)));
+      allow update: if admin();
+      allow delete: if admin() || (logado() && resource.data.usuarioId == request.auth.uid);
+    }
+    match /administradores/{uid} {
+      allow get: if dono(uid);
+      allow list, create, update, delete: if false;
+    }
+    match /participantesPesquisa/{uid} {
+      allow read, delete: if admin();
+      allow create, update: if dono(uid) && request.resource.data.ownerUid == uid;
+    }
+    match /eventosPesquisa/{id} {
+      allow read: if admin();
+      allow create: if logado() && request.resource.data.ownerUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+    match /estatisticas/visitas-index {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['total','atualizadoEm']) && request.resource.data.total == 1;
+      allow update: if request.resource.data.total == resource.data.total + 1
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['total','atualizadoEm']);
+      allow delete: if admin();
+    }
+    match /estatisticas/resumo-pesquisa { allow read: if admin(); allow write: if false; }
+    match /{documento=**} { allow read, write: if false; }
+  }
+}

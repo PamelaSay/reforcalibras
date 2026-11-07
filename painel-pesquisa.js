@@ -93,7 +93,7 @@ async function abrirRelatorioPainel(uid) {
         ]);
         if (!adminAutorizada || versao!==versaoAcessoPainel || requisicao!==versaoRelatorioPainel) return;
         if (!doc.exists) throw new Error('Cadastro não encontrado.');
-        const p=doc.data(),r=resultados.docs.map(d=>d.data()).sort((a,b)=>millisPainel(a.realizadoEm)-millisPainel(b.realizadoEm));
+        const p=doc.data(),r=resultados.docs.map(d=>({...d.data(),idResultado:d.id})).sort((a,b)=>millisPainel(a.realizadoEm)-millisPainel(b.realizadoEm));
         const a=acessos.docs.map(d=>d.data()).sort((a,b)=>millisPainel(a.entrouEm)-millisPainel(b.entrouEm));
         const c=conteudos.docs.map(d=>d.data()).sort((a,b)=>millisPainel(a.acessadoEm)-millisPainel(b.acessadoEm));
         const area=elPainel('relatorio');area.replaceChildren();
@@ -105,11 +105,12 @@ async function abrirRelatorioPainel(uid) {
          ['Consentimento da pesquisa',consentiu?'Sim':'Não'],['Data do aceite',dataPainel(p.dataAceiteTermos)],
          ['Participar do ranking',p.participarRanking===true?'Sim':'Não'],['Quantidade de acessos',p.quantidadeAcessos===undefined?'Não registrado':p.quantidadeAcessos],
          ['Último acesso',dataPainel(p.ultimoAcesso)],['Atualizado em',dataPainel(p.atualizadoEm)],
-         ['Verificações registradas',r.length],['Pontos dos exercícios',r.reduce((s,r)=>s+pontosPainel(r),0)]].forEach(([nome,valor])=>{cadastro.append(novoNoPainel('dt',nome),novoNoPainel('dd',valor));});
+         ['Verificações registradas',r.length],['Pontuação atual (última nota de cada exercício)',somarUltimasNotas(r)]].forEach(([nome,valor])=>{cadastro.append(novoNoPainel('dt',nome),novoNoPainel('dd',valor));});
         area.appendChild(cadastro);
-        area.appendChild(tabelaPainel('Exercícios e pontos',['Data','Temática','Exercício','Acertos','Erros','Pontos','Situação'],r.map(x=>[
+        const contamNoTotal = new Set(ultimosResultadosDosExercicios(r));
+        area.appendChild(tabelaPainel('Exercícios e pontos',['Data','Temática','Exercício','Acertos','Erros','Pontos','Situação','Conta no total?'],r.map(x=>[
             dataPainel(x.realizadoEm),x.tematica||'Não informado',x.nomeModulo||x.modulo||'Não informado',x.acertos===undefined?'Não registrado':x.acertos,
-            x.erros===undefined?'Não registrado':x.erros,pontosPainel(x),x.concluido?'Concluído':'Tentativa encerrada'
+            x.erros===undefined?'Não registrado':x.erros,pontosPainel(x),x.concluido?'Concluído':'Tentativa encerrada',contamNoTotal.has(x)?'Sim — última nota':'Não — histórico'
         ])));
         const questoes=[];r.forEach((x,i)=>(Array.isArray(x.respostas)?x.respostas:[]).forEach(q=>questoes.push([
             i+1,x.nomeModulo||x.modulo||'',q.topico||q.idQuestao||q.id||'',q.respostaSelecionada||q.respostaEscolhida||'',
@@ -158,10 +159,10 @@ async function organizarCadastrosAntigos() {
             });
             if(numero===null)continue;numeros.set(documento.id,numero);
             const resultados=await ref.collection('resultados').get();
-            const pontos=resultados.empty?Number(documento.data().pontos)||0:resultados.docs.reduce((s,d)=>s+pontosPainel(d.data()),0);
+            const pontos=resultados.empty?Number(documento.data().pontos)||0:somarUltimasNotas(resultados.docs.map(d=>({...d.data(),idResultado:d.id})));
             await ref.set({pontos,jogos:resultados.empty?Number(documento.data().jogos)||0:resultados.size},{merge:true});
             const publico=db.collection('rankingPublico').doc(documento.id);
-            if(documento.data().participarRanking===true)await publico.set({ownerUid:documento.id,nome:'Participante '+numero,pontos,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+            if(documento.data().participarRanking===true)await publico.set({ownerUid:documento.id,nome:nomePublicoDoRanking(documento.data().nome),pontos,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
             else await publico.delete();
         }
         // Retirar vínculos internos e nomes completos dos comentários já publicados.

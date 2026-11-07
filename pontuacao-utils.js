@@ -9,6 +9,32 @@ function pontosDoResultado(resultado) {
     // Histórico antigo sem quantidade de acertos: preservar o valor registrado.
     return Math.max(0, Number(resultado.pontuacao) || 0);
 }
+// Última tentativa por temática + exercício. Tentativas anteriores permanecem no histórico.
+function instanteDoResultado(resultado) {
+    const valor = resultado.realizadoEm;
+    if (valor && typeof valor.toMillis === "function") return valor.toMillis();
+    if (valor && Number.isFinite(Number(valor.seconds))) {
+        return Number(valor.seconds)*1000 + (Number(valor.nanoseconds)||0)/1e6;
+    }
+    return Date.parse(valor) || Date.parse(resultado.realizadoEmCliente) || 0;
+}
+function chaveDoExercicio(resultado) {
+    const texto = String(resultado.tematica || resultado.jogo || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const tema = texto.includes("radiciacao") ? "radiciacao" : texto.includes("potenciacao") || texto.includes("multiplicacao") ? "potenciacao" : texto;
+    const exercicio = resultado.modulo || resultado.nomeModulo || resultado.conteudo || resultado.etapa || "sem-identificacao";
+    return tema + "::" + exercicio;
+}
+function ultimosResultadosDosExercicios(resultados) {
+    const ultimos = new Map();
+    const ordenados = [...resultados].sort((a,b) => instanteDoResultado(a)-instanteDoResultado(b)
+        || (Date.parse(a.realizadoEmCliente)||0)-(Date.parse(b.realizadoEmCliente)||0)
+        || String(a.idResultado||"").localeCompare(String(b.idResultado||"")));
+    ordenados.forEach(resultado => ultimos.set(chaveDoExercicio(resultado),resultado));
+    return [...ultimos.values()];
+}
+function somarUltimasNotas(resultados) {
+    return ultimosResultadosDosExercicios(resultados).reduce((total,r)=>total+pontosDoResultado(r),0);
+}
 function identificarResultado(resultado) {
     if (!resultado.idResultado) {
         resultado.idResultado = "tentativa_" + (
@@ -65,6 +91,7 @@ async function enviarPendenciasRanking(uid) {
         await db.collection("usuarios").doc(uid).collection("resultados")
             .doc(resultado.idResultado).set({
                 ...resultado, pontuacao: pontosDoResultado(resultado),
+                realizadoEmCliente: resultado.realizadoEmCliente || resultado.realizadoEm,
                 realizadoEm: firebase.firestore.FieldValue.serverTimestamp()
             });
         const restantes = lerPendenciasRanking(uid).filter(r => r.idResultado !== resultado.idResultado);
@@ -76,14 +103,16 @@ async function sincronizarPontuacaoDaConta(uid) {
     if (!auth.currentUser || auth.currentUser.uid !== uid) return null;
     const usuarioRef = db.collection("usuarios").doc(uid);
     const consulta = await usuarioRef.collection("resultados").get();
-    let pontos = 0, somaPercentuais = 0, comPercentual = 0, jogos = 0;
+    const historico = [];
+    let somaPercentuais = 0, comPercentual = 0, jogos = 0;
     consulta.forEach(doc => {
-        const r = doc.data(); jogos++;
-        pontos += pontosDoResultado(r);
+        const r = { ...doc.data(), idResultado: doc.id }; jogos++;
+        historico.push(r);
         if (r.percentual !== undefined && Number.isFinite(Number(r.percentual))) {
             somaPercentuais += Number(r.percentual); comPercentual++;
         }
     });
+    const pontos = somarUltimasNotas(historico);
     const resumo = { pontos, jogos, media: comPercentual ? Math.round(somaPercentuais / comPercentual) : 0 };
     const salvo = await db.runTransaction(async transacao => {
         const documento = await transacao.get(usuarioRef);

@@ -139,6 +139,13 @@ async function registrarAcessoPrivado(usuarioFirebase) {
         transacao.set(usuario, campos, { merge: true });
     });
 }
+function nomePublicoDoRanking(nome) {
+    const partes = String(nome || '').trim().split(/\s+/).filter(Boolean);
+    // Nome ausente ou e-mail usado como nome não é publicado como endereço de contato.
+    if (!partes.length || partes.some(p => p.includes('@'))) return 'Usuário';
+    return partes.length === 1 ? partes[0].slice(0,120)
+        : partes[0].slice(0,59) + ' ' + partes[partes.length-1].slice(0,59);
+}
 async function publicarRankingSeguro(uid, pontos) {
     const referencia = db.collection('usuarios').doc(uid);
     const documento = await referencia.get();
@@ -147,7 +154,7 @@ async function publicarRankingSeguro(uid, pontos) {
     const publico = db.collection('rankingPublico').doc(uid);
     if (dados.participarRanking === false) { await publico.delete(); return; }
     const numero = await garantirNumeroParticipante(uid);
-    await publico.set({ ownerUid: uid, nome: numero ? 'Participante ' + numero : 'Participante',
+    await publico.set({ ownerUid: uid, nome: nomePublicoDoRanking(dados.nome),
         pontos: Math.max(0,Number(pontos)||0), atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() });
 }
 if (typeof auth !== 'undefined' && auth && typeof db !== 'undefined' && db) {
