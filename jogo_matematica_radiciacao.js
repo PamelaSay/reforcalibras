@@ -220,7 +220,7 @@ async function verificarResposta(escolhida, botaoEscolhido) {
         else if (botao === botaoEscolhido) botao.classList.add("incorreta");
         else botao.classList.add("neutra");
     });
-    if (acertou) { pontos += dicaUsada ? 7 : 10; sequencia++; } else { vidas--; sequencia = 0; }
+    if (acertou) { pontos += 10; sequencia++; } else { vidas--; sequencia = 0; }
     resultados.push({id:q.id,topico:q.topico,respostaEscolhida:escolhida,respostaCorreta:q.correta,acertou,dicaUtilizada:dicaUsada});
     atualizarStatus();
     await alertaExplicacao(acertou, q);
@@ -290,6 +290,7 @@ function salvarResultado(concluido) {
     const acertos = resultados.filter(r => r.acertou).length;
     const total = resultados.length;
     const resultado = {jogo:"jogo_matematica_radiciacao",tematica:"Radiciação",modulo:moduloAtual,nomeModulo:configuracaoModulos[moduloAtual].titulo,etapa:Number(sessionStorage.getItem("testeCursoAtual"))||null,pontuacao:pontos,acertos,erros:total-acertos,totalRespondido:total,percentual:total?Math.round(acertos/total*100):0,concluido,respostas:resultados,realizadoEm:new Date().toISOString()};
+    identificarResultado(resultado);
     let historico=[];try{historico=JSON.parse(localStorage.getItem(chaveUsuario("resultadosRadiciacao")))||[];}catch(e){historico=[];}
     historico.push(resultado);localStorage.setItem(chaveUsuario("resultadosRadiciacao"),JSON.stringify(historico));
     if(concluido){marcarModuloConcluido(moduloAtual);registrarConclusaoNaTrilha();}
@@ -319,9 +320,9 @@ function carregarModulosConcluidos() {
     document.querySelectorAll(".botao-modulo[data-modulo]").forEach(b=>b.classList.toggle("concluido",lista.includes(b.dataset.modulo)));
 }
 
-function salvarFirebase(resultado) {
-    if(typeof auth==="undefined"||typeof db==="undefined"||!auth||!db||!auth.currentUser)return;
-    db.collection("usuarios").doc(auth.currentUser.uid).collection("resultados").add({...resultado,realizadoEm:firebase.firestore.FieldValue.serverTimestamp()}).catch(erro=>console.error("Erro ao salvar resultado:",erro));
+async function salvarFirebase(resultado) {
+    try { await salvarResultadoComPontuacao(resultado); }
+    catch (erro) { console.error("Resultado pendente de envio ao ranking:", erro); }
 }
 
 async function finalizar(concluido) {

@@ -1621,10 +1621,6 @@ async function verificarResposta(
         sequenciaAcertos += 1;
         pontosDaQuestao = 10;
 
-        if (sequenciaAcertos >= 3) {
-            pontosDaQuestao += 2;
-        }
-
         pontos += pontosDaQuestao;
     } else {
         sequenciaAcertos = 0;
@@ -2094,7 +2090,7 @@ function obterChaveLocal(chaveBase) {
 
 function salvarResultadoLocal(resultado) {
     const chave = obterChaveLocal(
-        "resultadosJogoPotenciacao"
+        "resultadosPotenciacao"
     );
 
     let historico = [];
@@ -2194,73 +2190,11 @@ function carregarModulosConcluidos() {
    FIREBASE
 ===================================================== */
 
-async function salvarResultadoFirebase(
-    resultado
-) {
-    if (
-        typeof auth === "undefined" ||
-        typeof db === "undefined" ||
-        !auth ||
-        !db ||
-        !auth.currentUser
-    ) {
-        return;
-    }
-
-    const usuario = auth.currentUser;
-
-    const dados = {
-        jogo: resultado.jogo,
-        tematica: resultado.tematica,
-        modulo: resultado.modulo,
-        nomeModulo: resultado.nomeModulo,
-        conteudo: resultado.conteudo,
-        pontuacao: resultado.pontuacao,
-        acertos: resultado.acertos,
-        erros: resultado.erros,
-
-        totalRespondido:
-            resultado.totalRespondido,
-
-        totalPrevisto:
-            resultado.totalPrevisto,
-
-        percentual: resultado.percentual,
-
-        vidasRestantes:
-            resultado.vidasRestantes,
-
-        concluido: resultado.concluido,
-        respostas: resultado.respostas,
-
-        desempenhoPorTopico:
-            resultado.desempenhoPorTopico,
-
-        dificuldades:
-            resultado.dificuldades,
-
-        realizadoEm:
-            firebase.firestore
-                .FieldValue
-                .serverTimestamp()
-    };
-
+async function salvarResultadoFirebase(resultado) {
     try {
-        await db
-            .collection("usuarios")
-            .doc(usuario.uid)
-            .collection("resultados")
-            .add(dados);
-
-        await atualizarMelhorPontuacao(
-            usuario.uid,
-            resultado
-        );
+        await salvarResultadoComPontuacao(resultado);
     } catch (erro) {
-        console.error(
-            "Erro ao salvar o resultado no Firebase:",
-            erro
-        );
+        console.error("Resultado pendente de envio ao ranking:", erro);
     }
 }
 
@@ -2349,8 +2283,7 @@ async function finalizarPartida(concluiu) {
 
     pararVideoPrincipal();
 
-    const resultado =
-        criarResultadoFinal(concluiu);
+    const resultado = identificarResultado(criarResultadoFinal(concluiu));
 
     salvarResultadoLocal(resultado);
 

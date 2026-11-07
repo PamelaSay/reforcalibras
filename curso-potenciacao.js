@@ -60,6 +60,15 @@ function obterProgressoCurso() {
                 ? progresso.concluidas.map(Number)
                 : [];
 
+        const maiorAulaAssistida = Math.max(0, ...progresso.aulasAssistidas.filter(
+            n => Number.isInteger(n) && n >= 1 && n <= TOTAL_ETAPAS
+        ));
+        const liberadaPelasAulas = Math.min(TOTAL_ETAPAS, maiorAulaAssistida + 1);
+        if (progresso.etapaLiberada < liberadaPelasAulas) {
+            progresso.etapaLiberada = liberadaPelasAulas;
+            salvarProgressoCurso(progresso);
+        }
+
         return progresso;
 
     } catch (erro) {
@@ -104,6 +113,10 @@ function registrarAulaAssistida(numero) {
         );
     }
 
+    // Assistir à aula libera a próxima; a verificação pode ficar para depois.
+    progresso.etapaLiberada = Math.min(TOTAL_ETAPAS, Math.max(
+        Number(progresso.etapaLiberada) || 1, numero + 1
+    ));
     salvarProgressoCurso(progresso);
     atualizarCursoNaTela();
     atualizarAcompanhamentoDaTrilha();
@@ -171,7 +184,7 @@ function atualizarCursoNaTela() {
             situacao.textContent =
                 "AULA " +
                 numero +
-                " · TESTE DISPONÍVEL";
+                " · VERIFICAÇÃO PENDENTE";
 
         } else {
             situacao.textContent =
@@ -276,7 +289,7 @@ function abrirVideoaula(numero, videoId) {
     ) {
         mostrarMensagem(
             "Etapa bloqueada",
-            "Conclua o teste anterior para liberar esta videoaula.",
+            "Assista à videoaula anterior até o final para liberar esta aula.",
             "warning"
         );
 
@@ -584,7 +597,7 @@ function verificarEstadoDoVideo(evento) {
 
             html:
                 conteudoAlertaComLibras(
-                    "Deseja fazer agora a verificação de conhecimento desta aula?"
+                    "A verificação desta aula já está disponível. Você pode fazê-la agora ou depois. Para continuar assistindo às aulas, escolha Fazer depois."
                 ),
 
             showCancelButton: true,
@@ -623,12 +636,7 @@ function verificarEstadoDoVideo(evento) {
                     return;
                 }
 
-                if (botaoTeste) {
-                    botaoTeste.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
-                }
+                mostrarProximaAulaOuVerificacao(etapaAssistida, botaoTeste);
             }
         );
 
@@ -646,7 +654,17 @@ function verificarEstadoDoVideo(evento) {
         botaoTeste
     ) {
         botaoTeste.click();
+    } else {
+        mostrarProximaAulaOuVerificacao(etapaAssistida, botaoTeste);
     }
+}
+
+function mostrarProximaAulaOuVerificacao(etapa, botaoTeste) {
+    const proxima = etapa < TOTAL_ETAPAS
+        ? document.querySelector('.etapa-curso[data-etapa="' + (etapa + 1) + '"]')
+        : null;
+    const destino = proxima || botaoTeste;
+    if (destino) destino.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 // ==========================================
 // ERRO DO YOUTUBE
@@ -739,7 +757,7 @@ function abrirTeste(numero, destino) {
     ) {
         mostrarMensagem(
             "Etapa bloqueada",
-            "Conclua o teste anterior para liberar esta etapa.",
+            "Assista à videoaula anterior até o final para liberar esta etapa.",
             "warning"
         );
 
@@ -1072,26 +1090,7 @@ const NOMES_DAS_ETAPAS = {
 
 
 function obterResultadosPotenciacao() {
-    try {
-        const resultados =
-            JSON.parse(
-                localStorage.getItem(
-                    chaveLocalDoUsuario("resultadosPotenciacao")
-                )
-            );
-
-        return Array.isArray(resultados)
-            ? resultados
-            : [];
-
-    } catch (erro) {
-        console.error(
-            "Erro ao recuperar resultados:",
-            erro
-        );
-
-        return [];
-    }
+    return lerHistoricoDePontos("Potenciacao");
 }
 
 
@@ -1249,7 +1248,7 @@ function atualizarAndamentoDasEtapas(
             )
         ) {
             situacao =
-                "Teste disponível";
+                "Aula assistida · verificação pendente";
 
             item.classList.add(
                 "em-andamento"

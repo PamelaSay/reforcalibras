@@ -591,14 +591,8 @@ function obterResumoAprendizagem() {
         chaveLocalDoUsuario("progressoCursoRadiciacao"),
         { concluidas: [] }
     );
-    const resultadosPotenciacao = lerDadosLocais(
-        chaveLocalDoUsuario("resultadosPotenciacao"),
-        []
-    );
-    const resultadosRadiciacao = lerDadosLocais(
-        chaveLocalDoUsuario("resultadosRadiciacao"),
-        []
-    );
+    const resultadosPotenciacao = lerHistoricoDePontos("Potenciacao");
+    const resultadosRadiciacao = lerHistoricoDePontos("Radiciacao");
 
     const concluidasPotenciacao = Array.isArray(
         progressoPotenciacao.concluidas
@@ -722,30 +716,17 @@ function atualizarTrilhaNoPerfil(nome, dados) {
 
 async function sincronizarResumoNoFirebase() {
     if (!auth || !db || !auth.currentUser) return;
-
-    const resumo = obterResumoAprendizagem();
     try {
-        await db.collection("usuarios").doc(auth.currentUser.uid).set({
-            pontos: resumo.pontos,
-            aulas: resumo.aulas,
-            jogos: resumo.jogos,
-            media: resumo.media,
-            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-
-        const usuario = obterUsuarioLocal();
-        if (usuario) {
-            Object.assign(usuario, {
-                pontos: resumo.pontos,
-                aulas: resumo.aulas,
-                jogos: resumo.jogos
-            });
-            localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
-            mostrarUsuario();
+        const resumo = await enviarPendenciasRanking(auth.currentUser.uid);
+        mostrarUsuario();
+        if (resumo) {
+            definirTexto("perfilPontos", resumo.pontos);
+            definirTexto("perfilTestes", resumo.jogos);
+            definirTexto("perfilMedia", resumo.media + "%");
         }
-        atualizarRankingPublico();
+        await atualizarRankingPublico();
     } catch (erro) {
-        console.error("Erro ao sincronizar o resumo:", erro);
+        console.error("Não foi possível atualizar o ranking agora:", erro);
     }
 }
 
@@ -776,37 +757,32 @@ function atualizarContinuarEstudando() {
 async function atualizarRankingPublico() {
     const lista = document.getElementById("rankingLista");
     if (!lista || !db) return;
-
     try {
-        const consulta = await db.collection("usuarios")
-            .limit(50)
-            .get();
-
+        // Ordenar no servidor: sem o recorte incorreto de 50 usuários aleatórios.
+        const consulta = await db.collection("usuarios").orderBy("pontos", "desc").get();
         const participantes = [];
-        consulta.forEach(function (documento) {
+        consulta.forEach(documento => {
             const dados = documento.data();
-            participantes.push({
-                nome: dados.nome || "Aluno",
-                pontos: Number(dados.pontos) || 0
-            });
+            participantes.push({ uid: documento.id, nome: dados.nome || "Aluno", pontos: Number(dados.pontos) || 0 });
         });
-        participantes.sort(function (a, b) { return b.pontos - a.pontos; });
-
+        participantes.sort((a, b) => b.pontos - a.pontos || a.nome.localeCompare(b.nome, "pt-BR") || a.uid.localeCompare(b.uid));
         lista.replaceChildren();
         if (!participantes.length) {
             const vazio = document.createElement("p");
             vazio.textContent = "O ranking ainda não possui participantes.";
-            lista.appendChild(vazio);
-            return;
+            lista.appendChild(vazio); return;
         }
-
+        const usuario = obterUsuarioLocal();
+        const uid = auth && auth.currentUser ? auth.currentUser.uid : usuario && usuario.uid;
+        const minhaPosicao = participantes.findIndex(p => p.uid === uid);
+        const exibidos = participantes.slice(0, 3).map((p, i) => ({ ...p, posicao: i + 1 }));
+        if (minhaPosicao >= 3) exibidos.push({ ...participantes[minhaPosicao], posicao: minhaPosicao + 1 });
         const medalhas = ["🥇", "🥈", "🥉"];
-        participantes.slice(0, 5).forEach(function (participante, indice) {
+        exibidos.forEach(participante => {
             const item = document.createElement("p");
             item.className = "ranking-item";
-            item.textContent =
-                (medalhas[indice] || "⭐") + " " + participante.nome +
-                " — " + participante.pontos + " pontos";
+            item.textContent = (medalhas[participante.posicao - 1] || "⭐") + " " + participante.posicao + "º — " +
+                participante.nome + (participante.uid === uid ? " (você)" : "") + " — " + participante.pontos + " pontos";
             lista.appendChild(item);
         });
     } catch (erro) {
@@ -1502,6 +1478,7 @@ if (auth) {
                 );
 
                 mostrarUsuario();
+                await sincronizarResumoNoFirebase();
 
             } catch (erro) {
                 console.error(
