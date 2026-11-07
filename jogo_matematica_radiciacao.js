@@ -63,6 +63,7 @@ function iniciar() {
     const recebido = new URLSearchParams(location.search).get("modulo");
     if (recebido && bancoDeQuestoes[recebido]) moduloAtual = recebido;
     carregarModulosConcluidos();
+    exercicioDeEntrada = moduloAtual;
     iniciarPartida(moduloAtual);
 }
 
@@ -99,27 +100,71 @@ function iniciarPartida(modulo) {
     mostrarQuestao();
 }
 
-async function selecionarModulo(modulo) {
-    if (!bancoDeQuestoes[modulo] || modulo === moduloAtual) return;
-    if (partidaFinalizada) { location.replace("radiciacao.html"); return; }
-    const resposta = await Swal.fire({
-        icon: "question", title: "Trocar de exercício?",
-        html: montarAvisoTrocaExercicio(),
-        showCancelButton: true, confirmButtonText: "Voltar à trilha",
-        cancelButtonText: "Continuar aqui", confirmButtonColor: "#1d3557",
-        allowOutsideClick: false, allowEscapeKey: false,
-        customClass: { popup: "alerta-reforca" }
-    });
-    if (resposta.isConfirmed) location.replace("radiciacao.html");
+// O exercício de entrada continua acessível pelo link da aula no YouTube.
+// Isso não marca a aula como assistida nem libera os demais exercícios.
+let exercicioDeEntrada = null;
+const ETAPAS_DOS_EXERCICIOS = { introducao: [1, 2, 3], propriedades: [4] };
+function podeAbrirExercicio(modulo) {
+    if (modulo === exercicioDeEntrada) return true;
+    try {
+        const progresso = JSON.parse(localStorage.getItem(chaveUsuario("progressoCursoRadiciacao"))) || {};
+        const assistidas = Array.isArray(progresso.aulasAssistidas)
+            ? progresso.aulasAssistidas.map(Number) : [];
+        return (ETAPAS_DOS_EXERCICIOS[modulo] || []).some(etapa => assistidas.includes(etapa));
+    } catch (erro) { return false; }
 }
 
-// Inserir aqui o link /embed/ da tradução específica deste aviso.
-const VIDEO_TROCA_EXERCICIO = "";
-function montarAvisoTrocaExercicio() {
-    const traducao = VIDEO_TROCA_EXERCICIO
-        ? `<iframe class="video-explicacao" src="${urlVideo(VIDEO_TROCA_EXERCICIO)}" title="Troca de exercício em Libras" allowfullscreen></iframe>`
-        : `<div class="video-explicacao" role="region" aria-label="Janela de Libras" style="display:flex;align-items:center;justify-content:center;padding:20px;background:#edf4f8;color:#1d3557">Janela de Libras — tradução deste aviso aguardando vídeo.</div>`;
-    return `<div class="explicacao-resposta"><div class="texto-explicacao">Para fazer outro exercício, volte à trilha e assista à aula correspondente. Se sair agora, esta partida em andamento não será salva.</div>${traducao}</div>`;
+async function selecionarModulo(modulo) {
+    const destino = modulo;
+    if (!bancoDeQuestoes[destino] || destino === moduloAtual) return;
+    const permitido = podeAbrirExercicio(destino);
+    const terminou = partidaFinalizada;
+    const mensagem = permitido
+        ? "Deseja trocar de exercício? A partida atual será encerrada e o exercício selecionado começará do início."
+        : "Para fazer este exercício, assista primeiro à aula correspondente na trilha. Você também pode acessar o exercício pelo link na descrição da aula no YouTube.";
+    const resposta = await Swal.fire({
+        icon: permitido ? "question" : "warning",
+        title: "Trocar de exercício?",
+        html: montarAvisoTrocaExercicio(mensagem),
+        showCancelButton: true,
+        confirmButtonText: permitido ? "Trocar de exercício" : "Ir para a trilha",
+        cancelButtonText: terminou ? "Jogar este exercício novamente" : "Continuar aqui",
+        confirmButtonColor: "#1d3557",
+        allowOutsideClick: false, allowEscapeKey: false,
+        customClass: { popup: "alerta-reforca" },
+        didOpen: prepararTraducaoTroca,
+        willClose: () => {
+            const video = document.getElementById("videoTrocaExercicio");
+            if (video) video.src = "";
+        }
+    });
+    if (resposta.isConfirmed) {
+        if (permitido) iniciarPartida(destino);
+        else window.location.href = "radiciacao.html";
+        return;
+    }
+    if (terminou) { iniciarPartida(moduloAtual); }
+    // Em uma partida ativa, cancelar preserva a pergunta, pontos e vidas.
+}
+
+// Vídeo provisório já referenciado no projeto. Substituir pela tradução deste aviso.
+const VIDEO_TROCA_EXERCICIO = "https://www.youtube.com/embed/r9AoQVkUUvU";
+function montarAvisoTrocaExercicio(mensagem) {
+    // Reutiliza exatamente o layout dos alertas de saída existentes.
+    return htmlAlertaTraducao(mensagem, "Troca de exercício em Libras")
+        .replaceAll("videoAlerta", "videoTrocaExercicio")
+        .replaceAll("repetirVideoAlerta", "repetirTrocaExercicio")
+        .replace(urlVideo(V), urlVideo(VIDEO_TROCA_EXERCICIO));
+}
+function prepararTraducaoTroca() {
+    const video = document.getElementById("videoTrocaExercicio");
+    const repetir = document.getElementById("repetirTrocaExercicio");
+    if (video && repetir) repetir.addEventListener("click", function () {
+        video.src = "";
+        setTimeout(function () {
+            video.src = urlVideo(VIDEO_TROCA_EXERCICIO, true);
+        }, 100);
+    });
 }
 
 function atualizarModulo() {
