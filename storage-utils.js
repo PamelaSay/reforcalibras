@@ -26,3 +26,19 @@ function chaveLocalDoUsuario(chaveBase) {
 
     return chaveIndividual;
 }
+
+// Exclusão confirmada da conta: remove também o estado de visitante deste dispositivo.
+function limparDadosLocaisDaContaExcluida(uid) {
+    const bases = ['progressoCursoPotenciacao','progressoCursoRadiciacao',
+        'resultadosPotenciacao','resultadosJogoPotenciacao','resultadosRadiciacao',
+        'modulosJogoPotenciacaoConcluidos','modulosJogoRadiciacaoConcluidos'];
+    for (const base of bases) {
+        localStorage.removeItem(base);
+        localStorage.removeItem(base + '_' + uid);
+        localStorage.removeItem(base + '_visitante');
+    }
+    localStorage.removeItem('resultadosPendentesRanking_' + uid);
+    localStorage.removeItem('usuarioLogado');
+    sessionStorage.removeItem('testeCursoAtual');
+    sessionStorage.removeItem('testeSendoRefeito');
+}

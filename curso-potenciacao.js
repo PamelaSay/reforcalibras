@@ -2,7 +2,8 @@
 // CONFIGURAÇÕES DO CURSO
 // ==========================================
 
-const CHAVE_CURSO = chaveLocalDoUsuario("progressoCursoPotenciacao");
+const CHAVE_BASE_CURSO = "progressoCursoPotenciacao";
+function chaveDoProgressoAtual() { return chaveLocalDoUsuario(CHAVE_BASE_CURSO); }
 const TOTAL_ETAPAS = 5;
 const VIDEO_ALERTA_VIDEOAULA =
     "https://www.youtube.com/embed/r9AoQVkUUvU";
@@ -31,75 +32,43 @@ function progressoInicial() {
 // RECUPERAR PROGRESSO
 // ==========================================
 
+function normalizarEtapasDaTrilha(lista) {
+    return [...new Set((Array.isArray(lista) ? lista : []).map(Number).filter(
+        n => Number.isInteger(n) && n >= 1 && n <= TOTAL_ETAPAS
+    ))].sort((a,b) => a-b);
+}
 function obterProgressoCurso() {
-    try {
-        const salvo =
-            localStorage.getItem(CHAVE_CURSO);
-
-        const progresso = salvo
-            ? JSON.parse(salvo)
-            : progressoInicial();
-
-        /* Reinicia apenas o progresso antigo de quatro etapas. */
-        if (progresso.versao !== 2) {
-            const novoProgresso = progressoInicial();
-            salvarProgressoCurso(novoProgresso);
-            return novoProgresso;
-        }
-
-        progresso.etapaLiberada =
-            Number(progresso.etapaLiberada) || 1;
-
-        progresso.aulasAssistidas =
-            Array.isArray(progresso.aulasAssistidas)
-                ? progresso.aulasAssistidas.map(Number)
-                : [];
-
-        progresso.concluidas =
-            Array.isArray(progresso.concluidas)
-                ? progresso.concluidas.map(Number)
-                : [];
-
-        const maiorAulaAssistida = Math.max(0, ...progresso.aulasAssistidas.filter(
-            n => Number.isInteger(n) && n >= 1 && n <= TOTAL_ETAPAS
-        ));
-        const liberadaPelasAulas = Math.min(TOTAL_ETAPAS, maiorAulaAssistida + 1);
-        if (progresso.etapaLiberada < liberadaPelasAulas) {
-            progresso.etapaLiberada = liberadaPelasAulas;
-            salvarProgressoCurso(progresso);
-        }
-
-        return progresso;
-
-    } catch (erro) {
-        console.error(
-            "Erro ao recuperar o progresso:",
-            erro
-        );
-
-        return progressoInicial();
-    }
+    let salvo = null, progresso;
+    try { salvo = localStorage.getItem(chaveDoProgressoAtual()); progresso = JSON.parse(salvo); } catch (_) {}
+    if (!progresso || typeof progresso !== 'object' || Array.isArray(progresso)) progresso = progressoInicial();
+    if (progresso.versao !== 2) progresso = progressoInicial();
+    progresso.aulasAssistidas = normalizarEtapasDaTrilha(progresso.aulasAssistidas);
+    progresso.concluidas = normalizarEtapasDaTrilha(progresso.concluidas);
+    const anterior = Number(progresso.etapaLiberada);
+    progresso.etapaLiberada = Math.min(TOTAL_ETAPAS, Math.max(
+        Number.isInteger(anterior) ? anterior : 1, 1,
+        ...progresso.aulasAssistidas.map(n => n+1),
+        ...progresso.concluidas.map(n => n+1)
+    ));
+    progresso.verificacoesPendentes = progresso.aulasAssistidas.filter(n => !progresso.concluidas.includes(n));
+    if (JSON.stringify(progresso) !== salvo) salvarProgressoCurso(progresso);
+    return progresso;
 }
-
-
-// ==========================================
-// SALVAR PROGRESSO
-// ==========================================
-
 function salvarProgressoCurso(progresso) {
-    localStorage.setItem(
-        CHAVE_CURSO,
-        JSON.stringify(progresso)
-    );
+    progresso.verificacoesPendentes = normalizarEtapasDaTrilha(progresso.aulasAssistidas)
+        .filter(n => !normalizarEtapasDaTrilha(progresso.concluidas).includes(n));
+    localStorage.setItem(chaveDoProgressoAtual(), JSON.stringify(progresso));
 }
-
 
 // ==========================================
 // REGISTRAR VIDEOAULA ASSISTIDA
 // ==========================================
 
 function registrarAulaAssistida(numero) {
+    numero = Number(numero);
+    if (!Number.isInteger(numero) || numero < 1 || numero > TOTAL_ETAPAS) return;
     const progresso = obterProgressoCurso();
+    if (numero > progresso.etapaLiberada) return;
 
     if (
         !progresso.aulasAssistidas.includes(numero)
@@ -344,6 +313,10 @@ function abrirVideoaula(numero, videoId) {
         );
 
         return;
+    }
+
+    if (typeof registrarConteudoVisitaAnonima === 'function') {
+        registrarConteudoVisitaAnonima('Videoaula aberta: Potenciação — Aula ' + numero).catch(() => {});
     }
 
     etapaVideoAtual = numero;
@@ -615,6 +588,7 @@ function verificarEstadoDoVideo(evento) {
                 "#5fa8d3",
 
             allowOutsideClick: false,
+            allowEscapeKey: false,
 
             customClass: {
                 popup: "alerta-reforca"
@@ -636,7 +610,9 @@ function verificarEstadoDoVideo(evento) {
                     return;
                 }
 
-                mostrarProximaAulaOuVerificacao(etapaAssistida, botaoTeste);
+                if (resultado.dismiss === Swal.DismissReason.cancel) {
+                    adiarVerificacaoDaAula(etapaAssistida, botaoTeste);
+                }
             }
         );
 
@@ -655,8 +631,15 @@ function verificarEstadoDoVideo(evento) {
     ) {
         botaoTeste.click();
     } else {
-        mostrarProximaAulaOuVerificacao(etapaAssistida, botaoTeste);
+        adiarVerificacaoDaAula(etapaAssistida, botaoTeste);
     }
+}
+
+function adiarVerificacaoDaAula(etapa, botaoTeste) {
+    registrarAulaAssistida(etapa);
+    atualizarCursoNaTela();
+    atualizarAcompanhamentoDaTrilha();
+    mostrarProximaAulaOuVerificacao(etapa, botaoTeste);
 }
 
 function mostrarProximaAulaOuVerificacao(etapa, botaoTeste) {
@@ -1543,4 +1526,19 @@ function configurarJanelaLibrasDaTrilha() {
                 "autoplay=1";
         }, 100);
     });
+}
+
+// Recalcula a tela ao voltar do jogo e ao mudar a conta em outra aba.
+function atualizarTrilhaAoRetornar() {
+    atualizarCursoNaTela();
+    atualizarAcompanhamentoDaTrilha();
+}
+window.addEventListener('pageshow', atualizarTrilhaAoRetornar);
+window.addEventListener('storage', function(evento) {
+    if (evento.key === null || evento.key === 'usuarioLogado' || evento.key.startsWith(CHAVE_BASE_CURSO)) {
+        atualizarTrilhaAoRetornar();
+    }
+});
+if (typeof auth !== 'undefined' && auth && typeof auth.onAuthStateChanged === 'function') {
+    auth.onAuthStateChanged(atualizarTrilhaAoRetornar);
 }
