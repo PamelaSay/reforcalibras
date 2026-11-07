@@ -2356,10 +2356,7 @@ async function finalizarPartida(concluiu) {
 
     if (concluiu) {
         marcarModuloConcluido(moduloAtual);
-
-        if (moduloAtual === "revisaoMultiplicacao") {
-            liberarAulaDois();
-        }
+        concluirEtapaDoExercicio(moduloAtual);
     }
 
     salvarResultadoFirebase(resultado);
@@ -2386,95 +2383,82 @@ async function finalizarPartida(concluiu) {
         resultado.percentual +
         "%</strong>.";
 
+    const etapa = ETAPAS_DOS_EXERCICIOS[moduloAtual][0];
+    const proximaAula = concluiu && etapa < 5 ? etapa + 1 : null;
     const resposta = await Swal.fire({
-        icon: concluiu
-            ? "success"
-            : "warning",
-
+        icon: concluiu ? "success" : "warning",
         title: titulo,
-        html: mensagem,
-        showDenyButton: true,
-        showCancelButton: true,
-
-        confirmButtonText: revisaoConcluida
-            ? "Continuar para a Aula 2"
+        html: montarConteudoResultado(mensagem),
+        showDenyButton: Boolean(proximaAula) || !concluiu, showCancelButton: true,
+        confirmButtonText: proximaAula
+            ? "Ir para a Aula " + proximaAula
             : "Voltar à trilha",
-
-        denyButtonText:
-            "Jogar novamente",
-
-        cancelButtonText:
-            "Avaliar o jogo",
-
-        confirmButtonColor:
-            "#1d3557",
-
-        denyButtonColor:
-            "#5fa8d3",
-
-        cancelButtonColor:
-            "#d9a900",
-
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-
-        customClass: {
-            popup: "alerta-reforca"
+        denyButtonText: proximaAula ? "Voltar à trilha" : "Jogar novamente",
+        cancelButtonText: "Avaliar o jogo",
+        confirmButtonColor: "#1d3557", denyButtonColor: "#5fa8d3",
+        cancelButtonColor: "#d9a900",
+        allowOutsideClick: false, allowEscapeKey: false,
+        customClass: { popup: "alerta-reforca" },
+        didOpen: prepararTraducaoResultado,
+        willClose: () => {
+            const video = document.getElementById("videoResultadoAlerta");
+            if (video) video.src = "";
         }
     });
-
     if (resposta.isConfirmed) {
-        if (revisaoConcluida) {
-            window.location.href = "potenciacao.html#aula-2";
-            return;
-        }
-
-        voltarParaTrilha();
-        return;
+        window.location.href = proximaAula
+            ? "potenciacao.html#aula-" + proximaAula
+            : "potenciacao.html";
+    } else if (resposta.isDenied) {
+        if (proximaAula) voltarParaTrilha();
+        else iniciarPartida(moduloAtual);
+    } else if (resposta.dismiss === Swal.DismissReason.cancel) {
+        window.location.href = "index.html#avaliacao";
     }
-
-    if (resposta.isDenied) {
-        iniciarPartida(moduloAtual);
-        return;
-    }
-
-    window.location.href =
-        "index.html#avaliacao";
 }
 
-function liberarAulaDois() {
+function concluirEtapaDoExercicio(modulo) {
+    const etapa = (ETAPAS_DOS_EXERCICIOS[modulo] || [])[0];
+    if (!etapa) return;
     const chave = obterChaveLocal("progressoCursoPotenciacao");
     let progresso;
-
-    try {
-        progresso = JSON.parse(localStorage.getItem(chave));
-    } catch (erro) {
-        progresso = null;
-    }
-
+    try { progresso = JSON.parse(localStorage.getItem(chave)); } catch (erro) {}
     if (!progresso || progresso.versao !== 2) {
-        progresso = {
-            versao: 2,
-            etapaLiberada: 1,
-            aulasAssistidas: [1],
-            concluidas: []
-        };
+        progresso = { versao: 2, etapaLiberada: 1, aulasAssistidas: [], concluidas: [] };
     }
-
-    if (!progresso.aulasAssistidas.includes(1)) {
-        progresso.aulasAssistidas.push(1);
-    }
-
-    if (!progresso.concluidas.includes(1)) {
-        progresso.concluidas.push(1);
-    }
-
-    progresso.etapaLiberada = Math.max(
-        Number(progresso.etapaLiberada) || 1,
-        2
-    );
-
+    progresso.aulasAssistidas = Array.isArray(progresso.aulasAssistidas)
+        ? progresso.aulasAssistidas.map(Number) : [];
+    progresso.concluidas = Array.isArray(progresso.concluidas)
+        ? progresso.concluidas.map(Number) : [];
+    if (!progresso.concluidas.includes(etapa)) progresso.concluidas.push(etapa);
+    progresso.concluidas.sort((a, b) => a - b);
+    progresso.etapaLiberada = Math.min(5, Math.max(
+        Number(progresso.etapaLiberada) || 1, etapa + 1
+    ));
     localStorage.setItem(chave, JSON.stringify(progresso));
+    // Um link direto pode ter sido aberto no YouTube: não inventar registro de vídeo assistido.
+    sessionStorage.removeItem("testeCursoAtual");
+    sessionStorage.removeItem("testeSendoRefeito");
+}
+
+// Substituir pela tradução do resultado; usa provisoriamente o vídeo já existente.
+const VIDEO_RESULTADO_EXERCICIO = "https://www.youtube.com/embed/r9AoQVkUUvU";
+function montarConteudoResultado(mensagem) {
+    return montarConteudoSaida(mensagem)
+        .replaceAll("videoSaidaAlerta", "videoResultadoAlerta")
+        .replaceAll("repetirSaidaAlerta", "repetirResultadoAlerta")
+        .replace(criarEnderecoYouTube(VIDEO_ALERTA_SAIDA), criarEnderecoYouTube(VIDEO_RESULTADO_EXERCICIO))
+        .replace("Tradução do alerta de saída em Libras", "Resultado do exercício em Libras");
+}
+function prepararTraducaoResultado() {
+    const video = document.getElementById("videoResultadoAlerta");
+    const botao = document.getElementById("repetirResultadoAlerta");
+    if (video && botao) botao.addEventListener("click", () => {
+        video.src = "";
+        setTimeout(() => {
+            video.src = criarEnderecoYouTube(VIDEO_RESULTADO_EXERCICIO, true);
+        }, 100);
+    });
 }
 
 function rolarParaMapaNoCelular() {
