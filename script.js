@@ -333,6 +333,26 @@ async function cadastrar() {
 // LOGIN
 // ==========================================
 
+// A autorização é conferida no Firebase antes desta função.
+// A sessão local permite testar as aulas sem criar participante da pesquisa.
+function iniciarSessaoAdministrativaDeTeste(usuario) {
+    let anterior = null;
+    try { anterior = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (_) {}
+    const mesmaConta = anterior && anterior.uid === usuario.uid;
+    const sessao = {
+        uid: usuario.uid,
+        nome: usuario.displayName || (mesmaConta && anterior.nome) || "Administradora",
+        email: usuario.email,
+        pontos: mesmaConta ? anterior.pontos || 0 : 0,
+        aulas: mesmaConta ? anterior.aulas || 0 : 0,
+        jogos: mesmaConta ? anterior.jogos || 0 : 0,
+        participarRanking: false,
+        administrativa: true
+    };
+    localStorage.setItem("usuarioLogado", JSON.stringify(sessao));
+    mostrarUsuario();
+}
+
 async function login() {
     const emailInput = document.getElementById("loginEmail");
     const senhaInput = document.getElementById("senhaLogin");
@@ -393,10 +413,9 @@ async function login() {
 
         const usuario = credencial.user;
         if (await contaAdministradora(usuario.uid)) {
-            localStorage.removeItem("usuarioLogado");
-            await auth.signOut();
-            mostrarUsuario();
-            exibirAlerta("info", "Conta administrativa", "Use esta conta na página privada de pesquisa. Ela não participa do ranking.");
+            iniciarSessaoAdministrativaDeTeste(usuario);
+            if (modalLogin) modalLogin.style.display = "none";
+            limparFormularioLogin();
             return;
         }
 
@@ -908,16 +927,7 @@ async function excluirConta() {
 
         await usuario.delete();
 
-        [
-            "progressoCursoPotenciacao",
-            "progressoCursoRadiciacao",
-            "resultadosPotenciacao",
-            "resultadosRadiciacao"
-        ].forEach(function (chaveBase) {
-            localStorage.removeItem(chaveBase);
-            localStorage.removeItem(chaveBase + "_" + usuario.uid);
-        });
-        localStorage.removeItem("usuarioLogado");
+        limparDadosLocaisDaContaExcluida(usuario.uid);
 
         await Swal.fire({
             icon: "success",
@@ -1467,9 +1477,7 @@ if (auth) {
 
             try {
                 if (await contaAdministradora(usuarioFirebase.uid)) {
-                    localStorage.removeItem("usuarioLogado");
-                    mostrarUsuario();
-                    await auth.signOut();
+                    iniciarSessaoAdministrativaDeTeste(usuarioFirebase);
                     return;
                 }
 
