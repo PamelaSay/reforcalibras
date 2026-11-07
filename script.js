@@ -160,6 +160,7 @@ async function cadastrar() {
     const emailInput = document.getElementById("emailCadastro");
     const senhaInput = document.getElementById("senhaCadastro");
     const aceiteInput = document.getElementById("aceitarTermos");
+    const respostaComunidade = lerRespostaComunidade();
 
     if (!nomeInput || !emailInput || !senhaInput || !aceiteInput) {
         exibirAlerta(
@@ -259,6 +260,7 @@ async function cadastrar() {
             participarRanking: participarRanking,
 
             consentimentoPesquisa: participaPesquisa,
+            perfilComunidade: participaPesquisa ? respostaComunidade : null,
 
             dataAceiteTermos: participaPesquisa
                 ? firebase.firestore.FieldValue.serverTimestamp()
@@ -390,6 +392,13 @@ async function login() {
             );
 
         const usuario = credencial.user;
+        if (await contaAdministradora(usuario.uid)) {
+            localStorage.removeItem("usuarioLogado");
+            await auth.signOut();
+            mostrarUsuario();
+            exibirAlerta("info", "Conta administrativa", "Use esta conta na página privada de pesquisa. Ela não participa do ranking.");
+            return;
+        }
 
         const referencia = db
             .collection("usuarios")
@@ -563,6 +572,7 @@ function mostrarPerfil() {
 
     mostrarUsuario();
     atualizarPerfilLocal();
+    carregarIdentificacaoComunidade();
     sincronizarResumoNoFirebase();
 
     if (modalPerfil) {
@@ -1456,6 +1466,13 @@ if (auth) {
             }
 
             try {
+                if (await contaAdministradora(usuarioFirebase.uid)) {
+                    localStorage.removeItem("usuarioLogado");
+                    mostrarUsuario();
+                    await auth.signOut();
+                    return;
+                }
+
                 const documento = await db
                     .collection("usuarios")
                     .doc(usuarioFirebase.uid)

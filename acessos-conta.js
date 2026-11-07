@@ -71,7 +71,11 @@ function prepararOrigemDaPagina() {
     }
     return dados;
 }
-const CONTEXTO_ACESSO = prepararOrigemDaPagina();
+const CONTEXTO_ACESSO = window.location.pathname.endsWith('painel-pesquisa.html') ? null : prepararOrigemDaPagina();
+async function contaAdministradora(uid) {
+    const doc = await db.collection('administradores').doc(uid).get();
+    return doc.exists && doc.data().ativo === true;
+}
 async function garantirNumeroParticipante(uid) {
     if (!auth.currentUser || auth.currentUser.uid !== uid) return null;
     const usuario = db.collection('usuarios').doc(uid);
@@ -108,6 +112,7 @@ async function registrarAcessoPrivado(usuarioFirebase) {
     // Não conta entradas no painel administrativo como uso do produto por alunos.
     if (window.location.pathname.endsWith('painel-pesquisa.html')) return;
     const uid = usuarioFirebase.uid;
+    if (await contaAdministradora(uid)) return;
     await garantirNumeroParticipante(uid);
     await normalizarCamposDaConta(uid);
     const usuario = db.collection('usuarios').doc(uid);
@@ -147,6 +152,7 @@ function nomePublicoDoRanking(nome) {
         : partes[0].slice(0,59) + ' ' + partes[partes.length-1].slice(0,59);
 }
 async function publicarRankingSeguro(uid, pontos) {
+    if (await contaAdministradora(uid)) { await db.collection('rankingPublico').doc(uid).delete(); return; }
     const referencia = db.collection('usuarios').doc(uid);
     const documento = await referencia.get();
     if (!documento.exists) return;

@@ -39,21 +39,21 @@ function tabelaPainel(titulo,colunas,linhas) {
     tabela.appendChild(corpo);caixa.appendChild(tabela);bloco.appendChild(caixa);return bloco;
 }
 async function conferirAdminPainel() {
-    const usuario = auth.currentUser;
+    const usuario = authPesquisa.currentUser;
     if (!usuario) return false;
-    const doc = await db.collection('administradores').doc(usuario.uid).get();
+    const doc = await dbPesquisa.collection('administradores').doc(usuario.uid).get();
     return doc.exists && doc.data().ativo === true;
 }
 elPainel('formAcesso').addEventListener('submit',async evento=>{
     evento.preventDefault();statusPainel('Entrando…');
     try {
-        await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
-        await auth.signInWithEmailAndPassword(elPainel('emailAdmin').value.trim(),elPainel('senhaAdmin').value);
+        await authPesquisa.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+        await authPesquisa.signInWithEmailAndPassword(elPainel('emailAdmin').value.trim(),elPainel('senhaAdmin').value);
     } catch (erro) { statusPainel('Não foi possível entrar. Confira e-mail e senha.'); }
     finally { elPainel('senhaAdmin').value = ''; }
 });
-elPainel('sairPainel').addEventListener('click',async()=>{limparPainelPrivado();await auth.signOut();});
-auth.onAuthStateChanged(async usuario=>{
+elPainel('sairPainel').addEventListener('click',async()=>{limparPainelPrivado();await authPesquisa.signOut();});
+authPesquisa.onAuthStateChanged(async usuario=>{
     const versao = ++versaoAcessoPainel;
     limparPainelPrivado();elPainel('entrada').hidden = Boolean(usuario);
     if (!usuario) {statusPainel('Entre com a conta administradora.');return;}
@@ -61,15 +61,19 @@ auth.onAuthStateChanged(async usuario=>{
         const permitido = await conferirAdminPainel();
         if (versao !== versaoAcessoPainel) return;
         if (!permitido) {elPainel('entrada').hidden=false;statusPainel('Acesso não autorizado. Use a conta administradora.');return;}
-        adminAutorizada = true;elPainel('painel').hidden=false;statusPainel('Carregando participantes…');
+        adminAutorizada = true;
+        await dbPesquisa.collection('rankingPublico').doc(usuario.uid).delete();
+        if (versao !== versaoAcessoPainel) return;
+        elPainel('painel').hidden=false;statusPainel('Carregando participantes…');
         await carregarParticipantesPainel(versao);
     } catch (erro) {if(versao===versaoAcessoPainel){limparPainelPrivado();statusPainel('Não foi possível verificar o acesso. Confira as regras do Firebase.');}}
 });
 async function carregarParticipantesPainel(versao=versaoAcessoPainel) {
     if (!adminAutorizada) throw new Error('Acesso não autorizado.');
-    const consulta = await db.collection('usuarios').get();
+    const [consulta,administradores] = await Promise.all([dbPesquisa.collection('usuarios').get(),dbPesquisa.collection('administradores').get()]);
+    const idsAdmin = new Set(administradores.docs.filter(d=>d.data().ativo===true).map(d=>d.id));
     if (!adminAutorizada || versao!==versaoAcessoPainel) return;
-    participantesPainel = consulta.docs.map(doc=>({...doc.data(),uid:doc.id}));
+    participantesPainel = consulta.docs.filter(d=>!idsAdmin.has(d.id)).map(doc=>({...doc.data(),uid:doc.id}));
     participantesPainel.sort((a,b)=>(a.numeroParticipante||Infinity)-(b.numeroParticipante||Infinity)||millisPainel(a.dataCriacao)-millisPainel(b.dataCriacao));
     renderizarListaPainel();statusPainel(participantesPainel.length+' cadastros. Selecione um para imprimir.');
 }
@@ -84,7 +88,7 @@ function renderizarListaPainel() {
 elPainel('buscarParticipante').addEventListener('input',renderizarListaPainel);
 async function abrirRelatorioPainel(uid) {
     if (!adminAutorizada) return;
-    const versao = versaoAcessoPainel, requisicao = ++versaoRelatorioPainel, referencia = db.collection('usuarios').doc(uid);
+    const versao = versaoAcessoPainel, requisicao = ++versaoRelatorioPainel, referencia = dbPesquisa.collection('usuarios').doc(uid);
     elPainel('relatorio').textContent = 'Carregando o participante selecionado…';
     statusPainel('Reunindo cadastro, exercícios e acessos…');
     try {
@@ -101,7 +105,7 @@ async function abrirRelatorioPainel(uid) {
         area.appendChild(novoNoPainel('h2',p.numeroParticipante?'Participante '+p.numeroParticipante:'Participante sem número'));
         const cadastro=novoNoPainel('dl');
         const consentiu = typeof p.consentimentoPesquisa==='boolean'?p.consentimentoPesquisa:p.termosAceitos===true;
-        [['Nome',p.nome||'Não informado'],['E-mail',p.email||'Não informado'],['Cadastro criado em',dataPainel(p.dataCriacao)],
+        [['Nome',p.nome||'Não informado'],['E-mail',p.email||'Não informado'],['Relação com a comunidade surda (autodeclarada)',textoPerfilComunidade(p.perfilComunidade)],['Cadastro criado em',dataPainel(p.dataCriacao)],
          ['Consentimento da pesquisa',consentiu?'Sim':'Não'],['Data do aceite',dataPainel(p.dataAceiteTermos)],
          ['Participar do ranking',p.participarRanking===true?'Sim':'Não'],['Quantidade de acessos',p.quantidadeAcessos===undefined?'Não registrado':p.quantidadeAcessos],
          ['Último acesso',dataPainel(p.ultimoAcesso)],['Atualizado em',dataPainel(p.atualizadoEm)],
@@ -134,11 +138,13 @@ async function organizarCadastrosAntigos() {
     const botao=elPainel('organizarCadastros');botao.disabled=true;
     try {
         statusPainel('Organizando numeração e campos antigos. Não feche esta página…');
-        const consulta=await db.collection('usuarios').get();
-        const documentos=[...consulta.docs].sort((a,b)=>millisPainel(a.data().dataCriacao)-millisPainel(b.data().dataCriacao)||a.id.localeCompare(b.id));
-        const controle=db.collection('controle').doc('participantes');
+        const [consulta,administradores]=await Promise.all([dbPesquisa.collection('usuarios').get(),dbPesquisa.collection('administradores').get()]);
+        const idsAdmin=new Set(administradores.docs.filter(d=>d.data().ativo===true).map(d=>d.id));
+        for(const id of idsAdmin) await dbPesquisa.collection('rankingPublico').doc(id).delete();
+        const documentos=consulta.docs.filter(d=>!idsAdmin.has(d.id)).sort((a,b)=>millisPainel(a.data().dataCriacao)-millisPainel(b.data().dataCriacao)||a.id.localeCompare(b.id));
+        const controle=dbPesquisa.collection('controle').doc('participantes');
         const maior=documentos.reduce((m,d)=>Math.max(m,Number(d.data().numeroParticipante)||0),0);
-        await db.runTransaction(async tx=>{
+        await dbPesquisa.runTransaction(async tx=>{
             const doc=await tx.get(controle),atual=doc.exists?Number(doc.data().ultimo)||0:0;
             if(!doc.exists||atual<maior)tx.set(controle,{ultimo:Math.max(atual,maior)});
         });
@@ -146,7 +152,7 @@ async function organizarCadastrosAntigos() {
         for(const documento of documentos) {
             if(!adminAutorizada)throw new Error('Sessão encerrada.');
             const ref=documento.ref;
-            const numero=await db.runTransaction(async tx=>{
+            const numero=await dbPesquisa.runTransaction(async tx=>{
                 const [cadastro,contador]=await Promise.all([tx.get(ref),tx.get(controle)]);
                 if(!cadastro.exists)return null;
                 const dados=cadastro.data();let numero=dados.numeroParticipante;
@@ -161,18 +167,18 @@ async function organizarCadastrosAntigos() {
             const resultados=await ref.collection('resultados').get();
             const pontos=resultados.empty?Number(documento.data().pontos)||0:somarUltimasNotas(resultados.docs.map(d=>({...d.data(),idResultado:d.id})));
             await ref.set({pontos,jogos:resultados.empty?Number(documento.data().jogos)||0:resultados.size},{merge:true});
-            const publico=db.collection('rankingPublico').doc(documento.id);
+            const publico=dbPesquisa.collection('rankingPublico').doc(documento.id);
             if(documento.data().participarRanking===true)await publico.set({ownerUid:documento.id,nome:nomePublicoDoRanking(documento.data().nome),pontos,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
             else await publico.delete();
         }
         // Retirar vínculos internos e nomes completos dos comentários já publicados.
-        const comentarios=await db.collection('comentarios').get();
+        const comentarios=await dbPesquisa.collection('comentarios').get();
         for(const doc of comentarios.docs){
             if(!adminAutorizada)throw new Error('Sessão encerrada.');
-            const dados=doc.data(),lote=db.batch();
+            const dados=doc.data(),lote=dbPesquisa.batch();
             const numero=numeros.get(dados.usuarioId);
             const nome=numero?'Participante '+numero:/^Participante( [0-9]+)?$/.test(dados.nome||'')?dados.nome:'Participante';
-            if(dados.usuarioId)lote.set(db.collection('comentariosPrivados').doc(doc.id),{usuarioId:dados.usuarioId,criadoEm:dados.dataCriacao||firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+            if(dados.usuarioId)lote.set(dbPesquisa.collection('comentariosPrivados').doc(doc.id),{usuarioId:dados.usuarioId,criadoEm:dados.dataCriacao||firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
             const campos={nome};if(Object.prototype.hasOwnProperty.call(dados,'usuarioId'))campos.usuarioId=firebase.firestore.FieldValue.delete();
             lote.update(doc.ref,campos);await lote.commit();
         }

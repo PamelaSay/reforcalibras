@@ -77,6 +77,7 @@ function lerPendenciasRanking(uid) {
 async function salvarResultadoComPontuacao(resultado) {
     if (typeof auth === "undefined" || typeof db === "undefined" || !auth || !db || !auth.currentUser) return;
     const uid = auth.currentUser.uid;
+    if (await contaAdministradora(uid)) return;
     identificarResultado(resultado);
     const pendentes = lerPendenciasRanking(uid);
     if (!pendentes.some(r => r.idResultado === resultado.idResultado)) pendentes.push(resultado);
@@ -85,6 +86,7 @@ async function salvarResultadoComPontuacao(resultado) {
 }
 async function enviarPendenciasRanking(uid) {
     if (!auth.currentUser || auth.currentUser.uid !== uid) return;
+    if (await contaAdministradora(uid)) { await db.collection("rankingPublico").doc(uid).delete(); return null; }
     for (const resultado of lerPendenciasRanking(uid)) {
         if (!auth.currentUser || auth.currentUser.uid !== uid) return;
         // Mesmo ID na repetição do envio: não soma a mesma tentativa duas vezes.
@@ -101,6 +103,7 @@ async function enviarPendenciasRanking(uid) {
 }
 async function sincronizarPontuacaoDaConta(uid) {
     if (!auth.currentUser || auth.currentUser.uid !== uid) return null;
+    if (await contaAdministradora(uid)) { await db.collection("rankingPublico").doc(uid).delete(); return null; }
     const usuarioRef = db.collection("usuarios").doc(uid);
     const consulta = await usuarioRef.collection("resultados").get();
     const historico = [];

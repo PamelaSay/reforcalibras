@@ -3,10 +3,11 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function logado() { return request.auth != null; }
     function dono(uid) { return logado() && request.auth.uid == uid; }
-    function admin() {
-      return logado() && exists(/databases/$(database)/documents/administradores/$(request.auth.uid))
-        && get(/databases/$(database)/documents/administradores/$(request.auth.uid)).data.ativo == true;
+    function administradorUid(uid) {
+      return exists(/databases/$(database)/documents/administradores/$(uid))
+        && get(/databases/$(database)/documents/administradores/$(uid)).data.ativo == true;
     }
+    function admin() { return logado() && administradorUid(request.auth.uid); }
     function numeroValido(uid) {
       let antes = get(/databases/$(database)/documents/usuarios/$(uid)).data;
       let depois = getAfter(/databases/$(database)/documents/usuarios/$(uid)).data;
@@ -20,7 +21,7 @@ service cloud.firestore {
     match /usuarios/{uid} {
       allow get: if dono(uid) || admin();
       allow list: if admin();
-      allow create: if dono(uid) && !request.resource.data.keys().hasAny(['numeroParticipante']);
+      allow create: if dono(uid) && !admin() && !request.resource.data.keys().hasAny(['numeroParticipante']);
       allow update: if admin() || (dono(uid) &&
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['numeroParticipante']) || numeroValido(uid)));
       allow delete: if dono(uid) || admin();
@@ -42,14 +43,14 @@ service cloud.firestore {
     }
     match /rankingPublico/{uid} {
       allow read: if true;
-      allow create, update: if admin() || (dono(uid)
+      allow create, update: if !administradorUid(uid) && (admin() || (dono(uid)
         && request.resource.data.keys().hasOnly(['ownerUid','nome','pontos','atualizadoEm'])
         && request.resource.data.ownerUid == uid
         && request.resource.data.nome is string && request.resource.data.nome.size() > 0 && request.resource.data.nome.size() <= 120
         && request.resource.data.nome.matches('[^ @\\r\\n]+( [^ @\\r\\n]+)?')
         && request.resource.data.pontos is number && request.resource.data.pontos >= 0
         && request.resource.data.pontos == get(/databases/$(database)/documents/usuarios/$(uid)).data.pontos
-        && get(/databases/$(database)/documents/usuarios/$(uid)).data.participarRanking == true);
+        && get(/databases/$(database)/documents/usuarios/$(uid)).data.participarRanking == true));
       allow delete: if dono(uid) || admin();
     }
     match /comentarios/{id} {
@@ -72,8 +73,9 @@ service cloud.firestore {
       allow delete: if admin() || (logado() && resource.data.usuarioId == request.auth.uid);
     }
     match /administradores/{uid} {
-      allow get: if dono(uid);
-      allow list, create, update, delete: if false;
+      allow get: if dono(uid) || admin();
+      allow list: if admin();
+      allow create, update, delete: if false;
     }
     match /participantesPesquisa/{uid} {
       allow read, delete: if admin();

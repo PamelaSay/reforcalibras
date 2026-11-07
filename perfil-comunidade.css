@@ -1,0 +1,5 @@
+#modalPerfil .perfil-comunidade-edicao { margin: 0 16px 16px; padding: 12px 14px; border: 1px solid #d5e6ed; border-radius: 13px; background: white; text-align: left; }
+#modalPerfil .perfil-comunidade-edicao summary { cursor: pointer; color: #1d3557; font-weight: bold; }
+#modalPerfil .perfil-comunidade-edicao p { font-size: 13px; line-height: 1.45; }
+#modalPerfil .perfil-comunidade-edicao select { display: block; width: 100%; padding: 9px; margin: 8px 0; box-sizing: border-box; }
+#modalPerfil .perfil-comunidade-edicao button { min-height: 40px; padding: 8px 14px; background: #1d3557; color: white; border: 0; border-radius: 8px; }
