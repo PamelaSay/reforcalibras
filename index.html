@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reforca Libras</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="perfil-aluno.css?v=20261107-correcao08">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
@@ -310,7 +311,7 @@
                     </strong>
 
                     <span>
-                        Aulas concluídas
+                        Videoaulas assistidas
                     </span>
                 </div>
 
@@ -329,7 +330,7 @@
                     </strong>
 
                     <span>
-                        Testes realizados
+                        Verificações realizadas
                     </span>
                 </div>
 
@@ -388,106 +389,34 @@
 
                     <div>
                         <span>
-                            MINHAS TRILHAS
+                            MEUS EXERCÍCIOS
                         </span>
 
                         <h3>
-                            Andamento nos conteúdos
+                            Notas por exercício
                         </h3>
                     </div>
 
                 </div>
 
 
+                <p class="perfil-notas-legenda">Nota da última tentativa · cada exercício vale 100 pontos.</p>
+                <p id="perfilSemTrilhas">Você ainda não iniciou uma trilha. <a href="matematica.html">Escolher uma temática →</a></p>
                 <!-- POTENCIAÇÃO -->
 
-                <article class="perfil-curso">
-
-                    <div class="perfil-curso-topo">
-
-                        <div>
-                            <span class="perfil-curso-icone">
-                                ⚡
-                            </span>
-
-                            <strong>
-                                Potenciação
-                            </strong>
-                        </div>
-
-                        <span id="perfilPotenciacaoTexto">
-                            0 de 4 etapas
-                        </span>
-
-                    </div>
-
-                    <div class="perfil-barra">
-
-                        <div
-                            id="perfilPotenciacaoBarra"
-                            style="width: 0%"
-                        ></div>
-
-                    </div>
-
-                    <div class="perfil-curso-rodape">
-
-                        <span id="perfilPotenciacaoMedia">
-                            Sem resultados
-                        </span>
-
-                        <a href="potenciacao.html">
-                            Continuar →
-                        </a>
-
-                    </div>
-
+                <article id="perfilPotenciacaoCard" class="perfil-curso" hidden>
+                    <div class="perfil-curso-topo"><strong>⚡ Potenciação</strong></div>
+                    <ul id="perfilPotenciacaoNotas" class="perfil-notas" aria-label="Notas dos exercícios de Potenciação"></ul>
+                    <div class="perfil-curso-rodape"><a id="perfilPotenciacaoContinuar" href="potenciacao.html">Ver trilha →</a></div>
                 </article>
 
 
                 <!-- RADICIAÇÃO -->
 
-                <article class="perfil-curso">
-
-                    <div class="perfil-curso-topo">
-
-                        <div>
-                            <span class="perfil-curso-icone">
-                                √
-                            </span>
-
-                            <strong>
-                                Radiciação
-                            </strong>
-                        </div>
-
-                        <span id="perfilRadiciacaoTexto">
-                            0 de 4 etapas
-                        </span>
-
-                    </div>
-
-                    <div class="perfil-barra">
-
-                        <div
-                            id="perfilRadiciacaoBarra"
-                            style="width: 0%"
-                        ></div>
-
-                    </div>
-
-                    <div class="perfil-curso-rodape">
-
-                        <span id="perfilRadiciacaoMedia">
-                            Sem resultados
-                        </span>
-
-                        <a href="radiciacao.html">
-                            Continuar →
-                        </a>
-
-                    </div>
-
+                <article id="perfilRadiciacaoCard" class="perfil-curso" hidden>
+                    <div class="perfil-curso-topo"><strong>√ Radiciação</strong></div>
+                    <ul id="perfilRadiciacaoNotas" class="perfil-notas" aria-label="Notas dos exercícios de Radiciação"></ul>
+                    <div class="perfil-curso-rodape"><a id="perfilRadiciacaoContinuar" href="radiciacao.html">Ver trilha →</a></div>
                 </article>
 
             </section>
@@ -501,7 +430,7 @@
 
                     <div>
                         <span>
-                            DIAGNÓSTICO
+                            ACOMPANHAMENTO
                         </span>
 
                         <h3>
@@ -517,7 +446,7 @@
                     <article class="diagnostico-bloco dominio">
 
                         <h4>
-                            ✅ Bom desempenho
+                            📈 Meus resultados
                         </h4>
 
                         <div id="perfilPontosFortes">
@@ -535,7 +464,7 @@
                     <article class="diagnostico-bloco revisar">
 
                         <h4>
-                            💡 Preciso revisar
+                            💡 Próximos passos
                         </h4>
 
                         <div id="perfilRecomendacoes">
@@ -555,7 +484,7 @@
         </div>
 
 
-        <!-- AÇÕES -->
+<!-- AÇÕES -->
 
         <footer class="perfil-acoes">
 
@@ -702,12 +631,12 @@
         <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
         <script src="firebase-config.js"></script>
         <script src="storage-utils.js"></script>
-    <script src="pontuacao-utils.js?v=20261107-correcao06"></script>
+    <script src="pontuacao-utils.js?v=20261107-correcao08"></script>
 
     <!-- Biblioteca de Alertas Bonitos SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <script src="script.js?v=20261107-correcao06"></script>
+        <script src="script.js?v=20261107-correcao08"></script>
         <script src="comentarios.js"></script>
 </body>
 </html>

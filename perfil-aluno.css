@@ -1,0 +1,20 @@
+#modalPerfil [hidden] { display: none !important; }
+#modalPerfil .perfil-curso { padding: 13px; margin-bottom: 12px; border: 1px solid #d5e6ed; border-radius: 13px; background: #f7fbfd; }
+#modalPerfil .perfil-curso:last-child { margin-bottom: 0; }
+#modalPerfil .perfil-curso-topo { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; }
+#modalPerfil .perfil-curso-topo > span { font-size: 12px; }
+#modalPerfil .perfil-curso-rodape { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 13px; }
+#modalPerfil .perfil-curso-rodape a { color: #1d3557; font-weight: 700; }
+#modalPerfil .perfil-diagnostico p { margin: 7px 0 12px; line-height: 1.5; font-size: 13px; }
+#modalPerfil .perfil-indicador > div { display: flex; flex-direction: column; gap: 3px; }
+#modalPerfil .perfil-indicador strong { font-size: 20px; }
+#modalPerfil .perfil-indicador span { line-height: 1.4; }
+
+#modalPerfil .perfil-notas-legenda { font-size: 12px; line-height: 1.5; color: #52697e; margin: 0 0 12px; }
+#modalPerfil .perfil-notas { list-style: none; margin: 10px 0 0; padding: 0; }
+#modalPerfil .perfil-notas li { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 0; border-bottom: 1px solid #e1edf3; }
+#modalPerfil .perfil-notas li:last-child { border-bottom: 0; }
+#modalPerfil .perfil-nota-exercicio { font-size: 13px; line-height: 1.4; min-width: 0; }
+#modalPerfil .perfil-nota-exercicio small { display: block; margin-top: 3px; color: #66798b; font-size: 11px; }
+#modalPerfil .perfil-nota-valor { flex-shrink: 0; border-radius: 9px; padding: 5px 8px; font-size: 15px; color: #1d3557; background: #e5f1f8; font-variant-numeric: tabular-nums; }
+#modalPerfil .perfil-nota-pendente { font-size: 11px; color: #63778a; background: #edf1f4; font-weight: 400; }

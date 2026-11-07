@@ -582,136 +582,145 @@ function lerDadosLocais(chave, valorPadrao) {
     }
 }
 
-function obterResumoAprendizagem() {
-    const progressoPotenciacao = lerDadosLocais(
-        chaveLocalDoUsuario("progressoCursoPotenciacao"),
-        { concluidas: [] }
-    );
-    const progressoRadiciacao = lerDadosLocais(
-        chaveLocalDoUsuario("progressoCursoRadiciacao"),
-        { concluidas: [] }
-    );
-    const resultadosPotenciacao = lerHistoricoDePontos("Potenciacao");
-    const resultadosRadiciacao = lerHistoricoDePontos("Radiciacao");
-
-    const concluidasPotenciacao = Array.isArray(
-        progressoPotenciacao.concluidas
-    ) ? progressoPotenciacao.concluidas.length : 0;
-    const concluidasRadiciacao = Array.isArray(
-        progressoRadiciacao.concluidas
-    ) ? progressoRadiciacao.concluidas.length : 0;
-
-    const todosResultados = []
-        .concat(Array.isArray(resultadosPotenciacao) ? resultadosPotenciacao : [])
-        .concat(Array.isArray(resultadosRadiciacao) ? resultadosRadiciacao : []);
-
-    const percentuais = todosResultados
-        .map(function (resultado) {
-            return Number(resultado.percentual);
-        })
-        .filter(Number.isFinite);
-
-    const media = percentuais.length
-        ? Math.round(
-            percentuais.reduce(function (total, valor) {
-                return total + valor;
-            }, 0) / percentuais.length
-        )
-        : 0;
-
-    const pontos = todosResultados.reduce(function (total, resultado) {
-        return total + (Number(resultado.pontuacao) || 0);
-    }, 0);
-
-    function mediaDaTrilha(resultados) {
-        if (!Array.isArray(resultados) || !resultados.length) return null;
-        const valores = resultados
-            .map(function (resultado) { return Number(resultado.percentual); })
-            .filter(Number.isFinite);
-        if (!valores.length) return null;
-        return Math.round(
-            valores.reduce(function (total, valor) { return total + valor; }, 0) /
-            valores.length
-        );
-    }
-
+const TRILHAS_PERFIL = {
+    Potenciacao: { titulo: "Potenciação", total: 5, pagina: "potenciacao.html" },
+    Radiciacao: { titulo: "Radiciação", total: 4, pagina: "radiciacao.html" }
+};
+function dadosDaTrilhaNoPerfil(nome) {
+    const config = TRILHAS_PERFIL[nome];
+    const progresso = lerDadosLocais(chaveLocalDoUsuario("progressoCurso" + nome), {}) || {};
+    const etapasValidas = lista => [...new Set((Array.isArray(lista) ? lista : []).map(Number))]
+        .filter(n => Number.isInteger(n) && n >= 1 && n <= config.total).sort((a,b) => a-b);
+    const assistidas = etapasValidas(progresso.aulasAssistidas);
+    const concluidas = etapasValidas(progresso.concluidas);
+    const resultados = lerHistoricoDePontos(nome);
+    const percentuais = resultados.map(r => Number(r.percentual)).filter(Number.isFinite);
+    const pendentes = assistidas.filter(n => !concluidas.includes(n));
+    const proxima = Array.from({length: config.total}, (_,i) => i+1).find(n => !assistidas.includes(n));
     return {
-        aulas: concluidasPotenciacao + concluidasRadiciacao,
-        jogos: todosResultados.length,
-        media: media,
-        pontos: pontos,
-        potenciacao: {
-            concluidas: concluidasPotenciacao,
-            media: mediaDaTrilha(resultadosPotenciacao)
-        },
-        radiciacao: {
-            concluidas: concluidasRadiciacao,
-            media: mediaDaTrilha(resultadosRadiciacao)
-        }
+        ...config, nome, assistidas, etapasConcluidas: concluidas, pendentes, resultados,
+        concluidas: concluidas.length, iniciada: assistidas.length > 0 || concluidas.length > 0 || resultados.length > 0,
+        media: percentuais.length ? Math.round(percentuais.reduce((a,b)=>a+b,0) / percentuais.length) : null,
+        proximaAula: proxima || null
     };
 }
-
+function obterResumoAprendizagem() {
+    const potenciacao = dadosDaTrilhaNoPerfil("Potenciacao");
+    const radiciacao = dadosDaTrilhaNoPerfil("Radiciacao");
+    const todosResultados = [...potenciacao.resultados, ...radiciacao.resultados];
+    const valores = todosResultados.map(r=>Number(r.percentual)).filter(Number.isFinite);
+    return {
+        aulas: potenciacao.concluidas + radiciacao.concluidas,
+        assistidas: potenciacao.assistidas.length + radiciacao.assistidas.length,
+        jogos: todosResultados.length,
+        media: valores.length ? Math.round(valores.reduce((a,b)=>a+b,0)/valores.length) : 0,
+        pontos: todosResultados.reduce((s,r)=>s+pontosDoResultado(r),0),
+        potenciacao, radiciacao
+    };
+}
 function definirTexto(id, texto) {
     const elemento = document.getElementById(id);
     if (elemento) elemento.textContent = texto;
 }
-
+function escreverListaPerfil(id, textos) {
+    const area = document.getElementById(id);
+    if (!area) return;
+    area.replaceChildren();
+    textos.forEach(texto => {
+        const item = document.createElement("p"); item.textContent = texto; area.appendChild(item);
+    });
+}
 function atualizarPerfilLocal() {
-    const usuario = obterUsuarioLocal();
-    const resumo = obterResumoAprendizagem();
-
-    if (usuario) {
-        definirTexto("nomeUsuario", usuario.nome || "Aluno");
-    }
-
-    definirTexto("perfilAulas", resumo.aulas);
+    const usuario = obterUsuarioLocal(), resumo = obterResumoAprendizagem();
+    if (usuario) definirTexto("nomeUsuario", usuario.nome || "Aluno");
+    definirTexto("perfilAulas", resumo.assistidas);
     definirTexto("perfilTestes", resumo.jogos);
-    definirTexto("perfilMedia", resumo.media + "%");
+    definirTexto("perfilMedia", resumo.jogos ? resumo.media + "%" : "—");
     definirTexto("perfilPontos", resumo.pontos);
+    const trilhas = [resumo.potenciacao, resumo.radiciacao];
+    trilhas.forEach(dados => atualizarTrilhaNoPerfil(dados.nome, dados));
+    const iniciadas = trilhas.filter(t=>t.iniciada);
+    const vazio = document.getElementById("perfilSemTrilhas");
+    if (vazio) vazio.hidden = iniciadas.length > 0;
+    escreverListaPerfil("perfilPontosFortes", iniciadas.some(t=>t.resultados.length)
+        ? iniciadas.filter(t=>t.media !== null).map(t=>t.titulo + ": média de " + t.media + "% em " + t.resultados.length + " tentativa(s).")
+        : ["Faça uma verificação para visualizar seu desempenho. Assistir à aula não gera uma nota."]);
+    const passos = [];
+    iniciadas.forEach(t => {
+        if (t.pendentes.length) passos.push(t.titulo + ": verificações pendentes das aulas " + t.pendentes.join(", ") + ". Você pode fazê-las quando preferir.");
+        if (t.proximaAula) passos.push(t.titulo + ": continue assistindo pela aula " + t.proximaAula + ".");
+        if (!t.proximaAula && t.concluidas === t.total) passos.push(t.titulo + ": todas as etapas concluídas. Você pode revisar as aulas.");
+        const ultimos = new Map();
+        [...t.resultados].sort((a,b)=>dataResultadoPerfil(a)-dataResultadoPerfil(b)).forEach(r=>ultimos.set(r.modulo || r.nomeModulo,r));
+        const topicos = new Map();
+        ultimos.forEach(r => (Array.isArray(r.respostas) ? r.respostas : []).forEach(q => {
+            if (!q.topico) return;
+            const dados = topicos.get(q.topico) || {acertos:0,total:0};
+            dados.total++; if (q.acertou === true) dados.acertos++;
+            topicos.set(q.topico,dados);
+        }));
+        const revisar = [...topicos].map(([nome,d])=>({nome,percentual:Math.round(d.acertos/d.total*100)}))
+            .filter(d=>d.percentual<70).sort((a,b)=>a.percentual-b.percentual).slice(0,3);
+        if (revisar.length) passos.push(t.titulo + " — revise: " + revisar.map(d=>d.nome + " (" + d.percentual + "% de acertos)").join("; ") + ".");
+        else if (t.media !== null && t.media < 70) passos.push("Reveja as explicações e refaça os exercícios de " + t.titulo + ".");
+    });
+    escreverListaPerfil("perfilRecomendacoes", passos.length ? passos : ["Escolha uma trilha em Matemática para começar."]);
 
-    atualizarTrilhaNoPerfil("Potenciacao", resumo.potenciacao);
-    atualizarTrilhaNoPerfil("Radiciacao", resumo.radiciacao);
-
-    const pontosFortes = document.getElementById("perfilPontosFortes");
-    const recomendacoes = document.getElementById("perfilRecomendacoes");
-
-    if (pontosFortes) {
-        pontosFortes.replaceChildren();
-        const texto = document.createElement("p");
-        texto.textContent = resumo.jogos === 0
-            ? "Realize as verificações para visualizar seus resultados."
-            : resumo.media >= 70
-                ? "Seu desempenho geral está acima de 70%. Continue avançando."
-                : "Continue praticando para consolidar os conteúdos.";
-        pontosFortes.appendChild(texto);
-    }
-
-    if (recomendacoes) {
-        recomendacoes.replaceChildren();
-        const texto = document.createElement("p");
-        if (resumo.jogos === 0) {
-            texto.textContent = "Comece pela trilha de Potenciação.";
-        } else if (resumo.potenciacao.media !== null && resumo.potenciacao.media < 70) {
-            texto.textContent = "Reveja a trilha de Potenciação e refaça o teste.";
-        } else if (resumo.radiciacao.media !== null && resumo.radiciacao.media < 70) {
-            texto.textContent = "Reveja a trilha de Radiciação e refaça o teste.";
+}
+const EXERCICIOS_DO_PERFIL = {
+    Potenciacao: [
+        ["revisaoMultiplicacao", "Revisão da multiplicação"],
+        ["potenciacao", "Base, expoente e potência"],
+        ["casosEspeciais", "Casos especiais"],
+        ["baseDez", "Potências de base 10"],
+        ["propriedades", "Propriedades da potenciação"]
+    ],
+    Radiciacao: [
+        ["introducao", "Introdução à radiciação"],
+        ["propriedades", "Propriedades da radiciação"]
+    ]
+};
+function atualizarTrilhaNoPerfil(nome, dados) {
+    const card = document.getElementById("perfil" + nome + "Card");
+    if (card) card.hidden = !dados.iniciada;
+    if (!dados.iniciada) return;
+    const area = document.getElementById("perfil" + nome + "Notas");
+    if (!area) return;
+    area.replaceChildren();
+    const ultimas = new Map();
+    [...dados.resultados].sort((a,b)=>dataResultadoPerfil(a)-dataResultadoPerfil(b))
+        .forEach(r=>ultimas.set(r.modulo,r));
+    EXERCICIOS_DO_PERFIL[nome].forEach(([modulo,titulo]) => {
+        const resultado = ultimas.get(modulo);
+        const linha = document.createElement("li");
+        const rotulo = document.createElement("span");
+        rotulo.className = "perfil-nota-exercicio";
+        rotulo.textContent = titulo;
+        const nota = document.createElement("strong");
+        nota.className = "perfil-nota-valor";
+        if (resultado) {
+            nota.textContent = pontosDoResultado(resultado) + "/100";
+            nota.setAttribute("aria-label", pontosDoResultado(resultado) + " de 100 pontos");
+            const detalhe = document.createElement("small");
+            const acertos = Number(resultado.acertos);
+            detalhe.textContent = Number.isFinite(acertos)
+                ? acertos + " acerto(s)" : "Última tentativa";
+            if (resultado.concluido === false) detalhe.textContent += " · tentativa encerrada antes do fim";
+            rotulo.appendChild(detalhe);
         } else {
-            texto.textContent = "Nenhuma revisão prioritária no momento.";
+            nota.textContent = "Não realizado";
+            nota.classList.add("perfil-nota-pendente");
         }
-        recomendacoes.appendChild(texto);
-    }
+        linha.append(rotulo,nota);area.appendChild(linha);
+    });
+    const link = document.getElementById("perfil" + nome + "Continuar");
+    if (link) { link.href = dados.pagina; link.textContent = "Ver trilha →"; }
 }
 
-function atualizarTrilhaNoPerfil(nome, dados) {
-    const concluidas = Math.min(4, Number(dados.concluidas) || 0);
-    definirTexto("perfil" + nome + "Texto", concluidas + " de 4 etapas");
-    definirTexto(
-        "perfil" + nome + "Media",
-        dados.media === null ? "Sem resultados" : "Média: " + dados.media + "%"
-    );
-
-    const barra = document.getElementById("perfil" + nome + "Barra");
-    if (barra) barra.style.width = Math.round((concluidas / 4) * 100) + "%";
+function dataResultadoPerfil(resultado) {
+    const data = resultado.realizadoEm;
+    if (data && typeof data.toMillis === "function") return data.toMillis();
+    return Date.parse(data) || 0;
 }
 
 async function sincronizarResumoNoFirebase() {
@@ -743,13 +752,12 @@ function atualizarContinuarEstudando() {
     titulo.textContent = "📘 Continuar estudando";
 
     const link = document.createElement("a");
-    if (resumo.potenciacao.concluidas < 4) {
-        link.href = "potenciacao.html";
-        link.textContent = "Continuar Potenciação →";
-    } else {
-        link.href = "radiciacao.html";
-        link.textContent = "Continuar Radiciação →";
-    }
+    const trilhas = [resumo.potenciacao, resumo.radiciacao];
+    const dados = trilhas.find(t=>t.iniciada && (t.concluidas<t.total || t.assistidas.length<t.total)) || trilhas.find(t=>t.iniciada);
+    if (!dados) return;
+    const etapa = dados.proximaAula || dados.pendentes[0];
+    link.href = dados.pagina + (etapa ? "#aula-" + etapa : "");
+    link.textContent = "Continuar " + dados.titulo + " →";
 
     area.append(titulo, link);
 }
