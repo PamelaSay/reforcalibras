@@ -10,14 +10,14 @@
     max-height: min(540px, calc(100vh - 24px)) !important;
     max-height: min(540px, calc(100dvh - 24px)) !important;
     min-height: 0 !important;
-    padding: 12px !important;
-    gap: 6px;
+    padding: 10px !important;
+    gap: 4px;
     border: 3px solid #e5bd27 !important;
     border-radius: 23px !important;
     font-family: "Nunito", Arial, sans-serif !important;
 }
 .swal2-popup:not(.swal2-toast)[style*="display: none"] { display: none !important; }
-.swal2-popup .swal2-icon { flex: 0 0 auto; align-self: center; font-size: 8px !important; margin: 0 auto !important; }
+.swal2-popup .swal2-icon { flex: 0 0 auto; align-self: center; font-size: 5.5px !important; margin: 0 auto !important; }
 .swal2-popup .swal2-title {
     flex: 0 0 auto; margin: 0 !important; padding: 0 10px !important;
     color: #1d3557; font-size: clamp(18px, 2.5vw, 23px) !important;
@@ -32,7 +32,7 @@
 .swal2-popup .alerta-conteudo-acessivel,
 .swal2-popup .swal2-html-container > div:has(> #videoAlertaVideoaula) {
     display: grid !important; grid-template-columns: minmax(0,1fr) !important;
-    gap: 6px !important; align-items: start; text-align: left;
+    gap: 4px !important; align-items: start; text-align: left;
 }
 .swal2-popup .explicacao-resposta > *,
 .swal2-popup .alerta-conteudo-acessivel > *,
@@ -42,7 +42,7 @@
 .swal2-popup .texto-explicacao,
 .swal2-popup .alerta-conteudo-acessivel > p,
 .swal2-popup .swal2-html-container > div:has(> #videoAlertaVideoaula) > div:first-child {
-    margin: 0 !important; padding: 8px 10px !important;
+    margin: 0 !important; padding: 6px 10px !important;
     font-size: 14px; line-height: 1.4; overflow-wrap: anywhere;
 }
 .swal2-popup .alerta-conteudo-acessivel > p { order: -1; }
@@ -50,9 +50,11 @@
 .swal2-popup #videoAlertaVideoaula,
 .swal2-popup .video-libras-alerta {
     box-sizing: border-box; display: block; width: 100% !important;
-    height: clamp(120px, 22vh, 160px) !important;
-    height: clamp(120px, 22dvh, 160px) !important;
-    min-height: 0 !important; max-height: 25dvh;
+    /* Altura original da janela de Libras: 260px. */
+    height: 260px !important;
+    min-height: 0 !important;
+    max-height: max(100px, calc(100vh - 290px));
+    max-height: max(100px, calc(100dvh - 290px));
     object-fit: contain; background: #101827; border-radius: 12px !important;
 }
 .swal2-popup .botao-alerta-repetir,
@@ -94,7 +96,7 @@
         padding: 10px !important; gap: 5px;
     }
     .swal2-popup .swal2-title { font-size: 19px !important; }
-    .swal2-popup .swal2-actions button { flex: 1 1 120px; min-width: 0; }
+    .swal2-popup .swal2-actions button { flex: 1 1 100px; min-width: 0; }
 }
 @media (max-height: 500px) {
     .swal2-container { padding: 6px !important; }
@@ -103,7 +105,14 @@
     .swal2-popup .swal2-title { font-size: 18px !important; }
     .swal2-popup .video-explicacao,
     .swal2-popup #videoAlertaVideoaula,
-    .swal2-popup .video-libras-alerta { height: min(23dvh,110px) !important; max-height: 23dvh; }
+    .swal2-popup .video-libras-alerta { height: min(260px, max(100px, calc(100dvh - 250px))) !important; max-height: none; }
     .swal2-popup .swal2-actions button { min-height: 36px !important; padding: 6px 9px !important; }
 }
 .swal2-popup [hidden] { display: none !important; }
+
+/* Só as telas muito estreitas reduzem a janela para acomodar botões em duas linhas. */
+@media (max-width: 360px) {
+    .swal2-popup .video-explicacao,
+    .swal2-popup #videoAlertaVideoaula,
+    .swal2-popup .video-libras-alerta { height: min(260px, 30dvh, 210px) !important; }
+}
