@@ -906,6 +906,13 @@ async function excluirConta() {
             return;
         }
 
+        const tokenDaSessao = await usuario.getIdTokenResult();
+        const autenticadoEm = Number(tokenDaSessao.claims.auth_time) * 1000;
+        if (!Number.isFinite(autenticadoEm) || Date.now() - autenticadoEm >= 5 * 60 * 1000) {
+            abrirLoginDaExclusao(usuario.email);
+            return;
+        }
+
         await apagarColecaoEmLotes(
             db.collection("usuarios").doc(usuario.uid).collection("resultados")
         );
@@ -948,12 +955,7 @@ async function excluirConta() {
         console.error("Erro ao excluir conta:", erro);
 
         if (erro.code === "auth/requires-recent-login") {
-            exibirAlerta(
-                "warning",
-                "Confirmação de segurança necessária",
-                "O Firebase bloqueou a exclusão porque esta sessão é antiga. Entre novamente e repita somente nesse caso."
-            );
-
+            abrirLoginDaExclusao();
             return;
         }
 
@@ -963,6 +965,16 @@ async function excluirConta() {
             traduzirErroFirebase(erro.code)
         );
     }
+}
+
+function abrirLoginDaExclusao(email) {
+    if (modalPerfil) modalPerfil.style.display = "none";
+    const campoEmail = document.getElementById("loginEmail");
+    const campoSenha = document.getElementById("senhaLogin");
+    if (campoEmail && email) campoEmail.value = email;
+    if (campoSenha) campoSenha.value = "";
+    if (modalLogin) modalLogin.style.display = "flex";
+    if (campoSenha) campoSenha.focus();
 }
 
 function aguardarUsuarioFirebase() {
