@@ -792,7 +792,7 @@ async function atualizarRankingPublico() {
             const item = document.createElement("p");
             item.className = "ranking-item";
             item.textContent = (medalhas[participante.posicao - 1] || "⭐") + " " + participante.posicao + "º — " +
-                participante.nome + (participante.uid === uid ? " (você)" : "") + " — " + participante.pontos + " pontos";
+                participante.nome + " — " + participante.pontos + " pontos";
             lista.appendChild(item);
         });
     } catch (erro) {
