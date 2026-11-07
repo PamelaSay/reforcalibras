@@ -89,15 +89,16 @@ async function sincronizarPontuacaoDaConta(uid) {
         const documento = await transacao.get(usuarioRef);
         const atual = documento.exists ? documento.data() : {};
         // Não zerar um saldo antigo cuja origem não está mais no histórico.
-        if (jogos === 0 || (atual.pontuacaoVersao === 2 && Number(atual.jogos) > jogos)) {
+        if (jogos === 0 || Number(atual.jogos) > jogos) {
             return { pontos: Number(atual.pontos) || 0, jogos: Number(atual.jogos) || 0, media: Number(atual.media) || 0 };
         }
         transacao.set(usuarioRef, {
-            ...resumo, pontuacaoVersao: 2,
+            pontos: resumo.pontos, jogos: resumo.jogos,
             atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
         return resumo;
     });
+    await publicarRankingSeguro(uid, salvo.pontos);
     try {
         const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
         if (usuario && usuario.uid === uid) {

@@ -94,47 +94,13 @@ function salvarComentario() {
         }
     }
 
-    const nomeAutor = obterNomeUsuarioLogado();
-
-    // Objeto do comentário para enviar ao Firebase
-    const novoComentario = {
-        usuarioId:
-            typeof auth !== "undefined" && auth && auth.currentUser
-                ? auth.currentUser.uid
-                : null,
-        nome: nomeAutor,
-        nota: notaSelecionada,
-        texto: texto,
-        dataCriacao: firebase.firestore.FieldValue.serverTimestamp() // Pega a data/hora oficial do servidor
-    };
-
-    // Salva no banco de dados
-    if (typeof db !== 'undefined') {
-        db.collection("comentarios").add(novoComentario)
-            .then(() => {
-                textarea.value = "";
-                notaSelecionada = 0;
-                atualizarEstrelas(0);
-
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Obrigado!',
-                        text: 'Sua avaliação foi enviada com sucesso!',
-                        timer: 1800,
-                        showConfirmButton: false
-                    });
-                } else {
-                    alert("Obrigado pela sua avaliação!");
-                }
-            })
-            .catch((error) => {
-                console.error("Erro ao salvar comentário no Firebase:", error);
-                alert("Erro ao enviar comentário. Tente novamente!");
-            });
-    } else {
-        alert("Conexão com o banco de dados não encontrada.");
-    }
+    enviarComentarioComPrivacidade(texto, notaSelecionada)
+        .then(() => {
+            textarea.value = ""; notaSelecionada = 0; atualizarEstrelas(0);
+            if (typeof Swal !== 'undefined') Swal.fire({icon:'success',title:'Obrigado!',text:'Sua avaliação foi enviada com sucesso!',timer:1800,showConfirmButton:false});
+            else alert("Obrigado pela sua avaliação!");
+        })
+        .catch(erro => { console.error("Erro ao salvar comentário:", erro); alert("Erro ao enviar comentário. Tente novamente!"); });
 }
 
 // 5. OUVINTE EM TEMPO REAL (Carrega lista geral e últimos comentários)

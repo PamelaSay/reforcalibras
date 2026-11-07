@@ -1,0 +1,32 @@
+const vm=require('vm'),fs=require('fs'),assert=require('assert');
+const docs=new Map();let tail=Promise.resolve(), clock=1000;
+const op={serverTimestamp:()=>({op:'date'}),increment:n=>({op:'inc',n}),delete:()=>({op:'del'})};
+function apply(path,value,options={}){const data=options.merge?{...(docs.get(path)||{})}:{};for(const[k,v]of Object.entries(value)){if(v&&v.op==='del')delete data[k];else if(v&&v.op==='inc')data[k]=(Number(data[k])||0)+v.n;else if(v&&v.op==='date')data[k]='2026-11-07T00:00:'+String(clock++%60).padStart(2,'0')+'Z';else data[k]=v;}docs.set(path,data)}
+function ref(path){return {path,id:path.split('/').pop(),get:async()=>snap(path),set:async(v,o)=>apply(path,v,o),update:async v=>apply(path,v,{merge:true}),delete:async()=>docs.delete(path),collection:n=>collection(path+'/'+n)}}
+function snap(path){return {exists:docs.has(path),id:path.split('/').pop(),ref:ref(path),data:()=>({...docs.get(path)})}}
+function collection(path){return {doc:id=>ref(path+'/'+(id||'auto'+clock++)),get:async()=>{let arr=[...docs.keys()].filter(p=>p.startsWith(path+'/')&&!p.slice(path.length+1).includes('/')).map(snap);return{docs:arr,size:arr.length,empty:!arr.length,forEach:f=>arr.forEach(f)}},where:()=>({get:async()=>({docs:[]})})}}
+const db={collection,runTransaction(fn){const run=tail.then(async()=>{const writes=[];const tx={get:async r=>snap(r.path),set:(r,v,o)=>writes.push(()=>apply(r.path,v,o)),update:(r,v)=>writes.push(()=>apply(r.path,v,{merge:true})),delete:r=>writes.push(()=>docs.delete(r.path))};const result=await fn(tx);writes.forEach(f=>f());return result});tail=run.catch(()=>{});return run;},batch(){const writes=[];return{set:(r,v,o)=>writes.push(()=>apply(r.path,v,o)),update:(r,v)=>writes.push(()=>apply(r.path,v,{merge:true})),delete:r=>writes.push(()=>docs.delete(r.path)),commit:async()=>writes.forEach(f=>f())}}};
+function context(uid,url,referer='',sessions={}){const storage={getItem:k=>sessions[k]||null,setItem:(k,v)=>sessions[k]=v};const c={console,Date,Math,URL,URLSearchParams,encodeURIComponent,crypto:{randomUUID:()=>uid+'_'+clock++},performance:{getEntriesByType:()=>[{type:'navigate'}]},navigator:{userAgent:'Android Mobile'},document:{referrer:referer,title:'Site'},sessionStorage:storage,window:{location:new URL(url),history:{replaceState:()=>{}}},auth:{currentUser:{uid},onAuthStateChanged:()=>{}},db,firebase:{firestore:{FieldValue:op}}};vm.createContext(c);vm.runInContext(fs.readFileSync('correcao_09/acessos-conta.js','utf8'),c);return c}
+(async()=>{
+ docs.set('usuarios/u1',{nome:'Nome privado',email:'privado@example.invalid',termosAceitos:true,versaoTermos:'1',media:99,nivel:'Iniciante',uid:'u1',pontos:100,participarRanking:true});docs.set('usuarios/u2',{nome:'Outro',participarRanking:true,pontos:0});
+ const c=context('u1','https://www.reforcalibras.com.br/jogo_potenciacao.html?origem=youtube','');
+ assert.equal(c.identificarOrigemAcesso('https://x.test/','https://youtube.com/watch?v=123','x.test').origem,'YouTube');
+ assert.equal(c.identificarOrigemAcesso('https://x.test/','https://outro.test/path?email=secret','x.test').origemDominio,'outro.test');
+ assert.equal(c.identificarOrigemAcesso('https://x.test/','','x.test').origem,'Acesso direto ou origem não identificada');
+ assert.equal(c.identificarOrigemAcesso('https://x.test/','https://x.test/index.html','x.test').origem,'Reforça Libras');
+ const other=context('u2','https://www.reforcalibras.com.br/index.html');
+ const n=await Promise.all([c.garantirNumeroParticipante('u1'),other.garantirNumeroParticipante('u2')]);assert.deepEqual(n,[1,2]);assert.equal(await c.garantirNumeroParticipante('u1'),1);assert.equal(docs.get('controle/participantes').ultimo,2);
+ await Promise.all([c.registrarAcessoPrivado({uid:'u1'}),c.registrarAcessoPrivado({uid:'u1'})]);assert.equal(docs.get('usuarios/u1').quantidadeAcessos,1);assert.equal(docs.get('usuarios/u1').quantidadeConteudosAcessados,1);assert.equal(docs.get('usuarios/u1').consentimentoPesquisa,true);assert(!('media'in docs.get('usuarios/u1')));assert(!('termosAceitos'in docs.get('usuarios/u1')));
+ const acesso=[...docs].find(([k])=>k.startsWith('usuarios/u1/acessos/'))[1];assert.equal(acesso.origem,'YouTube');assert.equal(acesso.dispositivo,'Celular');assert(!JSON.stringify(acesso).includes('userAgent'));assert(!JSON.stringify(acesso).includes('email'));
+ await c.publicarRankingSeguro('u1',100);const rank=docs.get('rankingPublico/u1');assert.equal(rank.nome,'Participante 1');assert(!('email'in rank));assert(!JSON.stringify(rank).includes('Nome privado'));
+ docs.get('usuarios/u1').participarRanking=false;await c.publicarRankingSeguro('u1',100);assert(!docs.has('rankingPublico/u1'));
+ await c.enviarComentarioComPrivacidade('Comentário público',5);const pub=[...docs].find(([k])=>k.startsWith('comentarios/'))[1];const priv=[...docs].find(([k])=>k.startsWith('comentariosPrivados/'))[1];assert.equal(pub.nome,'Participante 1');assert(!('usuarioId'in pub));assert.equal(priv.usuarioId,'u1');
+ console.log('PASS simulated: unique sequential numbers/idempotence; duplicate access increments once; source classification; external URL discarded; old fields normalized; public ranking excludes private name/email; opt-out removes rank; comment ownership private.');
+ // Verify access gate before any private list query using real panel functions.
+ const callbacks=[];let privateLists=0;
+ class El{constructor(){this.hidden=true;this.children=[];this.textContent='';this.value=''}addEventListener(){}replaceChildren(){this.children=[]}appendChild(e){this.children.push(e)}append(...e){this.children.push(...e)}}
+ const elements=new Map();for(const m of fs.readFileSync('correcao_09/painel-pesquisa.html','utf8').matchAll(/\bid="([^"]+)"/g))elements.set(m[1],new El());
+ const panel={console,Date,Math,Map,document:{getElementById:id=>elements.get(id),createElement:()=>new El()},auth:{currentUser:{uid:'student'},onAuthStateChanged:f=>callbacks.push(f)},db:{collection:name=>{if(name==='usuarios')return{get:async()=>{privateLists++;return{docs:[]}}};return{doc:()=>({get:async()=>({exists:false})})}}}};
+ vm.createContext(panel);vm.runInContext(fs.readFileSync('correcao_09/painel-pesquisa.js','utf8'),panel);await callbacks[0]({uid:'student'});assert.equal(privateLists,0);assert.equal(elements.get('painel').hidden,true);assert(elements.get('status').textContent.includes('não autorizado'));
+ console.log('PASS real panel gate: unauthorized account never requests private user list; report cleared.');
+})().catch(e=>{console.error(e);process.exit(1)});

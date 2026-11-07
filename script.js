@@ -1,4 +1,4 @@
-const VERSAO_TERMOS = "1.0";
+
 
 
 // ==========================================
@@ -174,7 +174,7 @@ async function cadastrar() {
     const nome = nomeInput.value.trim();
     const email = emailInput.value.trim().toLowerCase();
     const senha = senhaInput.value;
-    // O ranking público usa somente o nome informado no cadastro.
+    // O ranking público usa um código de participante, sem e-mail ou nome completo.
     const participarRanking = true;
 
     if (!nome) {
@@ -249,23 +249,22 @@ async function cadastrar() {
         const participaPesquisa = aceiteInput.checked;
 
         const dadosUsuario = {
-            uid: usuarioCriado.uid,
             nome: nome,
             email: email,
-            nivel: "Iniciante",
             pontos: 0,
             aulas: 0,
             jogos: 0,
+            quantidadeAcessos: 0,
+            quantidadeConteudosAcessados: 0,
             participarRanking: participarRanking,
 
-            termosAceitos: participaPesquisa,
             consentimentoPesquisa: participaPesquisa,
-            versaoTermos: VERSAO_TERMOS,
 
             dataAceiteTermos: participaPesquisa
                 ? firebase.firestore.FieldValue.serverTimestamp()
                 : null,
 
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp(),
             dataCriacao:
                 firebase.firestore.FieldValue.serverTimestamp()
         };
@@ -307,6 +306,7 @@ async function cadastrar() {
 
         limparFormularioCadastro();
         mostrarUsuario();
+        registrarAcessoPrivado(usuarioCriado).catch(erro => console.error("Registro de acesso pendente:", erro));
 
         exibirAlerta(
             "success",
@@ -434,12 +434,13 @@ async function login() {
 
                 email: usuario.email,
 
-                nivel: "Iniciante",
-                pontos: 0,
+                    pontos: 0,
                 aulas: 0,
                 jogos: 0,
 
-                termosAceitos: false,
+                consentimentoPesquisa: false,
+                dataAceiteTermos: null,
+                participarRanking: true,
 
                 dataCriacao:
                     firebase.firestore.FieldValue.serverTimestamp()
@@ -475,6 +476,7 @@ async function login() {
 
         limparFormularioLogin();
         mostrarUsuario();
+        registrarAcessoPrivado(usuario).catch(erro => console.error("Registro de acesso pendente:", erro));
 
         exibirAlerta(
             "success",
@@ -767,7 +769,7 @@ async function atualizarRankingPublico() {
     if (!lista || !db) return;
     try {
         // Ordenar no servidor: sem o recorte incorreto de 50 usuários aleatórios.
-        const consulta = await db.collection("usuarios").orderBy("pontos", "desc").get();
+        const consulta = await db.collection("rankingPublico").orderBy("pontos", "desc").get();
         const participantes = [];
         consulta.forEach(documento => {
             const dados = documento.data();
@@ -883,9 +885,11 @@ async function excluirConta() {
         await apagarColecaoEmLotes(
             db.collection("usuarios").doc(usuario.uid).collection("acessos")
         );
-        await apagarConsultaEmLotes(
-            db.collection("comentarios").where("usuarioId", "==", usuario.uid)
-        );
+        for (const colecao of ["conteudosAcessados", "aulasAssistidas", "melhoresResultados"]) {
+            await apagarColecaoEmLotes(db.collection("usuarios").doc(usuario.uid).collection(colecao));
+        }
+        await excluirComentariosDaConta(usuario.uid);
+        await db.collection("rankingPublico").doc(usuario.uid).delete();
 
         await db
             .collection("usuarios")
@@ -1523,100 +1527,6 @@ window.addEventListener(
         }
     }
 );
-
-async function registrarAcessoUsuario(
-    usuarioFirebase
-) {
-    if (!usuarioFirebase) {
-        return;
-    }
-
-    /*
-     * Impede que atualizar a página várias vezes
-     * conte como vários acessos na mesma sessão.
-     */
-
-    const chaveDaSessao =
-        "acessoRegistrado_" +
-        usuarioFirebase.uid;
-
-    if (
-        sessionStorage.getItem(
-            chaveDaSessao
-        )
-    ) {
-        return;
-    }
-
-    const referenciaUsuario =
-        db.collection("usuarios")
-            .doc(usuarioFirebase.uid);
-
-    try {
-        await referenciaUsuario.set(
-            {
-                email:
-                    usuarioFirebase.email ||
-                    "",
-
-                ultimoAcesso:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp(),
-
-                quantidadeAcessos:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(1)
-            },
-            {
-                merge: true
-            }
-        );
-
-        await referenciaUsuario
-            .collection("acessos")
-            .add(
-                {
-                    entrouEm:
-                        firebase.firestore
-                            .FieldValue
-                            .serverTimestamp(),
-
-                    paginaInicial:
-                        window.location.pathname,
-
-                    dispositivo:
-                        navigator.userAgent
-                }
-            );
-
-        sessionStorage.setItem(
-            chaveDaSessao,
-            "true"
-        );
-
-    } catch (erro) {
-        console.error(
-            "Erro ao registrar acesso:",
-            erro
-        );
-    }
-}
-
-if (auth) {
-    auth.onAuthStateChanged(
-        async function (usuarioFirebase) {
-            if (!usuarioFirebase) {
-                return;
-            }
-
-            await registrarAcessoUsuario(
-                usuarioFirebase
-            );
-        }
-    );
-}
 
 async function registrarVideoConcluido(
     tematica,
