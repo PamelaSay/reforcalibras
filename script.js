@@ -351,6 +351,7 @@ function iniciarSessaoAdministrativaDeTeste(usuario) {
     };
     localStorage.setItem("usuarioLogado", JSON.stringify(sessao));
     mostrarUsuario();
+    registrarAcessoPrivado(usuario).catch(erro => console.error("Registro do teste pendente:", erro));
 }
 
 async function login() {

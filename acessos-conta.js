@@ -112,7 +112,7 @@ async function registrarAcessoPrivado(usuarioFirebase) {
     // Não conta entradas no painel administrativo como uso do produto por alunos.
     if (window.location.pathname.endsWith('painel-pesquisa.html')) return;
     const uid = usuarioFirebase.uid;
-    if (await contaAdministradora(uid)) return;
+    if (await contaAdministradora(uid)) return registrarAcessoTesteAdministrativo(usuarioFirebase);
     await garantirNumeroParticipante(uid);
     await normalizarCamposDaConta(uid);
     const usuario = db.collection('usuarios').doc(uid);
@@ -191,4 +191,49 @@ async function excluirComentariosDaConta(uid) {
         });
         await lote.commit();
     }
+}
+
+function dadosDoTesteAdministrativo(usuario) {
+    return {nome:usuario.displayName || 'Administradora',email:usuario.email || '',
+        administrativa:true,tipoRegistro:'teste_administracao',naoIncluirNaPesquisa:true,participarRanking:false,consentimentoPesquisa:false};
+}
+async function registrarAcessoTesteAdministrativo(usuario) {
+    if(!CONTEXTO_ACESSO || !auth.currentUser || auth.currentUser.uid!==usuario.uid)return;
+    const raiz=db.collection('testesAdministracao').doc(usuario.uid),s=CONTEXTO_ACESSO.sessao;
+    const entrada=raiz.collection('acessos').doc(s.id);
+    const conteudo=raiz.collection('conteudosAcessados').doc(s.id+'_'+CONTEXTO_ACESSO.chaveConteudo);
+    await db.runTransaction(async tx=>{
+        const [cadastro,entrou,abriu]=await Promise.all([tx.get(raiz),tx.get(entrada),tx.get(conteudo)]);
+        const data=firebase.firestore.FieldValue.serverTimestamp();
+        const campos={...dadosDoTesteAdministrativo(usuario),ultimoAcesso:data,atualizadoEm:data};
+        if(!cadastro.exists)campos.dataCriacao=data;
+        if(!entrou.exists){campos.quantidadeAcessos=firebase.firestore.FieldValue.increment(1);tx.set(entrada,{entrouEm:data,paginaInicial:s.paginaInicial,origem:s.origem,origemDominio:s.origemDominio,identificacaoOrigem:s.identificacaoOrigem,dispositivo:s.dispositivo});}
+        if(!abriu.exists){campos.quantidadeConteudosAcessados=firebase.firestore.FieldValue.increment(1);tx.set(conteudo,{acessadoEm:data,pagina:CONTEXTO_ACESSO.pagina,conteudo:CONTEXTO_ACESSO.conteudo,origem:CONTEXTO_ACESSO.origem,origemDominio:CONTEXTO_ACESSO.origemDominio,dispositivo:CONTEXTO_ACESSO.dispositivo});}
+        tx.set(raiz,campos,{merge:true});
+    });
+    if(typeof enviarPendenciasAdministracao==='function')await enviarPendenciasAdministracao(usuario.uid);
+}
+async function registrarConteudoTesteAdministrativo(nome) {
+    if(!auth.currentUser||!CONTEXTO_ACESSO||!(await contaAdministradora(auth.currentUser.uid)))return;
+    const usuario=auth.currentUser;await registrarAcessoTesteAdministrativo(usuario);
+    const raiz=db.collection('testesAdministracao').doc(usuario.uid);
+    const ref=raiz.collection('conteudosAcessados').doc(CONTEXTO_ACESSO.sessao.id+'_'+encodeURIComponent(nome).replace(/%/g,'_'));
+    await db.runTransaction(async tx=>{
+        const doc=await tx.get(ref);if(doc.exists)return;
+        const data=firebase.firestore.FieldValue.serverTimestamp();
+        tx.set(ref,{conteudo:nome,pagina:CONTEXTO_ACESSO.pagina,acessadoEm:data,origem:CONTEXTO_ACESSO.origem,origemDominio:CONTEXTO_ACESSO.origemDominio,dispositivo:CONTEXTO_ACESSO.dispositivo});
+        tx.set(raiz,{ultimoAcesso:data,atualizadoEm:data,quantidadeConteudosAcessados:firebase.firestore.FieldValue.increment(1)},{merge:true});
+    });
+}
+
+async function registrarAulaAssistidaTesteAdministrativo(tema, numero) {
+    if(!auth.currentUser||!(await contaAdministradora(auth.currentUser.uid)))return;
+    const usuario=auth.currentUser;await registrarAcessoTesteAdministrativo(usuario);
+    const raiz=db.collection('testesAdministracao').doc(usuario.uid),ref=raiz.collection('aulasAssistidas').doc(tema+'_'+numero);
+    await db.runTransaction(async tx=>{
+        const doc=await tx.get(ref);if(doc.exists)return;
+        const agora=firebase.firestore.FieldValue.serverTimestamp();
+        tx.set(ref,{tema,numero,assistidaEm:agora});
+        tx.set(raiz,{aulas:firebase.firestore.FieldValue.increment(1),atualizadoEm:agora},{merge:true});
+    });
 }

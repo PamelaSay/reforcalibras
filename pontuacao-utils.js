@@ -75,9 +75,10 @@ function lerPendenciasRanking(uid) {
     } catch (erro) { return []; }
 }
 async function salvarResultadoComPontuacao(resultado) {
-    if (typeof auth === "undefined" || typeof db === "undefined" || !auth || !db || !auth.currentUser) return;
+    if (typeof auth === "undefined" || typeof db === "undefined" || !auth || !db) return;
+    if (!auth.currentUser) return typeof registrarResultadoVisitaAnonima === "function" ? registrarResultadoVisitaAnonima(resultado) : undefined;
     const uid = auth.currentUser.uid;
-    if (await contaAdministradora(uid)) return;
+    if (await contaAdministradora(uid)) return salvarResultadoAdministrativo(resultado);
     identificarResultado(resultado);
     const pendentes = lerPendenciasRanking(uid);
     if (!pendentes.some(r => r.idResultado === resultado.idResultado)) pendentes.push(resultado);
@@ -139,4 +140,39 @@ async function sincronizarPontuacaoDaConta(uid) {
         }
     } catch (erro) { console.error("Erro ao atualizar resumo local:", erro); }
     return salvo;
+}
+
+async function salvarResultadoAdministrativo(resultado) {
+    const usuario=auth.currentUser;if(!usuario||!(await contaAdministradora(usuario.uid)))return;
+    identificarResultado(resultado);
+    const chave='resultadosPendentesAdministracao_'+usuario.uid;
+    let fila=[];try{fila=JSON.parse(localStorage.getItem(chave))||[];}catch(_){}
+    if(!fila.some(r=>r.idResultado===resultado.idResultado))fila.push(resultado);
+    localStorage.setItem(chave,JSON.stringify(fila));
+    return enviarPendenciasAdministracao(usuario.uid);
+}
+async function enviarPendenciasAdministracao(uid) {
+    if(!auth.currentUser||auth.currentUser.uid!==uid||!(await contaAdministradora(uid)))return;
+    const chave='resultadosPendentesAdministracao_'+uid;
+    function ler(){try{return JSON.parse(localStorage.getItem(chave))||[];}catch(_){return [];}}
+    for(const r of ler()){
+        if(!auth.currentUser||auth.currentUser.uid!==uid)return;
+        const usuario=auth.currentUser,raiz=db.collection('testesAdministracao').doc(uid),ref=raiz.collection('resultados').doc(r.idResultado);
+        await db.runTransaction(async tx=>{
+            const [cadastro,anterior]=await Promise.all([tx.get(raiz),tx.get(ref)]);
+            if(anterior.exists)return;
+            const dados=cadastro.exists?cadastro.data():{},notas={...(dados.ultimasNotas||{})};
+            const exercicio=encodeURIComponent(chaveDoExercicio(r)).replace(/%/g,'_');
+            const dataCliente=r.realizadoEmCliente||r.realizadoEm||new Date().toISOString();
+            const nota={pontuacao:pontosDoResultado(r),realizadoEmCliente:dataCliente,idResultado:r.idResultado};
+            const antiga=notas[exercicio];
+            if(!antiga||Date.parse(dataCliente)>Date.parse(antiga.realizadoEmCliente)||(Date.parse(dataCliente)===Date.parse(antiga.realizadoEmCliente)&&String(r.idResultado).localeCompare(String(antiga.idResultado))>=0))notas[exercicio]=nota;
+            const agora=firebase.firestore.FieldValue.serverTimestamp();
+            tx.set(ref,{...r,pontuacao:nota.pontuacao,realizadoEmCliente:dataCliente,realizadoEm:dataCliente,recebidoEm:agora});
+            const campos={...dadosDoTesteAdministrativo(usuario),ultimasNotas:notas,pontos:Object.values(notas).reduce((s,x)=>s+x.pontuacao,0),jogos:(Number(dados.jogos)||0)+1,atualizadoEm:agora};
+            if(!cadastro.exists)campos.dataCriacao=agora;
+            tx.set(raiz,campos,{merge:true});
+        });
+        localStorage.setItem(chave,JSON.stringify(ler().filter(x=>x.idResultado!==r.idResultado)));
+    }
 }

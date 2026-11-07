@@ -70,6 +70,10 @@ function registrarAulaAssistida(numero) {
     const progresso = obterProgressoCurso();
     if (numero > progresso.etapaLiberada) return;
 
+    if (typeof registrarAulaAssistidaTesteAdministrativo === 'function') {
+        registrarAulaAssistidaTesteAdministrativo('potenciacao', numero).catch(() => {});
+    }
+
     if (
         !progresso.aulasAssistidas.includes(numero)
     ) {
@@ -317,6 +321,10 @@ function abrirVideoaula(numero, videoId) {
 
     if (typeof registrarConteudoVisitaAnonima === 'function') {
         registrarConteudoVisitaAnonima('Videoaula aberta: Potenciação — Aula ' + numero).catch(() => {});
+    }
+
+    if (typeof registrarConteudoTesteAdministrativo === 'function') {
+        registrarConteudoTesteAdministrativo('Videoaula aberta: Potenciacao — Aula ' + numero).catch(() => {});
     }
 
     etapaVideoAtual = numero;

@@ -2,6 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function logado() { return request.auth != null; }
+    function anonimo() { return logado() && request.auth.token.firebase.sign_in_provider == 'anonymous'; }
     function dono(uid) { return logado() && request.auth.uid == uid; }
     function administradorUid(uid) {
       return exists(/databases/$(database)/documents/administradores/$(uid))
@@ -18,10 +19,83 @@ service cloud.firestore {
         && ((!exists(contador) && depois.numeroParticipante == 1)
           || (exists(contador) && get(contador).data.ultimo + 1 == depois.numeroParticipante));
     }
+    function numeroVisitaValido(uid) {
+      let contador = /databases/$(database)/documents/controle/visitasAnonimas;
+      let visita = /databases/$(database)/documents/visitasAnonimas/$(uid);
+      let depois = getAfter(visita).data;
+      return anonimo() && request.auth.uid == uid && !exists(visita)
+        && depois.ownerUid == uid && depois.consentimentoPesquisa == true
+        && depois.numeroVisita is int && depois.numeroVisita > 0
+        && getAfter(contador).data.ultimo == depois.numeroVisita
+        && ((!exists(contador) && depois.numeroVisita == 1)
+          || (exists(contador) && get(contador).data.ultimo + 1 == depois.numeroVisita));
+    }
+    match /controle/visitasAnonimas {
+      allow get: if anonimo() || admin();
+      allow list, delete: if false;
+      allow create, update: if request.resource.data.keys().hasOnly(['ultimo'])
+        && request.resource.data.ultimo is int && numeroVisitaValido(request.auth.uid);
+    }
+    match /visitasAnonimas/{uid} {
+      allow get: if (anonimo() && dono(uid)) || admin();
+      allow list: if admin();
+      allow create: if numeroVisitaValido(uid)
+        && request.resource.data.keys().hasOnly(['ownerUid','numeroVisita','consentimentoPesquisa','perfilComunidade','iniciouEm','consentiuEm','ultimoAcesso','origem','origemDominio','paginaInicial','dispositivo'])
+        && request.resource.data.iniciouEm == request.time
+        && request.resource.data.consentiuEm == request.time
+        && request.resource.data.ultimoAcesso == request.time
+        && request.resource.data.origem is string && request.resource.data.origem.size() <= 200
+        && request.resource.data.origemDominio is string && request.resource.data.origemDominio.size() <= 253
+        && request.resource.data.paginaInicial is string && request.resource.data.paginaInicial.size() <= 500
+        && request.resource.data.dispositivo in ['Celular','Tablet','Computador','Não identificado']
+        && request.resource.data.perfilComunidade in [null,'pessoa_surda','deficiencia_auditiva','pessoa_surdocega','coda','pessoa_ouvinte','familiar','professor','interprete','estudante_libras','prefiro_nao_informar'];
+      allow update: if anonimo() && dono(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ultimoAcesso'])
+        && request.resource.data.ultimoAcesso == request.time;
+      allow delete: if admin();
+      match /conteudos/{id} {
+        allow read: if (anonimo() && dono(uid)) || admin();
+        allow create: if anonimo() && dono(uid)
+          && get(/databases/$(database)/documents/visitasAnonimas/$(uid)).data.consentimentoPesquisa == true
+          && request.resource.data.keys().hasOnly(['conteudo','pagina','acessadoEm'])
+          && request.resource.data.conteudo is string && request.resource.data.conteudo.size() <= 300
+          && request.resource.data.pagina is string && request.resource.data.pagina.size() <= 500
+          && request.resource.data.acessadoEm == request.time;
+        allow update: if false;
+        allow delete: if admin();
+      }
+      match /resultados/{id} {
+        allow read: if (anonimo() && dono(uid)) || admin();
+        allow create: if anonimo() && dono(uid)
+          && get(/databases/$(database)/documents/visitasAnonimas/$(uid)).data.consentimentoPesquisa == true
+          && request.resource.data.keys().hasOnly(['idResultado','pontuacao','jogo','tematica','modulo','nomeModulo','etapa','acertos','erros','totalRespondido','percentual','concluido','respostas','realizadoEm','realizadoEmCliente'])
+          && request.resource.data.idResultado == id
+          && request.resource.data.respostas is list && request.resource.data.respostas.size() <= 100
+          && request.resource.data.pontuacao is number && request.resource.data.pontuacao >= 0 && request.resource.data.pontuacao <= 1000
+          && request.resource.data.realizadoEm == request.time;
+        allow update: if false;
+        allow delete: if admin();
+      }
+    }
+    // Testes da administradora: separados dos participantes e do ranking.
+    match /testesAdministracao/{uid} {
+      allow read: if admin();
+      allow create, update: if admin() && dono(uid)
+        && request.resource.data.administrativa == true
+        && request.resource.data.tipoRegistro == 'teste_administracao'
+        && request.resource.data.naoIncluirNaPesquisa == true
+        && request.resource.data.participarRanking == false;
+      allow delete: if admin() && dono(uid);
+      match /{colecao}/{id} {
+        allow read: if admin();
+        allow write: if admin() && dono(uid)
+          && colecao in ['resultados','acessos','conteudosAcessados','aulasAssistidas'];
+      }
+    }
     match /usuarios/{uid} {
       allow get: if dono(uid) || admin();
       allow list: if admin();
-      allow create: if dono(uid) && !admin() && !request.resource.data.keys().hasAny(['numeroParticipante']);
+      allow create: if dono(uid) && !anonimo() && !admin() && !request.resource.data.keys().hasAny(['numeroParticipante']);
       allow update: if admin() || (dono(uid) &&
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['numeroParticipante']) || numeroValido(uid)));
       allow delete: if dono(uid) || admin();

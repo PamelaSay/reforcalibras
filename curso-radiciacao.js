@@ -69,6 +69,10 @@ function registrarAulaAssistida(numero) {
     const progresso = obterProgressoCurso();
     if (numero > progresso.etapaLiberada) return;
 
+    if (typeof registrarAulaAssistidaTesteAdministrativo === 'function') {
+        registrarAulaAssistidaTesteAdministrativo('radiciacao', numero).catch(() => {});
+    }
+
     if (
         !progresso.aulasAssistidas.includes(numero)
     ) {
@@ -316,6 +320,10 @@ function abrirVideoaula(numero, videoId) {
 
     if (typeof registrarConteudoVisitaAnonima === 'function') {
         registrarConteudoVisitaAnonima('Videoaula aberta: Radiciação — Aula ' + numero).catch(() => {});
+    }
+
+    if (typeof registrarConteudoTesteAdministrativo === 'function') {
+        registrarConteudoTesteAdministrativo('Videoaula aberta: Radiciacao — Aula ' + numero).catch(() => {});
     }
 
     etapaVideoAtual = numero;

@@ -1,0 +1,25 @@
+--- a/jogo_matematica_potenciacao.js
++++ b/jogo_matematica_potenciacao.js
+@@ -1624,9 +1624,7 @@
+         pontos += pontosDaQuestao;
+     } else {
+         sequenciaAcertos = 0;
+-        if (moduloAtual !== "revisaoMultiplicacao") {
+-            vidas -= 1;
+-        }
++        vidas = Math.max(0, vidas - 1);
+     }
+ 
+     resultadosDaPartida.push({
+@@ -2276,11 +2274,6 @@
+ async function finalizarPartida(concluiu) {
+     if (partidaFinalizada) return;
+     partidaFinalizada = true;
+-    if (moduloAtual === "revisaoMultiplicacao") {
+-        concluiu =
+-            resultadosDaPartida.length === questoesDaPartida.length;
+-    }
+-
+     pararVideoPrincipal();
+ 
+     const resultado = identificarResultado(criarResultadoFinal(concluiu));
