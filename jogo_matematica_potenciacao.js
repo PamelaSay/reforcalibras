@@ -112,7 +112,7 @@ const bancoDeQuestoes = {
             id: "mult-04", topico: "Representação", nivel: 1,
             pergunta: "Qual adição representa esta multiplicação?",
             representacao: "6 × 3",
-            alternativas: ["6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
+            alternativas: ["6 + 6 + 6 + 6", "3 + 3 + 3 + 3 + 3 + 3", "6 + 3", "3 + 6 + 3"], correta: "3 + 3 + 3 + 3 + 3 + 3",
             dica: "Escreva seis parcelas iguais a 3.",
             explicacao: "6 × 3 representa seis parcelas iguais a 3.",
             videoPergunta: "https://www.youtube.com/embed/XpJg0IovWuA",
@@ -132,7 +132,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-06", topico: "Cálculo", nivel: 2,
-            pergunta: "Qual é o resultado de 4 × 5?", representacao: "4 × 5",
+            pergunta: "Qual é o resultado dessa multiplicação?", representacao: "4 × 5",
             alternativas: ["9", "15", "20", "25"], correta: "20",
             dica: "Some quatro parcelas iguais a 5.",
             explicacao: "5 + 5 + 5 + 5 = 20. Logo, 4 × 5 = 20.",
