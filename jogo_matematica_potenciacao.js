@@ -46,7 +46,7 @@ const VIDEOS_ALERTAS_JOGO = {
     "fim-vidas-casosEspeciais": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "fim-vidas-baseDez": "https://www.youtube.com/embed/iCGwqkRystQ",
-    "concluido-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-propriedades": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-propriedades": "https://www.youtube.com/embed/iCGwqkRystQ"
 };
 
