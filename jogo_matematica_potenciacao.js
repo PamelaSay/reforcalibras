@@ -788,8 +788,8 @@ const bancoDeQuestoes = {
             topico: "Decomposição decimal",
             nivel: 3,
             pergunta:
-                "Qual é a decomposição correta do número 3 205?",
-            representacao: "3 205",
+                "Qual é a decomposição correta do número 3.205?",
+            representacao: "3.205",
             alternativas: [
                 "3 × 10³ + 2 × 10² + 5 × 10⁰",
                 "3 × 10² + 2 × 10¹ + 5 × 10⁰",
@@ -801,7 +801,7 @@ const bancoDeQuestoes = {
             dica:
                 "Observe a posição ocupada por cada algarismo.",
             explicacao:
-                "3 205 = 3 × 1 000 + 2 × 100 + 0 × 10 + 5 × 1. Portanto, 3 205 = 3 × 10³ + 2 × 10² + 5 × 10⁰.",
+                "3.205 = 3 × 1.000 + 2 × 100 + 0 × 10 + 5 × 1. Portanto, 3.205 = 3 × 10³ + 2 × 10² + 5 × 10⁰.",
             videoPergunta:
                 "https://www.youtube.com/embed/OvOFJnhz8-c",
             videoDica:
@@ -816,7 +816,7 @@ const bancoDeQuestoes = {
             nivel: 2,
             pergunta:
                 "Qual potência representa o maior número?",
-            representacao: "10³     10⁵     10²     10⁴",
+            representacao: "10³ , 10⁵ , 10² , 10⁴",
             alternativas: ["10⁵", "10⁴", "10³", "10²"],
             correta: "10⁵",
             dica:
