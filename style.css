@@ -2001,7 +2001,18 @@ body {
         order: -1;
 
     }
+  .janela-libras-termo .libras-video-box {
+    padding: 0;
+    overflow: hidden;
+}
 
+.janela-libras-termo #videoLibrasTermo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+}
 
 
     .libras-video-box {
