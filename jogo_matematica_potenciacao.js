@@ -39,15 +39,15 @@ const VIDEOS_ALERTAS_JOGO = {
     "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-sem-respostas": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "concluido-revisaoMultiplicacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "fim-vidas-revisaoMultiplicacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-revisaoMultiplicacao": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-potenciacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "fim-vidas-potenciacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-potenciacao": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-casosEspeciais": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "fim-vidas-casosEspeciais": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-casosEspeciais": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "fim-vidas-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-baseDez": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "fim-vidas-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU"
+    "fim-vidas-propriedades": "https://www.youtube.com/embed/iCGwqkRystQ"
 };
 
 /* =====================================================
