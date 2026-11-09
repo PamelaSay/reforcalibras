@@ -920,11 +920,11 @@ const bancoDeQuestoes = {
             explicacao:
                 "No quociente de potências de mesma base, conservamos a base e subtraímos os expoentes: 5⁸ ÷ 5³ = 5⁸⁻³ = 5⁵.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/-2C59Hc84Zk",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/vf0e63gnUVA",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/3qYeKl0hkPM"
         }),
 
         criarQuestao({
