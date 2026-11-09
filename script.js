@@ -1,3 +1,31 @@
+function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) {
+    const entrada = String(endereco || '').trim();
+    let id = permitirId && /^[A-Za-z0-9_-]{11}$/.test(entrada) ? entrada : '';
+    let inicio = '';
+    if (!id) {
+        try {
+            const url = new URL(entrada);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port) return '';
+            const host = url.hostname.toLowerCase();
+            if (host === 'youtu.be') {
+                const partes = url.pathname.split('/').filter(Boolean);
+                if (partes.length !== 1) return '';
+                id = partes[0];
+            } else if (['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(host)) {
+                if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+                else {
+                    const trecho = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})\/?$/);
+                    id = trecho ? trecho[1] : '';
+                }
+            } else return '';
+            const tempo = url.searchParams.get('start') || '';
+            if (/^\d+$/.test(tempo)) inicio = '&start=' + tempo;
+        } catch (_) { return ''; }
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return '';
+    return 'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1' + inicio + (autoplay ? '&autoplay=1' : '');
+}
+
 
 
 
@@ -24,12 +52,9 @@ const concordarTermos = document.getElementById("concordarTermos");
 const fecharSemConcordar = document.getElementById("fecharSemConcordar");
 
 const VIDEOS_LIBRAS_INTERFACE = {
-    login: "https://www.youtube.com/embed/DNm2CRhWCK0",
-    cadastro: "https://www.youtube.com/embed/QnVvV0ECgpk",
-    termo: "https://www.youtube.com/embed/kcQAr7_WMVI",
-    alerta: "videos/libras/alerta-geral.mp4",
+    alerta: "https://www.youtube.com/embed/r9AoQVkUUvU",
     "excluir-conta": "https://www.youtube.com/embed/AnEFltlubiM",
-    "conta-excluida": "videos/libras/conta-excluida.mp4",
+    "conta-excluida": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "recuperar-senha": "https://www.youtube.com/embed/IJ88LcEX1TM"
 };
 
@@ -57,13 +82,13 @@ if (btnLogin) {
 
 if (fecharLogin) {
     fecharLogin.onclick = function () {
-        modalLogin.style.display = "none";
+        modalLogin.style.display = "none"; pararVideosInterface(modalLogin);
     };
 }
 
 if (fecharCadastro) {
     fecharCadastro.onclick = function () {
-        modalCadastro.style.display = "none";
+        modalCadastro.style.display = "none"; pararVideosInterface(modalCadastro);
     };
 }
 
@@ -75,7 +100,7 @@ if (fecharPerfil) {
 
 if (fecharTermos) {
     fecharTermos.onclick = function () {
-        modalTermos.style.display = "none";
+        modalTermos.style.display = "none"; pararVideosInterface(modalTermos);
     };
 }
 
@@ -87,7 +112,7 @@ if (fecharTermos) {
 if (abrirCadastro) {
     abrirCadastro.onclick = function () {
         if (modalLogin) {
-            modalLogin.style.display = "none";
+            modalLogin.style.display = "none"; pararVideosInterface(modalLogin);
         }
 
         if (modalCadastro) {
@@ -118,7 +143,7 @@ if (concordarTermos) {
         }
 
         if (modalTermos) {
-            modalTermos.style.display = "none";
+            modalTermos.style.display = "none"; pararVideosInterface(modalTermos);
         }
     };
 }
@@ -132,7 +157,7 @@ if (fecharSemConcordar) {
         }
 
         if (modalTermos) {
-            modalTermos.style.display = "none";
+            modalTermos.style.display = "none"; pararVideosInterface(modalTermos);
         }
     };
 }
@@ -303,7 +328,7 @@ async function cadastrar() {
         );
 
         if (modalCadastro) {
-            modalCadastro.style.display = "none";
+            modalCadastro.style.display = "none"; pararVideosInterface(modalCadastro);
         }
 
         limparFormularioCadastro();
@@ -415,7 +440,7 @@ async function login() {
         const usuario = credencial.user;
         if (await contaAdministradora(usuario.uid)) {
             iniciarSessaoAdministrativaDeTeste(usuario);
-            if (modalLogin) modalLogin.style.display = "none";
+            if (modalLogin) modalLogin.style.display = "none"; pararVideosInterface(modalLogin);
             limparFormularioLogin();
             return;
         }
@@ -500,7 +525,7 @@ async function login() {
         );
 
         if (modalLogin) {
-            modalLogin.style.display = "none";
+            modalLogin.style.display = "none"; pararVideosInterface(modalLogin);
         }
 
         limparFormularioLogin();
@@ -886,7 +911,8 @@ async function excluirConta() {
         customClass: { popup: "alerta-reforca-acessivel" },
         didOpen: function (popup) {
             prepararVideosLibras(popup);
-        }
+        },
+            willClose: function (popup) { pararVideosInterface(popup); }
     });
 
     if (!resultado.isConfirmed) {
@@ -946,7 +972,8 @@ async function excluirConta() {
             customClass: { popup: "alerta-reforca-acessivel" },
             didOpen: function (popup) {
                 prepararVideosLibras(popup);
-            }
+            },
+            willClose: function (popup) { pararVideosInterface(popup); }
         });
 
         window.location.reload();
@@ -1116,6 +1143,7 @@ async function esqueceuSenha(evento) {
         didOpen: function (popup) {
             prepararVideosLibras(popup);
         },
+            willClose: function (popup) { pararVideosInterface(popup); },
 
         inputValidator: function (valor) {
             if (!valor) {
@@ -1260,7 +1288,8 @@ function exibirAlerta(
             },
             didOpen: function (popup) {
                 prepararVideosLibras(popup);
-            }
+            },
+            willClose: function (popup) { pararVideosInterface(popup); }
         }).then(function () {
             if (callback) {
                 callback();
@@ -1283,71 +1312,45 @@ function escaparHtml(valor) {
 }
 
 function montarConteudoAlertaLibras(texto, chaveVideo = "alerta") {
-    const endereco = VIDEOS_LIBRAS_INTERFACE[chaveVideo] || "";
+    const endereco = normalizarVideoYouTube(VIDEOS_LIBRAS_INTERFACE[chaveVideo]);
     const video = endereco
-        ? '<video class="video-libras-alerta" controls playsinline preload="metadata" hidden>' +
-            '<source src="' + escaparHtml(endereco) + '" type="video/mp4">' +
-          '</video>'
-        : "";
-
-    return (
-        '<div class="alerta-conteudo-acessivel">' +
-            '<div class="janela-libras-alerta" aria-label="Janela de tradução em Libras">' +
-                '<strong>Janela de Libras</strong>' +
-                video +
-                '<p class="libras-video-pendente">A tradução deste aviso em Libras será inserida aqui.</p>' +
-                '<button type="button" class="repetir-video-interface" hidden>↻ Repetir tradução</button>' +
-            '</div>' +
-            '<p>' + escaparHtml(texto) + '</p>' +
-        '</div>'
-    );
+        ? '<iframe class="video-libras-alerta" src="' + escaparHtml(endereco) + '" title="Tradução do aviso em Libras" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+        : '';
+    return '<div class="alerta-conteudo-acessivel"><div class="janela-libras-alerta" aria-label="Janela de tradução em Libras"><strong>Janela de Libras</strong>' + video +
+        '<p class="libras-video-pendente"' + (endereco ? ' hidden' : '') + '>A tradução deste aviso em Libras será inserida aqui.</p>' +
+        '<button type="button" class="repetir-video-interface"' + (endereco ? '' : ' hidden') + '>↻ Repetir tradução</button></div><p>' + escaparHtml(texto) + '</p></div>';
 }
 
 function prepararVideosLibras(raiz = document) {
-    raiz.querySelectorAll("video").forEach(function (video) {
-        if (video.dataset.librasPreparado === "true") return;
-        if (!video.querySelector("source")) return;
-
-        video.dataset.librasPreparado = "true";
-
-        const caixa = video.closest(".libras-video-box, .janela-libras-alerta, .janela-libras-interface");
-        const pendente = caixa ? caixa.querySelector(".libras-video-pendente") : null;
-        const botao = caixa ? caixa.querySelector(".repetir-video-interface") : null;
-
-        video.addEventListener("loadedmetadata", function () {
-            video.hidden = false;
-            if (pendente) pendente.hidden = true;
-            if (botao) botao.hidden = false;
-        });
-
-        video.addEventListener("error", function () {
-            video.hidden = true;
-            if (pendente) pendente.hidden = false;
-            if (botao) botao.hidden = true;
-        }, true);
-
-        if (video.readyState >= 1) {
-            video.hidden = false;
-            if (pendente) pendente.hidden = true;
-            if (botao) botao.hidden = false;
+    raiz.querySelectorAll('.libras-video-box iframe, iframe.video-libras-alerta').forEach(function(video) {
+        const endereco = normalizarVideoYouTube(video.getAttribute('src'));
+        const caixa = video.closest('.libras-video-box, .janela-libras-alerta, .janela-libras-interface');
+        const janela = video.closest('.janela-libras-alerta, .janela-libras-interface') || caixa;
+        const pendente = janela ? janela.querySelector('.libras-video-pendente') : null;
+        const botao = janela ? janela.querySelector('.repetir-video-interface') : null;
+        video.hidden = !endereco;
+        video.style.display = endereco ? "" : "none";
+        if (pendente) { pendente.hidden = Boolean(endereco); pendente.style.display = endereco ? "none" : ""; }
+        if (botao) botao.hidden = !endereco;
+        if (!endereco) { video.removeAttribute('src'); return; }
+        video.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+        video.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        video.setAttribute('allowfullscreen','');
+        video.dataset.youtubeOriginal = endereco;
+        if (video.getAttribute('src') !== endereco) video.src = endereco;
+        if (botao && botao.dataset.repetirPreparado !== 'true') {
+            botao.dataset.repetirPreparado = 'true';
+            botao.addEventListener('click', function() {
+                video.src = normalizarVideoYouTube(video.dataset.youtubeOriginal, true);
+            });
         }
     });
-
-    raiz.querySelectorAll(".repetir-video-interface").forEach(function (botao) {
-        if (botao.dataset.repetirPreparado === "true") return;
-        botao.dataset.repetirPreparado = "true";
-
-        botao.addEventListener("click", function () {
-            const idVideo = botao.dataset.videoId;
-            const caixa = botao.closest(".janela-libras-alerta, .janela-libras-interface");
-            const video = idVideo
-                ? document.getElementById(idVideo)
-                : caixa && caixa.querySelector("video");
-
-            if (!video) return;
-            video.currentTime = 0;
-            video.play().catch(function () {});
-        });
+}
+function pararVideosInterface(raiz) {
+    if (!raiz) return;
+    raiz.querySelectorAll('.libras-video-box iframe, iframe.video-libras-alerta').forEach(function(video) {
+        const endereco = normalizarVideoYouTube(video.dataset.youtubeOriginal || video.getAttribute('src'));
+        if (endereco) video.src = endereco;
     });
 }
 
@@ -1549,11 +1552,11 @@ window.addEventListener(
     "click",
     function (evento) {
         if (evento.target === modalLogin) {
-            modalLogin.style.display = "none";
+            modalLogin.style.display = "none"; pararVideosInterface(modalLogin);
         }
 
         if (evento.target === modalCadastro) {
-            modalCadastro.style.display = "none";
+            modalCadastro.style.display = "none"; pararVideosInterface(modalCadastro);
         }
 
         if (evento.target === modalPerfil) {
@@ -1561,7 +1564,7 @@ window.addEventListener(
         }
 
         if (evento.target === modalTermos) {
-            modalTermos.style.display = "none";
+            modalTermos.style.display = "none"; pararVideosInterface(modalTermos);
         }
     }
 );
