@@ -623,9 +623,9 @@ const bancoDeQuestoes = {
             id: "dez-01",
             topico: "Cálculo",
             nivel: 1,
-            pergunta: "Qual é o valor de 10²?",
+            pergunta: "Qual é o valor de potência abaixo?",
             representacao: "10²",
-            alternativas: ["100", "20", "10", "1 000"],
+            alternativas: ["100", "20", "10", "1.000"],
             correta: "100",
             dica:
                 "O expoente indica a quantidade de fatores iguais a 10.",
@@ -643,19 +643,19 @@ const bancoDeQuestoes = {
             id: "dez-02",
             topico: "Cálculo",
             nivel: 1,
-            pergunta: "Qual é o valor de 10⁴?",
+            pergunta: "Qual é o valor da expressão abaixo?",
             representacao: "10⁴",
             alternativas: [
-                "10 000",
-                "1 000",
+                "10.000",
+                "1.000",
                 "40",
-                "100 000"
+                "100.000"
             ],
-            correta: "10 000",
+            correta: "10.000",
             dica:
                 "Uma potência de base 10 e expoente positivo forma o número 1 seguido de zeros.",
             explicacao:
-                "10⁴ = 10 × 10 × 10 × 10 = 10 000.",
+                "10⁴ = 10 × 10 × 10 × 10 = 10.000.",
             videoPergunta:
                 "https://www.youtube.com/embed/Hn7UtWxsOok",
             videoDica:
@@ -669,14 +669,14 @@ const bancoDeQuestoes = {
             topico: "Representação",
             nivel: 1,
             pergunta:
-                "Qual potência de base 10 representa o número 1 000?",
-            representacao: "1 000",
+                "Qual potência de base 10 representa o número abaixo?",
+            representacao: "1.000",
             alternativas: ["10³", "10²", "10⁴", "10 × 3"],
             correta: "10³",
             dica:
                 "Conte quantos zeros aparecem depois do número 1.",
             explicacao:
-                "O número 1 000 possui três zeros. Portanto, 1 000 = 10³.",
+                "O número 1.000 possui três zeros. Portanto, 1.000 = 10³.",
             videoPergunta:
                 "https://www.youtube.com/embed/3DVd4mWmnkY",
             videoDica:
@@ -690,19 +690,19 @@ const bancoDeQuestoes = {
             topico: "Representação",
             nivel: 1,
             pergunta:
-                "Qual número é representado por 10⁵?",
+                "Qual número é representado pela expressão abaixo?",
             representacao: "10⁵",
             alternativas: [
-                "100 000",
-                "10 000",
-                "1 000 000",
+                "100.000",
+                "10.000",
+                "1.000.000",
                 "50"
             ],
-            correta: "100 000",
+            correta: "100.000",
             dica:
                 "Escreva o número 1 seguido de cinco zeros.",
             explicacao:
-                "10⁵ é igual ao número 1 seguido de cinco zeros: 100 000.",
+                "10⁵ é igual ao número 1 seguido de cinco zeros: 100.000.",
             videoPergunta:
                 "https://www.youtube.com/embed/bUYNcR7T1yY",
             videoDica:
@@ -715,14 +715,14 @@ const bancoDeQuestoes = {
             id: "dez-05",
             topico: "Decomposição",
             nivel: 2,
-            pergunta: "Qual é o valor de 4 × 10³?",
+            pergunta: "Qual é o valor da expressão abaixo?",
             representacao: "4 × 10³",
-            alternativas: ["4 000", "400", "40", "12 000"],
-            correta: "4 000",
+            alternativas: ["4.000", "400", "40", "12.000"],
+            correta: "4.000",
             dica:
                 "Primeiro determine o valor de 10³.",
             explicacao:
-                "Como 10³ = 1 000, temos 4 × 1 000 = 4 000.",
+                "Como 10³ = 1.000, temos 4 × 1.000 = 4.000.",
             videoPergunta:
                 "https://www.youtube.com/embed/6xrfvZFkF5w",
             videoDica:
@@ -736,8 +736,8 @@ const bancoDeQuestoes = {
             topico: "Decomposição",
             nivel: 2,
             pergunta:
-                "Qual expressão representa o número 70 000?",
-            representacao: "70 000",
+                "Qual expressão representa o número 70.000?",
+            representacao: "70.000",
             alternativas: [
                 "7 × 10⁴",
                 "7 × 10³",
@@ -748,7 +748,7 @@ const bancoDeQuestoes = {
             dica:
                 "Determine o valor correspondente a 10⁴.",
             explicacao:
-                "Como 10⁴ = 10 000, então 7 × 10⁴ = 70 000.",
+                "Como 10⁴ = 10.000, então 7 × 10⁴ = 70.000.",
             videoPergunta:
                 "https://www.youtube.com/embed/4khMBdRHn5I",
             videoDica:
@@ -762,8 +762,8 @@ const bancoDeQuestoes = {
             topico: "Sistema decimal",
             nivel: 2,
             pergunta:
-                "Qual é o valor posicional do algarismo 6 no número 6 234?",
-            representacao: "6 234",
+                "Qual das quatro alternativas representa o número abaixo?",
+            representacao: "6.000",
             alternativas: [
                 "6 × 10³",
                 "6 × 10²",
@@ -772,9 +772,9 @@ const bancoDeQuestoes = {
             ],
             correta: "6 × 10³",
             dica:
-                "O algarismo 6 ocupa a ordem dos milhares.",
+                " Observe quantos zeros há em 6.000. Pense: por qual potência de base dez devemos multiplicar o número 6 para obter esse valor?",
             explicacao:
-                "O algarismo 6 representa 6 000, que pode ser escrito como 6 × 10³.",
+                "O número 6.000 pode ser escrito como 6 × 10³, pois 10³ = 1.000. Assim, 6 x 1.000 = 6.000.",
             videoPergunta:
                 "https://www.youtube.com/embed/4aR1n25ng6s",
             videoDica:
