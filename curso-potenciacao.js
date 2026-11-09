@@ -39,11 +39,11 @@ const VIDEOS_ALERTAS_TRILHA = {
     "player-carregando": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "erro-player": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "exercicio-bloqueado": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "assista-primeiro-aula": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "assista-primeiro-aula": "https://www.youtube.com/embed/C_AnbN27ZtM",
     "teste-nao-cadastrado": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "teste-revisao-nao-cadastrado": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "teste-revisao-link-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "revisao-concluida": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "revisao-concluida": "https://www.youtube.com/embed/xpMGTTz0zMo",
     "aula-concluida": "https://www.youtube.com/embed/r9AoQVkUUvU"
 };
 
