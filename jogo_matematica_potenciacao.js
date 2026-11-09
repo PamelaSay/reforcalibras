@@ -570,7 +570,7 @@ const bancoDeQuestoes = {
             id: "esp-09",
             topico: "Comparação de sinais",
             nivel: 3,
-            pergunta: "Das expressões abaixo afirmação está correta?",
+            pergunta: "Das expressões abaixo, qual a afirmação está correta?",
             representacao: "(−4)²  ,   −4²",
             alternativas: [
                 "(−4)² = 16 e −4² = −16",
@@ -596,7 +596,7 @@ const bancoDeQuestoes = {
             topico: "Análise",
             nivel: 3,
             pergunta: "Qual expressão possui resultado igual a 1?",
-            representacao: "Escolha uma expressão",
+            representacao: "15⁰ , 0⁶, 6¹, (−1)³",
             alternativas: ["15⁰", "0⁶", "6¹", "(−1)³"],
             correta: "15⁰",
             dica:
