@@ -32,8 +32,8 @@ function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) 
 
 
 const VIDEOS_ALERTAS_JOGO = {
-    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "troca-permitida-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/SBvffSvPGmU",
+    "troca-permitida-partida-finalizada": "https://www.youtube.com/embed/SBvffSvPGmU",
     "troca-bloqueada-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "troca-bloqueada-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
