@@ -1,9 +1,52 @@
 "use strict";
 
+function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) {
+    const entrada = String(endereco || '').trim();
+    let id = permitirId && /^[A-Za-z0-9_-]{11}$/.test(entrada) ? entrada : '';
+    let inicio = '';
+    if (!id) {
+        try {
+            const url = new URL(entrada);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port) return '';
+            const host = url.hostname.toLowerCase();
+            if (host === 'youtu.be') {
+                const partes = url.pathname.split('/').filter(Boolean);
+                if (partes.length !== 1) return '';
+                id = partes[0];
+            } else if (['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(host)) {
+                if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+                else {
+                    const trecho = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})\/?$/);
+                    id = trecho ? trecho[1] : '';
+                }
+            } else return '';
+            const tempo = url.searchParams.get('start') || '';
+            if (/^\d+$/.test(tempo)) inicio = '&start=' + tempo;
+        } catch (_) { return ''; }
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return '';
+    return 'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1' + inicio + (autoplay ? '&autoplay=1' : '');
+}
+
+
+
 const VIDEO_TESTE = "https://www.youtube.com/embed/r9AoQVkUUvU";
 const TOTAL_VIDAS = 3;
 const QUESTOES_POR_PARTIDA = 10;
 const V = VIDEO_TESTE;
+
+const VIDEOS_ALERTAS_JOGO = {
+    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-permitida-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-bloqueada-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-bloqueada-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "saida-sem-respostas": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-introducao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-introducao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU"
+};
 
 const configuracaoModulos = {
     introducao: {
@@ -18,28 +61,28 @@ const configuracaoModulos = {
 
 const bancoDeQuestoes = {
     introducao: [
-        {id:"rad-int-01",topico:"Raiz quadrada",nivel:1,pergunta:"Qual é a medida do lado de um quadrado com área igual a 25?",representacao:"Área do quadrado = 25 unidades²",alternativas:["5","10","12,5","25"],correta:"5",dica:"Procure um número que, multiplicado por ele mesmo, resulte em 25.",explicacao:"Como 5 × 5 = 25, o lado do quadrado mede 5 unidades. Portanto, √25 = 5.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-02",topico:"Raiz quadrada",nivel:1,pergunta:"Qual é a raiz quadrada de 36?",representacao:"√36",alternativas:["6","4","18","72"],correta:"6",dica:"Qual número multiplicado por ele mesmo resulta em 36?",explicacao:"6 × 6 = 36. Portanto, √36 = 6.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-03",topico:"Raiz cúbica",nivel:1,pergunta:"Qual é a raiz cúbica de 27?",representacao:"∛27",alternativas:["3","6","9","27"],correta:"3",dica:"Procure um número que, multiplicado por ele mesmo três vezes, resulte em 27.",explicacao:"3 × 3 × 3 = 27. Portanto, ∛27 = 3.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-04",topico:"Formação de cubos",nivel:1,pergunta:"Um cubo possui volume igual a 64. Qual é a medida de sua aresta?",representacao:"Volume do cubo = 64 unidades³",alternativas:["4","2","8","16"],correta:"4",dica:"A aresta participa três vezes da multiplicação.",explicacao:"4 × 4 × 4 = 64. Assim, ∛64 = 4 e a aresta mede 4 unidades.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-05",topico:"Índice",nivel:1,pergunta:"Na expressão ∛125 = 5, qual é o índice?",representacao:"³√125 = 5",alternativas:["3","5","25","125"],correta:"3",dica:"O índice é o número pequeno colocado junto ao radical.",explicacao:"O número 3 é o índice. Ele indica que a operação é uma raiz cúbica.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-06",topico:"Radicando",nivel:1,pergunta:"Na expressão √49 = 7, qual é o radicando?",representacao:"√49 = 7",alternativas:["49","7","2","√"],correta:"49",dica:"O radicando é o número que aparece dentro do radical.",explicacao:"Na expressão √49 = 7, o número 49 está dentro do radical. Portanto, ele é o radicando.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-07",topico:"Raiz",nivel:1,pergunta:"Na expressão ∛8 = 2, qual é a raiz?",representacao:"³√8 = 2",alternativas:["2","3","8","24"],correta:"2",dica:"A raiz é o resultado da operação.",explicacao:"Como 2 × 2 × 2 = 8, o resultado da operação e a raiz são iguais a 2.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-08",topico:"Raízes exatas",nivel:2,pergunta:"Qual destas raízes quadradas é exata?",representacao:"Escolha a expressão com resultado inteiro",alternativas:["√49","√20","√30","√50"],correta:"√49",dica:"Procure um radicando que seja o quadrado de um número inteiro.",explicacao:"Como 7 × 7 = 49, temos √49 = 7. Por isso, √49 é uma raiz exata.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-09",topico:"Caso com zero",nivel:1,pergunta:"Qual é o valor de √0?",representacao:"√0",alternativas:["0","1","2","Não existe"],correta:"0",dica:"Zero multiplicado por ele mesmo continua sendo zero.",explicacao:"Como 0 × 0 = 0, temos √0 = 0.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-int-10",topico:"Caso com um",nivel:1,pergunta:"Qual é o valor de ∛1?",representacao:"³√1",alternativas:["1","0","3","Não existe"],correta:"1",dica:"Um multiplicado por ele mesmo não muda de valor.",explicacao:"Como 1 × 1 × 1 = 1, temos ∛1 = 1.",videoPergunta:V,videoDica:V,videoExplicacao:V}
+        {id:"rad-int-01",topico:"Raiz quadrada",nivel:1,pergunta:"Qual é a medida do lado de um quadrado com área igual a 25?",representacao:"Área do quadrado = 25 unidades²",alternativas:["5","10","12,5","25"],correta:"5",dica:"Procure um número que, multiplicado por ele mesmo, resulte em 25.",explicacao:"Como 5 × 5 = 25, o lado do quadrado mede 5 unidades. Portanto, √25 = 5.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-02",topico:"Raiz quadrada",nivel:1,pergunta:"Qual é a raiz quadrada de 36?",representacao:"√36",alternativas:["6","4","18","72"],correta:"6",dica:"Qual número multiplicado por ele mesmo resulta em 36?",explicacao:"6 × 6 = 36. Portanto, √36 = 6.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-03",topico:"Raiz cúbica",nivel:1,pergunta:"Qual é a raiz cúbica de 27?",representacao:"∛27",alternativas:["3","6","9","27"],correta:"3",dica:"Procure um número que, multiplicado por ele mesmo três vezes, resulte em 27.",explicacao:"3 × 3 × 3 = 27. Portanto, ∛27 = 3.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-04",topico:"Formação de cubos",nivel:1,pergunta:"Um cubo possui volume igual a 64. Qual é a medida de sua aresta?",representacao:"Volume do cubo = 64 unidades³",alternativas:["4","2","8","16"],correta:"4",dica:"A aresta participa três vezes da multiplicação.",explicacao:"4 × 4 × 4 = 64. Assim, ∛64 = 4 e a aresta mede 4 unidades.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-05",topico:"Índice",nivel:1,pergunta:"Na expressão ∛125 = 5, qual é o índice?",representacao:"³√125 = 5",alternativas:["3","5","25","125"],correta:"3",dica:"O índice é o número pequeno colocado junto ao radical.",explicacao:"O número 3 é o índice. Ele indica que a operação é uma raiz cúbica.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-06",topico:"Radicando",nivel:1,pergunta:"Na expressão √49 = 7, qual é o radicando?",representacao:"√49 = 7",alternativas:["49","7","2","√"],correta:"49",dica:"O radicando é o número que aparece dentro do radical.",explicacao:"Na expressão √49 = 7, o número 49 está dentro do radical. Portanto, ele é o radicando.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-07",topico:"Raiz",nivel:1,pergunta:"Na expressão ∛8 = 2, qual é a raiz?",representacao:"³√8 = 2",alternativas:["2","3","8","24"],correta:"2",dica:"A raiz é o resultado da operação.",explicacao:"Como 2 × 2 × 2 = 8, o resultado da operação e a raiz são iguais a 2.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-08",topico:"Raízes exatas",nivel:2,pergunta:"Qual destas raízes quadradas é exata?",representacao:"Escolha a expressão com resultado inteiro",alternativas:["√49","√20","√30","√50"],correta:"√49",dica:"Procure um radicando que seja o quadrado de um número inteiro.",explicacao:"Como 7 × 7 = 49, temos √49 = 7. Por isso, √49 é uma raiz exata.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-09",topico:"Caso com zero",nivel:1,pergunta:"Qual é o valor de √0?",representacao:"√0",alternativas:["0","1","2","Não existe"],correta:"0",dica:"Zero multiplicado por ele mesmo continua sendo zero.",explicacao:"Como 0 × 0 = 0, temos √0 = 0.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-int-10",topico:"Caso com um",nivel:1,pergunta:"Qual é o valor de ∛1?",representacao:"³√1",alternativas:["1","0","3","Não existe"],correta:"1",dica:"Um multiplicado por ele mesmo não muda de valor.",explicacao:"Como 1 × 1 × 1 = 1, temos ∛1 = 1.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"}
     ],
     propriedades: [
-        {id:"rad-pro-01",topico:"Produto de radicais",nivel:1,pergunta:"Qual propriedade aparece em √(9 × 4) = √9 × √4?",representacao:"√(9 × 4) = √9 × √4",alternativas:["Produto","Quociente","Adição","Subtração"],correta:"Produto",dica:"Observe a operação que aparece entre 9 e 4.",explicacao:"A raiz de um produto pode ser escrita como o produto das raízes, quando os radicais possuem o mesmo índice.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-02",topico:"Produto de radicais",nivel:1,pergunta:"Qual é o valor de √9 × √16?",representacao:"√9 × √16",alternativas:["12","7","25","144"],correta:"12",dica:"Calcule separadamente √9 e √16.",explicacao:"√9 = 3 e √16 = 4. Portanto, √9 × √16 = 3 × 4 = 12.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-03",topico:"Produto de radicais",nivel:1,pergunta:"Qual é o valor de √(25 × 4)?",representacao:"√(25 × 4)",alternativas:["10","7","20","100"],correta:"10",dica:"Separe a raiz do produto em √25 × √4.",explicacao:"√(25 × 4) = √25 × √4 = 5 × 2 = 10.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-04",topico:"Quociente de radicais",nivel:1,pergunta:"Qual é o valor de √(64 ÷ 4)?",representacao:"√(64 ÷ 4)",alternativas:["4","2","8","16"],correta:"4",dica:"Você pode calcular √64 ÷ √4.",explicacao:"√(64 ÷ 4) = √64 ÷ √4 = 8 ÷ 2 = 4.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-05",topico:"Quociente de radicais",nivel:1,pergunta:"Qual propriedade aparece em √(49 ÷ 1) = √49 ÷ √1?",representacao:"√(49 ÷ 1) = √49 ÷ √1",alternativas:["Quociente","Produto","Potência","Adição"],correta:"Quociente",dica:"Observe a divisão apresentada dentro e fora do radical.",explicacao:"A raiz de um quociente pode ser escrita como o quociente das raízes, com divisor diferente de zero.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-06",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √12?",representacao:"√12 = √(4 × 3)",alternativas:["2√3","3√2","4√3","6√2"],correta:"2√3",dica:"O fator 4 possui raiz quadrada exata.",explicacao:"√12 = √(4 × 3) = √4 × √3 = 2√3.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-07",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √18?",representacao:"√18 = √(9 × 2)",alternativas:["3√2","2√3","6√2","9√2"],correta:"3√2",dica:"Separe o fator 9, pois ele possui raiz exata.",explicacao:"√18 = √(9 × 2) = √9 × √2 = 3√2.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-08",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √50?",representacao:"√50 = √(25 × 2)",alternativas:["5√2","2√5","10√5","25√2"],correta:"5√2",dica:"O número 25 é um quadrado perfeito.",explicacao:"√50 = √(25 × 2) = √25 × √2 = 5√2.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-09",topico:"Fatoração",nivel:2,pergunta:"Qual fator com raiz exata ajuda a simplificar √20?",representacao:"20 = fator exato × outro fator",alternativas:["4","2","5","10"],correta:"4",dica:"Procure um quadrado perfeito que seja divisor de 20.",explicacao:"O número 4 divide 20 e possui raiz exata. Assim, √20 = √(4 × 5) = 2√5.",videoPergunta:V,videoDica:V,videoExplicacao:V},
-        {id:"rad-pro-10",topico:"Simplificação",nivel:3,pergunta:"Sabendo que 72 = 36 × 2, qual é a forma simplificada de √72?",representacao:"√72 = √(36 × 2)",alternativas:["6√2","2√6","3√8","12√2"],correta:"6√2",dica:"Calcule a raiz quadrada do fator 36.",explicacao:"√72 = √(36 × 2) = √36 × √2 = 6√2.",videoPergunta:V,videoDica:V,videoExplicacao:V}
+        {id:"rad-pro-01",topico:"Produto de radicais",nivel:1,pergunta:"Qual propriedade aparece em √(9 × 4) = √9 × √4?",representacao:"√(9 × 4) = √9 × √4",alternativas:["Produto","Quociente","Adição","Subtração"],correta:"Produto",dica:"Observe a operação que aparece entre 9 e 4.",explicacao:"A raiz de um produto pode ser escrita como o produto das raízes, quando os radicais possuem o mesmo índice.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-02",topico:"Produto de radicais",nivel:1,pergunta:"Qual é o valor de √9 × √16?",representacao:"√9 × √16",alternativas:["12","7","25","144"],correta:"12",dica:"Calcule separadamente √9 e √16.",explicacao:"√9 = 3 e √16 = 4. Portanto, √9 × √16 = 3 × 4 = 12.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-03",topico:"Produto de radicais",nivel:1,pergunta:"Qual é o valor de √(25 × 4)?",representacao:"√(25 × 4)",alternativas:["10","7","20","100"],correta:"10",dica:"Separe a raiz do produto em √25 × √4.",explicacao:"√(25 × 4) = √25 × √4 = 5 × 2 = 10.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-04",topico:"Quociente de radicais",nivel:1,pergunta:"Qual é o valor de √(64 ÷ 4)?",representacao:"√(64 ÷ 4)",alternativas:["4","2","8","16"],correta:"4",dica:"Você pode calcular √64 ÷ √4.",explicacao:"√(64 ÷ 4) = √64 ÷ √4 = 8 ÷ 2 = 4.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-05",topico:"Quociente de radicais",nivel:1,pergunta:"Qual propriedade aparece em √(49 ÷ 1) = √49 ÷ √1?",representacao:"√(49 ÷ 1) = √49 ÷ √1",alternativas:["Quociente","Produto","Potência","Adição"],correta:"Quociente",dica:"Observe a divisão apresentada dentro e fora do radical.",explicacao:"A raiz de um quociente pode ser escrita como o quociente das raízes, com divisor diferente de zero.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-06",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √12?",representacao:"√12 = √(4 × 3)",alternativas:["2√3","3√2","4√3","6√2"],correta:"2√3",dica:"O fator 4 possui raiz quadrada exata.",explicacao:"√12 = √(4 × 3) = √4 × √3 = 2√3.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-07",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √18?",representacao:"√18 = √(9 × 2)",alternativas:["3√2","2√3","6√2","9√2"],correta:"3√2",dica:"Separe o fator 9, pois ele possui raiz exata.",explicacao:"√18 = √(9 × 2) = √9 × √2 = 3√2.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-08",topico:"Simplificação",nivel:2,pergunta:"Qual é a forma simplificada de √50?",representacao:"√50 = √(25 × 2)",alternativas:["5√2","2√5","10√5","25√2"],correta:"5√2",dica:"O número 25 é um quadrado perfeito.",explicacao:"√50 = √(25 × 2) = √25 × √2 = 5√2.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-09",topico:"Fatoração",nivel:2,pergunta:"Qual fator com raiz exata ajuda a simplificar √20?",representacao:"20 = fator exato × outro fator",alternativas:["4","2","5","10"],correta:"4",dica:"Procure um quadrado perfeito que seja divisor de 20.",explicacao:"O número 4 divide 20 e possui raiz exata. Assim, √20 = √(4 × 5) = 2√5.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"},
+        {id:"rad-pro-10",topico:"Simplificação",nivel:3,pergunta:"Sabendo que 72 = 36 × 2, qual é a forma simplificada de √72?",representacao:"√72 = √(36 × 2)",alternativas:["6√2","2√6","3√8","12√2"],correta:"6√2",dica:"Calcule a raiz quadrada do fator 36.",explicacao:"√72 = √(36 × 2) = √36 × √2 = 6√2.",videoPergunta:V,videoDica:V,videoExplicacao:"https://www.youtube.com/embed/r9AoQVkUUvU",videoExplicacaoErro:"https://www.youtube.com/embed/r9AoQVkUUvU"}
     ]
 };
 
@@ -122,10 +165,12 @@ async function selecionarModulo(modulo) {
     const mensagem = permitido
         ? "Deseja trocar de exercício? A partida atual será encerrada e o exercício selecionado começará do início."
         : "Para fazer este exercício, assista primeiro à aula correspondente na trilha. Você também pode acessar o exercício pelo link na descrição da aula no YouTube.";
+    const chaveVideo = (permitido ? 'troca-permitida-' : 'troca-bloqueada-') +
+        (terminou ? 'partida-finalizada' : 'partida-iniciada');
     const resposta = await Swal.fire({
         icon: permitido ? "question" : "warning",
         title: "Trocar de exercício?",
-        html: montarAvisoTrocaExercicio(mensagem),
+        html: montarAvisoTrocaExercicio(mensagem, chaveVideo),
         showCancelButton: true,
         confirmButtonText: permitido ? "Trocar de exercício" : "Ir para a trilha",
         cancelButtonText: terminou ? "Jogar este exercício novamente" : "Continuar aqui",
@@ -148,13 +193,11 @@ async function selecionarModulo(modulo) {
 }
 
 // Vídeo provisório já referenciado no projeto. Substituir pela tradução deste aviso.
-const VIDEO_TROCA_EXERCICIO = "https://www.youtube.com/embed/r9AoQVkUUvU";
-function montarAvisoTrocaExercicio(mensagem) {
+function montarAvisoTrocaExercicio(mensagem, chaveVideo) {
     // Reutiliza exatamente o layout dos alertas de saída existentes.
-    return htmlAlertaTraducao(mensagem, "Troca de exercício em Libras")
+    return htmlAlertaTraducao(mensagem, "Troca de exercício em Libras", chaveVideo)
         .replaceAll("videoAlerta", "videoTrocaExercicio")
-        .replaceAll("repetirVideoAlerta", "repetirTrocaExercicio")
-        .replace(urlVideo(V), urlVideo(VIDEO_TROCA_EXERCICIO));
+        .replaceAll("repetirVideoAlerta", "repetirTrocaExercicio");
 }
 function prepararTraducaoTroca() {
     const video = document.getElementById("videoTrocaExercicio");
@@ -162,7 +205,7 @@ function prepararTraducaoTroca() {
     if (video && repetir) repetir.addEventListener("click", function () {
         video.src = "";
         setTimeout(function () {
-            video.src = urlVideo(VIDEO_TROCA_EXERCICIO, true);
+            video.src = urlVideo(video.dataset.videoOriginal, true);
         }, 100);
     });
 }
@@ -241,13 +284,11 @@ function alternarDica() {
 }
 
 function urlVideo(url, autoplay = false) {
-    if (!url) return "";
-    const separador = url.includes("?") ? "&" : "?";
-    return url + separador + "rel=0&modestbranding=1" + (autoplay ? "&autoplay=1" : "");
+    return normalizarVideoYouTube(url, autoplay) || "about:blank";
 }
 
 function carregarVideo(url, titulo) {
-    if (!url) { el.video.hidden = true; el.repetir.hidden = true; el.videoIndisponivel.hidden = false; return; }
+    if (!normalizarVideoYouTube(url)) { el.video.hidden = true; el.repetir.hidden = true; el.videoIndisponivel.hidden = false; return; }
     el.videoIndisponivel.hidden = true; el.video.hidden = false; el.repetir.hidden = false;
     el.video.title = titulo; el.video.src = urlVideo(url);
 }
@@ -263,9 +304,9 @@ async function alertaExplicacao(acertou, q) {
     await Swal.fire({
         icon: acertou ? "success" : "error",
         title: acertou ? "Muito bem!" : "Vamos revisar",
-        html:`<div class="explicacao-resposta"><div class="texto-explicacao">${q.explicacao}</div><iframe id="videoExplicacao" class="video-explicacao" src="${urlVideo(q.videoExplicacao)}" title="Explicação da resposta em Libras" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><button id="repetirExplicacao" class="botao-alerta-repetir" type="button">↻ Repetir explicação em Libras</button></div>`,
+        html:`<div class="explicacao-resposta"><div class="texto-explicacao">${q.explicacao}</div><iframe id="videoExplicacao" class="video-explicacao" src="${urlVideo((acertou ? q.videoExplicacao : q.videoExplicacaoErro))}" title="Explicação da resposta em Libras" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><button id="repetirExplicacao" class="botao-alerta-repetir" type="button">↻ Repetir explicação em Libras</button></div>`,
         confirmButtonText:"Continuar",confirmButtonColor:"#1d3557",allowOutsideClick:false,customClass:{popup:"alerta-reforca"},
-        didOpen:()=>{const v=document.getElementById("videoExplicacao");const b=document.getElementById("repetirExplicacao");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo(q.videoExplicacao,true),100);};},
+        didOpen:()=>{const v=document.getElementById("videoExplicacao");const b=document.getElementById("repetirExplicacao");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo((acertou ? q.videoExplicacao : q.videoExplicacaoErro),true),100);};},
         willClose:()=>{const v=document.getElementById("videoExplicacao");if(v)v.src="";}
     });
 }
@@ -329,7 +370,8 @@ async function finalizar(concluido) {
     if (!resultados.length || partidaFinalizada) return;
     partidaFinalizada = true;
     const resultado=salvarResultado(concluido);
-    const resposta=await Swal.fire({icon:concluido?"success":"warning",title:concluido?"Exercício concluído!":"Suas vidas terminaram",html:`<div class="explicacao-resposta"><div class="texto-explicacao">Você acertou <strong>${resultado.acertos} de ${resultado.totalRespondido}</strong> desafios.<br>Pontuação: <strong>${pontos}</strong>.<br>Aproveitamento: <strong>${resultado.percentual}%</strong>.</div><iframe id="videoFinal" class="video-explicacao" src="${urlVideo(V)}" title="Resultado do jogo em Libras" allowfullscreen></iframe><button id="repetirFinal" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`,showDenyButton:true,showCancelButton:true,confirmButtonText:"Voltar para a trilha",denyButtonText:"Jogar novamente",cancelButtonText:"Avaliar o jogo",confirmButtonColor:"#1d3557",denyButtonColor:"#5fa8d3",cancelButtonColor:"#d9a900",allowOutsideClick:false,allowEscapeKey:false,customClass:{popup:"alerta-reforca"},didOpen:()=>{const v=document.getElementById("videoFinal");const b=document.getElementById("repetirFinal");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo(V,true),100);};}});
+    const chaveVideo = (concluido ? 'concluido-' : 'fim-vidas-') + moduloAtual;
+    const resposta=await Swal.fire({icon:concluido?"success":"warning",title:concluido?"Exercício concluído!":"Suas vidas terminaram",html:`<div class="explicacao-resposta"><div class="texto-explicacao">Você acertou <strong>${resultado.acertos} de ${resultado.totalRespondido}</strong> desafios.<br>Pontuação: <strong>${pontos}</strong>.<br>Aproveitamento: <strong>${resultado.percentual}%</strong>.</div><iframe id="videoFinal" data-video-original="${urlVideo(VIDEOS_ALERTAS_JOGO[chaveVideo])}" class="video-explicacao" src="${urlVideo(VIDEOS_ALERTAS_JOGO[chaveVideo])}" title="Resultado do jogo em Libras" allowfullscreen></iframe><button id="repetirFinal" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`,showDenyButton:true,showCancelButton:true,confirmButtonText:"Voltar para a trilha",denyButtonText:"Jogar novamente",cancelButtonText:"Avaliar o jogo",confirmButtonColor:"#1d3557",denyButtonColor:"#5fa8d3",cancelButtonColor:"#d9a900",allowOutsideClick:false,allowEscapeKey:false,customClass:{popup:"alerta-reforca"},didOpen:()=>{const v=document.getElementById("videoFinal");const b=document.getElementById("repetirFinal");if(v&&b)b.onclick=()=>{v.src="";setTimeout(()=>v.src=urlVideo(v.dataset.videoOriginal,true),100);};}});
     if(resposta.isConfirmed)location.replace("radiciacao.html");
     else if(resposta.isDenied)iniciarPartida(moduloAtual);
     else location.href="index.html#avaliacao";
@@ -338,16 +380,17 @@ async function finalizar(concluido) {
 async function confirmarSaida() {
     if (partidaFinalizada) { location.replace("radiciacao.html"); return; }
     const mensagem=resultados.length?"O progresso desta partida será perdido.":"Deseja voltar para a trilha de Radiciação?";
-    const resposta=await Swal.fire({icon:"question",title:"Sair do jogo?",html:htmlAlertaTraducao(mensagem, "Saída do jogo em Libras"),showCancelButton:true,confirmButtonText:"Sim, sair",cancelButtonText:"Continuar jogando",confirmButtonColor:"#d94b4b",cancelButtonColor:"#1d3557",didOpen:ativarRepeticaoAlerta});
+    const chaveVideo = resultados.length ? 'saida-partida-iniciada' : 'saida-sem-respostas';
+    const resposta=await Swal.fire({icon:"question",title:"Sair do jogo?",html:htmlAlertaTraducao(mensagem, "Saída do jogo em Libras", chaveVideo),showCancelButton:true,confirmButtonText:"Sim, sair",cancelButtonText:"Continuar jogando",confirmButtonColor:"#d94b4b",cancelButtonColor:"#1d3557",didOpen:ativarRepeticaoAlerta});
     if(resposta.isConfirmed)location.replace("radiciacao.html");
 }
 
-function htmlAlertaTraducao(mensagem, tituloVideo) {
-    return `<div class="explicacao-resposta"><div class="texto-explicacao">${mensagem}</div><iframe id="videoAlerta" class="video-explicacao" src="${urlVideo(V)}" title="${tituloVideo}" allowfullscreen></iframe><button id="repetirVideoAlerta" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`;
+function htmlAlertaTraducao(mensagem, tituloVideo, chaveVideo) {
+    return `<div class="explicacao-resposta"><div class="texto-explicacao">${mensagem}</div><iframe id="videoAlerta" data-video-original="${urlVideo(VIDEOS_ALERTAS_JOGO[chaveVideo])}" class="video-explicacao" src="${urlVideo(VIDEOS_ALERTAS_JOGO[chaveVideo])}" title="${tituloVideo}" allowfullscreen></iframe><button id="repetirVideoAlerta" class="botao-alerta-repetir" type="button">↻ Repetir tradução em Libras</button></div>`;
 }
 
 function ativarRepeticaoAlerta() {
     const video=document.getElementById("videoAlerta");
     const botao=document.getElementById("repetirVideoAlerta");
-    if(video&&botao)botao.addEventListener("click",()=>{video.src="";setTimeout(()=>video.src=urlVideo(V,true),100);});
+    if(video&&botao)botao.addEventListener("click",()=>{video.src="";setTimeout(()=>video.src=urlVideo(video.dataset.videoOriginal,true),100);});
 }

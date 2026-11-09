@@ -1,5 +1,54 @@
 "use strict";
 
+function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) {
+    const entrada = String(endereco || '').trim();
+    let id = permitirId && /^[A-Za-z0-9_-]{11}$/.test(entrada) ? entrada : '';
+    let inicio = '';
+    if (!id) {
+        try {
+            const url = new URL(entrada);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port) return '';
+            const host = url.hostname.toLowerCase();
+            if (host === 'youtu.be') {
+                const partes = url.pathname.split('/').filter(Boolean);
+                if (partes.length !== 1) return '';
+                id = partes[0];
+            } else if (['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(host)) {
+                if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+                else {
+                    const trecho = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})\/?$/);
+                    id = trecho ? trecho[1] : '';
+                }
+            } else return '';
+            const tempo = url.searchParams.get('start') || '';
+            if (/^\d+$/.test(tempo)) inicio = '&start=' + tempo;
+        } catch (_) { return ''; }
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return '';
+    return 'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1' + inicio + (autoplay ? '&autoplay=1' : '');
+}
+
+
+
+
+const VIDEOS_ALERTAS_JOGO = {
+    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-permitida-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-bloqueada-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "troca-bloqueada-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "saida-sem-respostas": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-revisaoMultiplicacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-revisaoMultiplicacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-potenciacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-potenciacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-casosEspeciais": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-casosEspeciais": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "fim-vidas-propriedades": "https://www.youtube.com/embed/r9AoQVkUUvU"
+};
 
 /* =====================================================
    FUNÇÃO DE CRIAÇÃO DAS QUESTÕES
@@ -18,7 +67,8 @@ function criarQuestao(configuracao) {
         explicacao: configuracao.explicacao,
         videoPergunta: configuracao.videoPergunta || "",
         videoDica: configuracao.videoDica || "",
-        videoExplicacao: configuracao.videoExplicacao || ""
+        videoExplicacao: configuracao.videoExplicacao || "",
+        videoExplicacaoErro: configuracao.videoExplicacaoErro || ""
     };
 }
 
@@ -84,7 +134,8 @@ const bancoDeQuestoes = {
             explicacao: "2 + 2 + 2 + 2 = 8. Também podemos escrever 4 × 2 = 8.",
             videoPergunta: "https://www.youtube.com/embed/-6u4QD4OnQI",
             videoDica: "https://www.youtube.com/embed/ZQ4wg02Hwwo",
-            videoExplicacao: "https://www.youtube.com/embed/7GFY3TXrcIY"
+            videoExplicacao: "https://www.youtube.com/embed/7GFY3TXrcIY",
+            videoExplicacaoErro: "https://www.youtube.com/embed/7GFY3TXrcIY"
         }),
         criarQuestao({
             id: "mult-02", topico: "Adição repetida", nivel: 1,
@@ -95,7 +146,8 @@ const bancoDeQuestoes = {
             explicacao: "A parcela 5 aparece três vezes. Portanto, 5 + 5 + 5 = 3 × 5.",
             videoPergunta: "https://www.youtube.com/embed/sPoVZRSrS-k",
             videoDica: "https://www.youtube.com/embed/0EcivcmAy-w",
-            videoExplicacao: "https://www.youtube.com/embed/po5XgPMmAQc"
+            videoExplicacao: "https://www.youtube.com/embed/po5XgPMmAQc",
+            videoExplicacaoErro: "https://www.youtube.com/embed/po5XgPMmAQc"
         }),
         criarQuestao({
             id: "mult-03", topico: "Adição repetida", nivel: 1,
@@ -106,7 +158,8 @@ const bancoDeQuestoes = {
             explicacao: "A parcela 2 aparece cinco vezes. Portanto, a multiplicação é 5 × 2.",
             videoPergunta: "https://www.youtube.com/embed/quo6FoHyPW8",
             videoDica: "https://www.youtube.com/embed/DsUUR-c_dSs",
-            videoExplicacao: "https://www.youtube.com/embed/vrB0fwgEpmM"
+            videoExplicacao: "https://www.youtube.com/embed/vrB0fwgEpmM",
+            videoExplicacaoErro: "https://www.youtube.com/embed/vrB0fwgEpmM"
         }),
         criarQuestao({
             id: "mult-04", topico: "Representação", nivel: 1,
@@ -117,7 +170,8 @@ const bancoDeQuestoes = {
             explicacao: "6 × 3 representa seis parcelas iguais a 3.",
             videoPergunta: "https://www.youtube.com/embed/XpJg0IovWuA",
             videoDica: "https://www.youtube.com/embed/Cfh0qVNYJM",
-            videoExplicacao: "https://www.youtube.com/embed/vHfbc39mVSg"
+            videoExplicacao: "https://www.youtube.com/embed/vHfbc39mVSg",
+            videoExplicacaoErro: "https://www.youtube.com/embed/vHfbc39mVSg"
         }),
         criarQuestao({
             id: "mult-05", topico: "Representação", nivel: 1,
@@ -128,7 +182,8 @@ const bancoDeQuestoes = {
             explicacao: "A parcela 7 aparece três vezes. Portanto, 7 + 7 + 7 = 3 × 7.",
             videoPergunta: "https://www.youtube.com/embed/-uXnpH6WKtk",
             videoDica: "https://www.youtube.com/embed/xNY-QozaZbAr9AoQVkUUvU",
-            videoExplicacao: "https://www.youtube.com/embed/5eqZJtetFc8"
+            videoExplicacao: "https://www.youtube.com/embed/5eqZJtetFc8",
+            videoExplicacaoErro: "https://www.youtube.com/embed/5eqZJtetFc8"
         }),
         criarQuestao({
             id: "mult-06", topico: "Cálculo", nivel: 2,
@@ -138,7 +193,8 @@ const bancoDeQuestoes = {
             explicacao: "5 + 5 + 5 + 5 = 20. Logo, 4 × 5 = 20.",
             videoPergunta: "https://www.youtube.com/embed/9s51hPrcAzM",
             videoDica: "https://www.youtube.com/embed/y4VXQi9glTc",
-            videoExplicacao: "https://www.youtube.com/embed/D4yuKenlc14"
+            videoExplicacao: "https://www.youtube.com/embed/D4yuKenlc14",
+            videoExplicacaoErro: "https://www.youtube.com/embed/D4yuKenlc14"
         }),
         criarQuestao({
             id: "mult-07", topico: "Cálculo", nivel: 2,
@@ -148,7 +204,8 @@ const bancoDeQuestoes = {
             explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18.",
             videoPergunta: "https://www.youtube.com/embed/yA63YcvtX-A",
             videoDica: "https://www.youtube.com/embed/UDV3Lzk6fLg",
-            videoExplicacao: "https://www.youtube.com/embed/2Z39JmFYkAA"
+            videoExplicacao: "https://www.youtube.com/embed/2Z39JmFYkAA",
+            videoExplicacaoErro: "https://www.youtube.com/embed/2Z39JmFYkAA"
         }),
         criarQuestao({
             id: "mult-08", topico: "Cálculo", nivel: 2,
@@ -158,7 +215,8 @@ const bancoDeQuestoes = {
             explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32.",
             videoPergunta: "https://www.youtube.com/embed/EkrCZavOEEg",
             videoDica: "https://www.youtube.com/embed/VPBAaK5q-UQ",
-            videoExplicacao: "https://www.youtube.com/embed/hBxd9gNrsqo"
+            videoExplicacao: "https://www.youtube.com/embed/hBxd9gNrsqo",
+            videoExplicacaoErro: "https://www.youtube.com/embed/hBxd9gNrsqo"
         }),
         criarQuestao({
             id: "mult-09", topico: "Tabuada", nivel: 3,
@@ -168,7 +226,8 @@ const bancoDeQuestoes = {
             explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27.",
             videoPergunta: "https://www.youtube.com/embed/xz55KkpVaxY",
             videoDica:  "https://www.youtube.com/embed/MpTx4A4DPbQ",
-            videoExplicacao:"https://www.youtube.com/embed/4WHP2jxaieQ"
+            videoExplicacao:"https://www.youtube.com/embed/4WHP2jxaieQ",
+            videoExplicacaoErro: "https://www.youtube.com/embed/4WHP2jxaieQ"
         }),
         criarQuestao({
             id: "mult-10", topico: "Tabuada", nivel: 3,
@@ -178,7 +237,8 @@ const bancoDeQuestoes = {
             explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70.",
             videoPergunta: "https://www.youtube.com/embed/1nyBbLIILOg",
             videoDica: "https://www.youtube.com/embed/qPhheHd_Mbk",
-            videoExplicacao: "https://www.youtube.com/embed/lx8GrcN3RGg"
+            videoExplicacao: "https://www.youtube.com/embed/lx8GrcN3RGg",
+            videoExplicacaoErro: "https://www.youtube.com/embed/lx8GrcN3RGg"
         })
     ],
 
@@ -200,7 +260,8 @@ const bancoDeQuestoes = {
             explicacao: "A expressão 2² é lida como dois elevado à segunda potência ou dois elevado ao quadrado.",
             videoPergunta: "https://www.youtube.com/embed/WXg-gpmmP9I",
             videoDica: "https://www.youtube.com/embed/DY8NyAlE6p4",
-            videoExplicacao: "https://www.youtube.com/embed/jI2KLNMggyg"
+            videoExplicacao: "https://www.youtube.com/embed/jI2KLNMggyg",
+            videoExplicacaoErro: "https://www.youtube.com/embed/jI2KLNMggyg"
         }),
 
         criarQuestao({
@@ -220,7 +281,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/_ynhWxETUc8",
             videoExplicacao:
-                "https://www.youtube.com/embed/GWpIm06VLec"
+                "https://www.youtube.com/embed/GWpIm06VLec",
+            videoExplicacaoErro: "https://www.youtube.com/embed/GWpIm06VLec"
         }),
 
         criarQuestao({
@@ -240,7 +302,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/U0B-MnIfwhE",
             videoExplicacao:
-                "https://www.youtube.com/embed/0nFNzi7ErB4"
+                "https://www.youtube.com/embed/0nFNzi7ErB4",
+            videoExplicacaoErro: "https://www.youtube.com/embed/0nFNzi7ErB4"
         }),
 
         criarQuestao({
@@ -261,7 +324,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/ThcSzrKvk3s",
             videoExplicacao:
-                "https://www.youtube.com/embed/1WXmkDdydoU"
+                "https://www.youtube.com/embed/1WXmkDdydoU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/1WXmkDdydoU"
         }),
 
         criarQuestao({
@@ -287,7 +351,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/Gjr00RQ9EIY",
             videoExplicacao:
-                "https://www.youtube.com/embed/seRS2LvTZEY"
+                "https://www.youtube.com/embed/seRS2LvTZEY",
+            videoExplicacaoErro: "https://www.youtube.com/embed/seRS2LvTZEY"
         }),
 
         criarQuestao({
@@ -307,7 +372,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/KtV8qNSHVCM",
             videoExplicacao:
-                "https://www.youtube.com/embed/d3phUxccHyA"
+                "https://www.youtube.com/embed/d3phUxccHyA",
+            videoExplicacaoErro: "https://www.youtube.com/embed/d3phUxccHyA"
         }),
 
         criarQuestao({
@@ -327,7 +393,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/BiOsrFJzBwc",
             videoExplicacao:
-                "https://www.youtube.com/embed/C2OZRFAMaMM"
+                "https://www.youtube.com/embed/C2OZRFAMaMM",
+            videoExplicacaoErro: "https://www.youtube.com/embed/C2OZRFAMaMM"
         }),
 
         criarQuestao({
@@ -348,7 +415,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/3Tvt4RnnBJA",
             videoExplicacao:
-                "https://www.youtube.com/embed/H9LH26cl8A4"
+                "https://www.youtube.com/embed/H9LH26cl8A4",
+            videoExplicacaoErro: "https://www.youtube.com/embed/H9LH26cl8A4"
         }),
 
         criarQuestao({
@@ -369,7 +437,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/7yuO8i6WcVQ",
             videoExplicacao:
-                "https://www.youtube.com/embed/EYxgos989ZY"
+                "https://www.youtube.com/embed/EYxgos989ZY",
+            videoExplicacaoErro: "https://www.youtube.com/embed/EYxgos989ZY"
         }),
 
         criarQuestao({
@@ -390,7 +459,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/LJNcxy4WpJY",
             videoExplicacao:
-                "https://www.youtube.com/embed/eaZQMnh_A3c"
+                "https://www.youtube.com/embed/eaZQMnh_A3c",
+            videoExplicacaoErro: "https://www.youtube.com/embed/eaZQMnh_A3c"
         })
     ],
 
@@ -418,7 +488,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/SAl3LZOjVbI",
             videoExplicacao:
-                "https://www.youtube.com/embed/zDaA8TKfiug"
+                "https://www.youtube.com/embed/zDaA8TKfiug",
+            videoExplicacaoErro: "https://www.youtube.com/embed/zDaA8TKfiug"
         }),
 
         criarQuestao({
@@ -438,7 +509,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/VebefsEQAOg",
             videoExplicacao:
-                "https://www.youtube.com/embed/Ic_Bl2g3cjE"
+                "https://www.youtube.com/embed/Ic_Bl2g3cjE",
+            videoExplicacaoErro: "https://www.youtube.com/embed/Ic_Bl2g3cjE"
         }),
 
         criarQuestao({
@@ -458,7 +530,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/yijquaZmU6M",
             videoExplicacao:
-                "https://www.youtube.com/embed/bH4i9UAjOmo"
+                "https://www.youtube.com/embed/bH4i9UAjOmo",
+            videoExplicacaoErro: "https://www.youtube.com/embed/bH4i9UAjOmo"
         }),
 
         criarQuestao({
@@ -478,7 +551,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/VeMzGdpgD6s",
             videoExplicacao:
-                "https://www.youtube.com/embed/u_WHOcIohcAU"
+                "https://www.youtube.com/embed/u_WHOcIohcAU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/u_WHOcIohcAU"
         }),
 
         criarQuestao({
@@ -503,7 +577,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/r9AoQVkUUvU",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/r9AoQVkUUvU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/r9AoQVkUUvU"
         }),
 
         criarQuestao({
@@ -523,7 +598,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/evfcybpoD68",
             videoExplicacao:
-                "https://www.youtube.com/embed/tvG4yalDQ_w"
+                "https://www.youtube.com/embed/tvG4yalDQ_w",
+            videoExplicacaoErro: "https://www.youtube.com/embed/tvG4yalDQ_w"
         }),
 
         criarQuestao({
@@ -543,7 +619,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/3zOLoiNDP1I",
             videoExplicacao:
-                "https://www.youtube.com/embed/pnMmk8L5DDk"
+                "https://www.youtube.com/embed/pnMmk8L5DDk",
+            videoExplicacaoErro: "https://www.youtube.com/embed/pnMmk8L5DDk"
         }),
 
         criarQuestao({
@@ -563,7 +640,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/ntzfg8JcctI",
             videoExplicacao:
-                "https://www.youtube.com/embed/yWe9NXBS-TU"
+                "https://www.youtube.com/embed/yWe9NXBS-TU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/yWe9NXBS-TU"
         }),
 
         criarQuestao({
@@ -588,7 +666,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/250NLyascHw",
             videoExplicacao:
-                "https://www.youtube.com/embed/7RytNiG3eFk"
+                "https://www.youtube.com/embed/7RytNiG3eFk",
+            videoExplicacaoErro: "https://www.youtube.com/embed/7RytNiG3eFk"
         }),
 
         criarQuestao({
@@ -608,7 +687,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/8bzw_6EAokk",
             videoExplicacao:
-                "https://www.youtube.com/embed/VoqZyYGBUnU"
+                "https://www.youtube.com/embed/VoqZyYGBUnU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/VoqZyYGBUnU"
         })
     ],
 
@@ -636,7 +716,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/Ay2kLJ3Nkds",
             videoExplicacao:
-                "https://www.youtube.com/embed/jt-eWTkFxEc"
+                "https://www.youtube.com/embed/jt-eWTkFxEc",
+            videoExplicacaoErro: "https://www.youtube.com/embed/jt-eWTkFxEc"
         }),
 
         criarQuestao({
@@ -661,7 +742,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/1JgztJTooGI",
             videoExplicacao:
-                "https://www.youtube.com/embed/mt5rVcP_eX4"
+                "https://www.youtube.com/embed/mt5rVcP_eX4",
+            videoExplicacaoErro: "https://www.youtube.com/embed/mt5rVcP_eX4"
         }),
 
         criarQuestao({
@@ -682,7 +764,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/1M5AXHagu9g",
             videoExplicacao:
-                "https://www.youtube.com/embed/-M86QwTTUSI"
+                "https://www.youtube.com/embed/-M86QwTTUSI",
+            videoExplicacaoErro: "https://www.youtube.com/embed/-M86QwTTUSI"
         }),
 
         criarQuestao({
@@ -708,7 +791,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/JDKeO9odjQs",
             videoExplicacao:
-                "https://www.youtube.com/embed/6JuI4ljjp40"
+                "https://www.youtube.com/embed/6JuI4ljjp40",
+            videoExplicacaoErro: "https://www.youtube.com/embed/6JuI4ljjp40"
         }),
 
         criarQuestao({
@@ -728,7 +812,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/Bqa-_YLDPuM",
             videoExplicacao:
-                "https://www.youtube.com/embed/DT5nDcetZHg"
+                "https://www.youtube.com/embed/DT5nDcetZHg",
+            videoExplicacaoErro: "https://www.youtube.com/embed/DT5nDcetZHg"
         }),
 
         criarQuestao({
@@ -754,7 +839,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/W2JVT3cEfcs",
             videoExplicacao:
-                "https://www.youtube.com/embed/24xPARAM1iU"
+                "https://www.youtube.com/embed/24xPARAM1iU",
+            videoExplicacaoErro: "https://www.youtube.com/embed/24xPARAM1iU"
         }),
 
         criarQuestao({
@@ -780,7 +866,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/eC1ejo-K5vM",
             videoExplicacao:
-                "https://www.youtube.com/embed/d6muu2wfMR4"
+                "https://www.youtube.com/embed/d6muu2wfMR4",
+            videoExplicacaoErro: "https://www.youtube.com/embed/d6muu2wfMR4"
         }),
 
         criarQuestao({
@@ -807,7 +894,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/zZLFPxHlt4g",
             videoExplicacao:
-                "https://www.youtube.com/embed/oseqxXhFC-E"
+                "https://www.youtube.com/embed/oseqxXhFC-E",
+            videoExplicacaoErro: "https://www.youtube.com/embed/oseqxXhFC-E"
         }),
 
         criarQuestao({
@@ -828,7 +916,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/_wSNSLLAMu8",
             videoExplicacao:
-                "https://www.youtube.com/embed/lvwbHlWd9ec"
+                "https://www.youtube.com/embed/lvwbHlWd9ec",
+            videoExplicacaoErro: "https://www.youtube.com/embed/lvwbHlWd9ec"
         }),
 
         criarQuestao({
@@ -854,7 +943,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/lRBAx_XexEQ",
             videoExplicacao:
-                "https://www.youtube.com/embed/OvCJ92o3PR8"
+                "https://www.youtube.com/embed/OvCJ92o3PR8",
+            videoExplicacaoErro: "https://www.youtube.com/embed/OvCJ92o3PR8"
         })
     ],
 
@@ -883,7 +973,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/kkAt8rUu0UE",
             videoExplicacao:
-                "https://www.youtube.com/embed/PliE-2e0ShA"
+                "https://www.youtube.com/embed/PliE-2e0ShA",
+            videoExplicacaoErro: "https://www.youtube.com/embed/PliE-2e0ShA"
         }),
 
         criarQuestao({
@@ -903,7 +994,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/R9RC1MVKvdM",
             videoExplicacao:
-                "https://www.youtube.com/embed/4PIwQeTXyjY"
+                "https://www.youtube.com/embed/4PIwQeTXyjY",
+            videoExplicacaoErro: "https://www.youtube.com/embed/4PIwQeTXyjY"
         }),
 
         criarQuestao({
@@ -924,7 +1016,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/vf0e63gnUVA",
             videoExplicacao:
-                "https://www.youtube.com/embed/3qYeKl0hkPM"
+                "https://www.youtube.com/embed/3qYeKl0hkPM",
+            videoExplicacaoErro: "https://www.youtube.com/embed/3qYeKl0hkPM"
         }),
 
         criarQuestao({
@@ -944,7 +1037,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/YarXV2Fv5Qg",
             videoExplicacao:
-                "https://www.youtube.com/embed/TjXUWR1zoV0"
+                "https://www.youtube.com/embed/TjXUWR1zoV0",
+            videoExplicacaoErro: "https://www.youtube.com/embed/TjXUWR1zoV0"
         }),
 
         criarQuestao({
@@ -965,7 +1059,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/xn1DayHwMrA",
             videoExplicacao:
-                "https://www.youtube.com/embed/rTtjWG5t5Ww"
+                "https://www.youtube.com/embed/rTtjWG5t5Ww",
+            videoExplicacaoErro: "https://www.youtube.com/embed/rTtjWG5t5Ww"
         }),
 
         criarQuestao({
@@ -986,7 +1081,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/PEaeJW0SzzI",
             videoExplicacao:
-                "https://www.youtube.com/embed/Zgf4TNlta4M"
+                "https://www.youtube.com/embed/Zgf4TNlta4M",
+            videoExplicacaoErro: "https://www.youtube.com/embed/Zgf4TNlta4M"
         }),
 
         criarQuestao({
@@ -1012,7 +1108,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/lmBfOXMCsgA",
             videoExplicacao:
-                "https://www.youtube.com/embed/oHIGPv1BWs4"
+                "https://www.youtube.com/embed/oHIGPv1BWs4",
+            videoExplicacaoErro: "https://www.youtube.com/embed/oHIGPv1BWs4"
         }),
 
         criarQuestao({
@@ -1038,7 +1135,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/n1ORbGoqKek",
             videoExplicacao:
-                "https://www.youtube.com/embed/mz32irQDnrQ"
+                "https://www.youtube.com/embed/mz32irQDnrQ",
+            videoExplicacaoErro: "https://www.youtube.com/embed/mz32irQDnrQ"
         }),
 
         criarQuestao({
@@ -1059,7 +1157,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/ba7kWMY7psc",
             videoExplicacao:
-                "https://www.youtube.com/embed/dWVJNxEHg4Y"
+                "https://www.youtube.com/embed/dWVJNxEHg4Y",
+            videoExplicacaoErro: "https://www.youtube.com/embed/dWVJNxEHg4Y"
         }),
 
         criarQuestao({
@@ -1085,7 +1184,8 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/4PIwQeTXyjY",
             videoExplicacao:
-                "https://www.youtube.com/embed/Y__7hA-fKck"
+                "https://www.youtube.com/embed/Y__7hA-fKck",
+            videoExplicacaoErro: "https://www.youtube.com/embed/Y__7hA-fKck"
         })
     ]
 };
@@ -1370,10 +1470,12 @@ async function selecionarModulo(novoModulo) {
     const mensagem = permitido
         ? "Deseja trocar de exercício? A partida atual será encerrada e o exercício selecionado começará do início."
         : "Para fazer este exercício, assista primeiro à aula correspondente na trilha. Você também pode acessar o exercício pelo link na descrição da aula no YouTube.";
+    const chaveVideo = (permitido ? 'troca-permitida-' : 'troca-bloqueada-') +
+        (terminou ? 'partida-finalizada' : 'partida-iniciada');
     const resposta = await Swal.fire({
         icon: permitido ? "question" : "warning",
         title: "Trocar de exercício?",
-        html: montarAvisoTrocaExercicio(mensagem),
+        html: montarAvisoTrocaExercicio(mensagem, chaveVideo),
         showCancelButton: true,
         confirmButtonText: permitido ? "Trocar de exercício" : "Ir para a trilha",
         cancelButtonText: terminou ? "Jogar este exercício novamente" : "Continuar aqui",
@@ -1396,13 +1498,11 @@ async function selecionarModulo(novoModulo) {
 }
 
 // Vídeo provisório já referenciado no projeto. Substituir pela tradução deste aviso.
-const VIDEO_TROCA_EXERCICIO = "https://www.youtube.com/embed/r9AoQVkUUvU";
-function montarAvisoTrocaExercicio(mensagem) {
+function montarAvisoTrocaExercicio(mensagem, chaveVideo) {
     // Reutiliza exatamente o layout do alerta de saída já existente.
-    return montarConteudoSaida(mensagem)
+    return montarConteudoSaida(mensagem, chaveVideo)
         .replaceAll("videoSaidaAlerta", "videoTrocaExercicio")
         .replaceAll("repetirSaidaAlerta", "repetirTrocaExercicio")
-        .replace(criarEnderecoYouTube(VIDEO_ALERTA_SAIDA), criarEnderecoYouTube(VIDEO_TROCA_EXERCICIO))
         .replace("Tradução do alerta de saída em Libras", "Troca de exercício em Libras");
 }
 function prepararTraducaoTroca() {
@@ -1411,7 +1511,7 @@ function prepararTraducaoTroca() {
     if (video && repetir) repetir.addEventListener("click", function () {
         video.src = "";
         setTimeout(function () {
-            video.src = criarEnderecoYouTube(VIDEO_TROCA_EXERCICIO, true);
+            video.src = criarEnderecoYouTube(video.dataset.videoOriginal, true);
         }, 100);
     });
 }
@@ -1671,25 +1771,14 @@ async function verificarResposta(
    VÍDEOS DO YOUTUBE
 ===================================================== */
 
-function criarEnderecoYouTube(
-    endereco,
-    reproducaoAutomatica = false
-) {
-    if (!endereco) return "";
-
-    const separador =
-        endereco.includes("?") ? "&" : "?";
-
-    return endereco +
-        separador +
-        "rel=0&modestbranding=1" +
-        (reproducaoAutomatica ? "&autoplay=1" : "");
+function criarEnderecoYouTube(endereco, autoplay = false) {
+    return normalizarVideoYouTube(endereco, autoplay) || "about:blank";
 }
 
 function carregarVideoLibras(endereco, titulo) {
     pararVideoPrincipal();
 
-    if (!endereco) {
+    if (!normalizarVideoYouTube(endereco)) {
         elementos.video.hidden = true;
         elementos.repetirLibras.hidden = true;
         elementos.videoIndisponivel.hidden = false;
@@ -1745,7 +1834,8 @@ function repetirTraducao() {
    ALERTA DE EXPLICAÇÃO
 ===================================================== */
 
-function montarConteudoExplicacao(questao) {
+function montarConteudoExplicacao(questao, acertou) {
+    const enderecoExplicacao = acertou ? questao.videoExplicacao : questao.videoExplicacaoErro;
     let conteudo = `
         <div class="explicacao-resposta">
 
@@ -1754,13 +1844,13 @@ function montarConteudoExplicacao(questao) {
             </div>
     `;
 
-    if (questao.videoExplicacao) {
+    if (enderecoExplicacao) {
         conteudo += `
             <iframe
                 id="videoExplicacaoAlerta"
                 class="video-explicacao"
                 src="${criarEnderecoYouTube(
-                    questao.videoExplicacao
+                    enderecoExplicacao
                 )}"
                 title="Explicação da resposta em Libras"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1810,7 +1900,7 @@ function mostrarExplicacao(questao, acertou) {
             ? "Resposta correta!"
             : "Vamos revisar!",
 
-        html: montarConteudoExplicacao(questao),
+        html: montarConteudoExplicacao(questao, acertou),
 
         confirmButtonText: "Continuar",
         confirmButtonColor: "#1d3557",
@@ -1842,7 +1932,7 @@ function mostrarExplicacao(questao, acertou) {
                     setTimeout(function () {
                         video.src =
                             criarEnderecoYouTube(
-                                questao.videoExplicacao,
+                                (acertou ? questao.videoExplicacao : questao.videoExplicacaoErro),
                                 true
                             );
                     }, 100);
@@ -2311,10 +2401,11 @@ async function finalizarPartida(concluiu) {
 
     const etapa = ETAPAS_DOS_EXERCICIOS[moduloAtual][0];
     const proximaAula = concluiu && etapa < 5 ? etapa + 1 : null;
+    const chaveVideo = (concluiu ? 'concluido-' : 'fim-vidas-') + moduloAtual;
     const resposta = await Swal.fire({
         icon: concluiu ? "success" : "warning",
         title: titulo,
-        html: montarConteudoResultado(mensagem),
+        html: montarConteudoResultado(mensagem, chaveVideo),
         showDenyButton: Boolean(proximaAula) || !concluiu, showCancelButton: true,
         confirmButtonText: proximaAula
             ? "Ir para a Aula " + proximaAula
@@ -2368,12 +2459,10 @@ function concluirEtapaDoExercicio(modulo) {
 }
 
 // Substituir pela tradução do resultado; usa provisoriamente o vídeo já existente.
-const VIDEO_RESULTADO_EXERCICIO = "https://www.youtube.com/embed/r9AoQVkUUvU";
-function montarConteudoResultado(mensagem) {
-    return montarConteudoSaida(mensagem)
+function montarConteudoResultado(mensagem, chaveVideo) {
+    return montarConteudoSaida(mensagem, chaveVideo)
         .replaceAll("videoSaidaAlerta", "videoResultadoAlerta")
         .replaceAll("repetirSaidaAlerta", "repetirResultadoAlerta")
-        .replace(criarEnderecoYouTube(VIDEO_ALERTA_SAIDA), criarEnderecoYouTube(VIDEO_RESULTADO_EXERCICIO))
         .replace("Tradução do alerta de saída em Libras", "Resultado do exercício em Libras");
 }
 function prepararTraducaoResultado() {
@@ -2382,7 +2471,7 @@ function prepararTraducaoResultado() {
     if (video && botao) botao.addEventListener("click", () => {
         video.src = "";
         setTimeout(() => {
-            video.src = criarEnderecoYouTube(VIDEO_RESULTADO_EXERCICIO, true);
+            video.src = criarEnderecoYouTube(video.dataset.videoOriginal, true);
         }, 100);
     });
 }
@@ -2406,10 +2495,8 @@ function rolarParaMapaNoCelular() {
    SAÍDA DO JOGO
 ===================================================== */
 
-const VIDEO_ALERTA_SAIDA =
-    "https://www.youtube.com/embed/r9AoQVkUUvU";
 
-function montarConteudoSaida(mensagem) {
+function montarConteudoSaida(mensagem, chaveVideo) {
     return `
         <div class="explicacao-resposta">
             <div class="texto-explicacao">
@@ -2418,8 +2505,9 @@ function montarConteudoSaida(mensagem) {
 
             <iframe
                 id="videoSaidaAlerta"
+                data-video-original="${criarEnderecoYouTube(VIDEOS_ALERTAS_JOGO[chaveVideo])}"
                 class="video-explicacao"
-                src="${criarEnderecoYouTube(VIDEO_ALERTA_SAIDA)}"
+                src="${criarEnderecoYouTube(VIDEOS_ALERTAS_JOGO[chaveVideo])}"
                 title="Tradução do alerta de saída em Libras"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -2442,10 +2530,11 @@ async function sairDoJogo() {
         ? "O progresso desta partida ainda não foi concluído."
         : "Deseja sair do jogo e voltar para a trilha de Potenciação?";
 
+    const chaveVideo = resultadosDaPartida.length > 0 ? 'saida-partida-iniciada' : 'saida-sem-respostas';
     const resposta = await Swal.fire({
         icon: "question",
         title: "Sair do jogo?",
-        html: montarConteudoSaida(mensagem),
+        html: montarConteudoSaida(mensagem, chaveVideo),
         showCancelButton: true,
         confirmButtonText: "Sair",
         cancelButtonText:
@@ -2471,7 +2560,7 @@ async function sairDoJogo() {
 
                 setTimeout(function () {
                     video.src = criarEnderecoYouTube(
-                        VIDEO_ALERTA_SAIDA,
+                        video.dataset.videoOriginal,
                         true
                     );
                 }, 100);

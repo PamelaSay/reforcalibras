@@ -52,10 +52,32 @@ const concordarTermos = document.getElementById("concordarTermos");
 const fecharSemConcordar = document.getElementById("fecharSemConcordar");
 
 const VIDEOS_LIBRAS_INTERFACE = {
-    alerta: "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-campos-ausentes": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-nome-obrigatorio": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-email-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-senha-curta": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-concluido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-cadastro": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "login-campos-ausentes": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "login-email-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "login-senha-obrigatoria": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "login-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "boas-vindas-login": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-login": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "exclusao-sessao-ausente": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-exclusao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "recuperacao-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "email-enviado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-envio-recuperacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "excluir-conta": "https://www.youtube.com/embed/AnEFltlubiM",
     "conta-excluida": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "recuperar-senha": "https://www.youtube.com/embed/IJ88LcEX1TM"
+    "recuperar-senha": "https://www.youtube.com/embed/IJ88LcEX1TM",
+    "comentario-sem-estrelas": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "comentario-sem-texto": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "comentario-linguagem-inadequada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "comentario-enviado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "comentario-erro-envio": "https://www.youtube.com/embed/r9AoQVkUUvU"
 };
 
 
@@ -188,11 +210,7 @@ async function cadastrar() {
     const respostaComunidade = lerRespostaComunidade();
 
     if (!nomeInput || !emailInput || !senhaInput || !aceiteInput) {
-        exibirAlerta(
-            "error",
-            "Erro",
-            "Os campos do cadastro não foram encontrados."
-        );
+        exibirAlerta("error", "Erro", "Os campos do cadastro não foram encontrados.", null, null, "cadastro-campos-ausentes");
 
         return;
     }
@@ -204,41 +222,25 @@ async function cadastrar() {
     const participarRanking = true;
 
     if (!nome) {
-        exibirAlerta(
-            "warning",
-            "Atenção",
-            "Informe seu nome."
-        );
+        exibirAlerta("warning", "Atenção", "Informe seu nome.", null, null, "cadastro-nome-obrigatorio");
 
         return;
     }
 
     if (!email || !emailInput.checkValidity()) {
-        exibirAlerta(
-            "warning",
-            "Atenção",
-            "Informe um e-mail válido."
-        );
+        exibirAlerta("warning", "Atenção", "Informe um e-mail válido.", null, null, "cadastro-email-invalido");
 
         return;
     }
 
     if (senha.length < 6) {
-        exibirAlerta(
-            "warning",
-            "Atenção",
-            "A senha deve ter pelo menos 6 caracteres."
-        );
+        exibirAlerta("warning", "Atenção", "A senha deve ter pelo menos 6 caracteres.", null, null, "cadastro-senha-curta");
 
         return;
     }
 
     if (!auth || !db) {
-        exibirAlerta(
-            "error",
-            "Erro",
-            "O Firebase não está disponível."
-        );
+        exibirAlerta("error", "Erro", "O Firebase não está disponível.", null, null, "cadastro-servico-indisponivel");
 
         return;
     }
@@ -335,21 +337,12 @@ async function cadastrar() {
         mostrarUsuario();
         registrarAcessoPrivado(usuarioCriado).catch(erro => console.error("Registro de acesso pendente:", erro));
 
-        exibirAlerta(
-            "success",
-            "Cadastro concluído!",
-            `Bem-vindo(a), ${nome}!`,
-            1600
-        );
+        exibirAlerta("success", "Cadastro concluído!", `Bem-vindo(a), ${nome}!`, 1600, null, "cadastro-concluido");
 
     } catch (erro) {
         console.error("Erro no cadastro:", erro);
 
-        exibirAlerta(
-            "error",
-            "Erro ao cadastrar",
-            traduzirErroFirebase(erro.code)
-        );
+        exibirAlerta("error", "Erro ao cadastrar", traduzirErroFirebase(erro.code), null, null, "erro-cadastro");
     }
 }
 
@@ -384,11 +377,7 @@ async function login() {
     const senhaInput = document.getElementById("senhaLogin");
 
     if (!emailInput || !senhaInput) {
-        exibirAlerta(
-            "error",
-            "Erro",
-            "Os campos de login não foram encontrados."
-        );
+        exibirAlerta("error", "Erro", "Os campos de login não foram encontrados.", null, null, "login-campos-ausentes");
 
         return;
     }
@@ -397,31 +386,19 @@ async function login() {
     const senha = senhaInput.value;
 
     if (!email || !emailInput.checkValidity()) {
-        exibirAlerta(
-            "warning",
-            "Atenção",
-            "Informe um e-mail válido."
-        );
+        exibirAlerta("warning", "Atenção", "Informe um e-mail válido.", null, null, "login-email-invalido");
 
         return;
     }
 
     if (!senha) {
-        exibirAlerta(
-            "warning",
-            "Atenção",
-            "Informe sua senha."
-        );
+        exibirAlerta("warning", "Atenção", "Informe sua senha.", null, null, "login-senha-obrigatoria");
 
         return;
     }
 
     if (!auth || !db) {
-        exibirAlerta(
-            "error",
-            "Erro",
-            "O Firebase não está disponível."
-        );
+        exibirAlerta("error", "Erro", "O Firebase não está disponível.", null, null, "login-servico-indisponivel");
 
         return;
     }
@@ -532,21 +509,12 @@ async function login() {
         mostrarUsuario();
         registrarAcessoPrivado(usuario).catch(erro => console.error("Registro de acesso pendente:", erro));
 
-        exibirAlerta(
-            "success",
-            "Bem-vindo(a)!",
-            `Olá, ${sessaoUsuario.nome}!`,
-            1600
-        );
+        exibirAlerta("success", "Bem-vindo(a)!", `Olá, ${sessaoUsuario.nome}!`, 1600, null, "boas-vindas-login");
 
     } catch (erro) {
         console.error("Erro no login:", erro);
 
-        exibirAlerta(
-            "error",
-            "Não foi possível entrar",
-            traduzirErroFirebase(erro.code)
-        );
+        exibirAlerta("error", "Não foi possível entrar", traduzirErroFirebase(erro.code), null, null, "erro-login");
     }
 }
 
@@ -923,11 +891,7 @@ async function excluirConta() {
         const usuario = await aguardarUsuarioFirebase();
 
         if (!auth || !usuario) {
-            exibirAlerta(
-                "warning",
-                "Sessão não encontrada",
-                "Não foi possível localizar a conta conectada."
-            );
+            exibirAlerta("warning", "Sessão não encontrada", "Não foi possível localizar a conta conectada.", null, null, "exclusao-sessao-ausente");
 
             return;
         }
@@ -986,11 +950,7 @@ async function excluirConta() {
             return;
         }
 
-        exibirAlerta(
-            "error",
-            "Erro ao excluir",
-            traduzirErroFirebase(erro.code)
-        );
+        exibirAlerta("error", "Erro ao excluir", traduzirErroFirebase(erro.code), null, null, "erro-exclusao");
     }
 }
 
@@ -1080,11 +1040,7 @@ async function esqueceuSenha(evento) {
     }
 
     if (!auth) {
-        exibirAlerta(
-            "error",
-            "Erro",
-            "O Firebase não está disponível."
-        );
+        exibirAlerta("error", "Erro", "O Firebase não está disponível.", null, null, "recuperacao-servico-indisponivel");
 
         return;
     }
@@ -1161,11 +1117,7 @@ async function esqueceuSenha(evento) {
             resultado.value.trim().toLowerCase()
         );
 
-        exibirAlerta(
-            "success",
-            "E-mail enviado",
-            "Confira sua caixa de entrada e a pasta de spam."
-        );
+        exibirAlerta("success", "E-mail enviado", "Confira sua caixa de entrada e a pasta de spam.", null, null, "email-enviado");
 
     } catch (erro) {
         console.error(
@@ -1173,11 +1125,7 @@ async function esqueceuSenha(evento) {
             erro
         );
 
-        exibirAlerta(
-            "error",
-            "Não foi possível enviar",
-            traduzirErroFirebase(erro.code)
-        );
+        exibirAlerta("error", "Não foi possível enviar", traduzirErroFirebase(erro.code), null, null, "erro-envio-recuperacao");
     }
 }
 
@@ -1273,7 +1221,7 @@ function exibirAlerta(
     text,
     timer = null,
     callback = null,
-    chaveVideo = "alerta"
+    chaveVideo
 ) {
     if (typeof Swal !== "undefined") {
         Swal.fire({
@@ -1311,7 +1259,7 @@ function escaparHtml(valor) {
     return elemento.innerHTML;
 }
 
-function montarConteudoAlertaLibras(texto, chaveVideo = "alerta") {
+function montarConteudoAlertaLibras(texto, chaveVideo) {
     const endereco = normalizarVideoYouTube(VIDEOS_LIBRAS_INTERFACE[chaveVideo]);
     const video = endereco
         ? '<iframe class="video-libras-alerta" src="' + escaparHtml(endereco) + '" title="Tradução do aviso em Libras" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'

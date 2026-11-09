@@ -1,3 +1,31 @@
+function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) {
+    const entrada = String(endereco || '').trim();
+    let id = permitirId && /^[A-Za-z0-9_-]{11}$/.test(entrada) ? entrada : '';
+    let inicio = '';
+    if (!id) {
+        try {
+            const url = new URL(entrada);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port) return '';
+            const host = url.hostname.toLowerCase();
+            if (host === 'youtu.be') {
+                const partes = url.pathname.split('/').filter(Boolean);
+                if (partes.length !== 1) return '';
+                id = partes[0];
+            } else if (['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(host)) {
+                if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+                else {
+                    const trecho = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})\/?$/);
+                    id = trecho ? trecho[1] : '';
+                }
+            } else return '';
+            const tempo = url.searchParams.get('start') || '';
+            if (/^\d+$/.test(tempo)) inicio = '&start=' + tempo;
+        } catch (_) { return ''; }
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return '';
+    return 'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1' + inicio + (autoplay ? '&autoplay=1' : '');
+}
+
 // ==========================================
 // CONFIGURAÇÕES DO CURSO
 // ==========================================
@@ -5,8 +33,19 @@
 const CHAVE_BASE_CURSO = "progressoCursoPotenciacao";
 function chaveDoProgressoAtual() { return chaveLocalDoUsuario(CHAVE_BASE_CURSO); }
 const TOTAL_ETAPAS = 5;
-const VIDEO_ALERTA_VIDEOAULA =
-    "https://www.youtube.com/embed/r9AoQVkUUvU";
+const VIDEOS_ALERTAS_TRILHA = {
+    "aula-bloqueada": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "video-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "player-carregando": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-player": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "exercicio-bloqueado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "assista-primeiro-aula": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "teste-nao-cadastrado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "teste-revisao-nao-cadastrado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "teste-revisao-link-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "revisao-concluida": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "aula-concluida": "https://www.youtube.com/embed/r9AoQVkUUvU"
+};
 
 let playerVideoaula = null;
 let etapaVideoAtual = null;
@@ -232,11 +271,7 @@ function onYouTubeIframeAPIReady() {
 // ==========================================
 
 function videoIdValido(videoId) {
-    return Boolean(
-        videoId &&
-        !videoId.startsWith("ID_DO_") &&
-        /^[a-zA-Z0-9_-]{11}$/.test(videoId)
-    );
+    return Boolean(normalizarVideoYouTube(videoId, false, true));
 }
 
 
@@ -245,6 +280,8 @@ function videoIdValido(videoId) {
 // ==========================================
 
 function abrirVideoaula(numero, videoId) {
+    const enderecoYouTube = normalizarVideoYouTube(videoId, false, true);
+    videoId = enderecoYouTube ? new URL(enderecoYouTube).pathname.split('/').pop() : '';
     const progresso =
         obterProgressoCurso();
 
@@ -260,21 +297,13 @@ function abrirVideoaula(numero, videoId) {
         numero >
         progresso.etapaLiberada
     ) {
-        mostrarMensagem(
-            "Etapa bloqueada",
-            "Assista à videoaula anterior até o final para liberar esta aula.",
-            "warning"
-        );
+        mostrarMensagem("Etapa bloqueada", "Assista à videoaula anterior até o final para liberar esta aula.", "warning", "aula-bloqueada");
 
         return;
     }
 
     if (!videoIdValido(videoId)) {
-        mostrarMensagem(
-            "Vídeo indisponível",
-            "O vídeo desta aula ainda não foi cadastrado.",
-            "info"
-        );
+        mostrarMensagem("Vídeo indisponível", "O vídeo desta aula ainda não foi cadastrado.", "info", "video-indisponivel");
 
         return;
     }
@@ -287,11 +316,7 @@ function abrirVideoaula(numero, videoId) {
     }
 
     if (!apiYouTubePronta) {
-        mostrarMensagem(
-            "Aguarde um instante",
-            "O player do vídeo ainda está carregando.",
-            "info"
-        );
+        mostrarMensagem("Aguarde um instante", "O player do vídeo ainda está carregando.", "info", "player-carregando");
 
         return;
     }
@@ -385,7 +410,7 @@ function abrirVideoaula(numero, videoId) {
 // ALERTA COM TRADUÇÃO EM LIBRAS
 // ==========================================
 
-function conteudoAlertaComLibras(texto) {
+function conteudoAlertaComLibras(texto, chaveVideo) {
     return `
         <div style="display:grid;gap:12px;text-align:left;">
             <div style="padding:12px;background:#f2fbff;border-left:5px solid #5fa8d3;border-radius:12px;">
@@ -394,7 +419,8 @@ function conteudoAlertaComLibras(texto) {
 
             <iframe
                 id="videoAlertaVideoaula"
-                src="${VIDEO_ALERTA_VIDEOAULA}?rel=0&modestbranding=1"
+                data-video-original="${normalizarVideoYouTube(VIDEOS_ALERTAS_TRILHA[chaveVideo])}"
+                src="${normalizarVideoYouTube(VIDEOS_ALERTAS_TRILHA[chaveVideo]) || "about:blank"}"
                 title="Tradução do alerta da videoaula em Libras"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -428,8 +454,7 @@ function ativarVideoDoAlerta() {
 
         setTimeout(function () {
             video.src =
-                VIDEO_ALERTA_VIDEOAULA +
-                "?rel=0&modestbranding=1&autoplay=1";
+                normalizarVideoYouTube(video.dataset.videoOriginal, true);
         }, 100);
     });
 }
@@ -502,9 +527,7 @@ function verificarEstadoDoVideo(evento) {
                     "Revisão concluída!",
 
                 html:
-                    conteudoAlertaComLibras(
-                        "Você terminou de rever esta videoaula."
-                    ),
+                    conteudoAlertaComLibras("Você terminou de rever esta videoaula.", "revisao-concluida"),
 
                 showCancelButton: true,
 
@@ -577,9 +600,7 @@ function verificarEstadoDoVideo(evento) {
                 "Videoaula concluída!",
 
             html:
-                conteudoAlertaComLibras(
-                    "A verificação desta aula já está disponível. Você pode fazê-la agora ou depois. Para continuar assistindo às aulas, escolha Fazer depois."
-                ),
+                conteudoAlertaComLibras("A verificação desta aula já está disponível. Você pode fazê-la agora ou depois. Para continuar assistindo às aulas, escolha Fazer depois.", "aula-concluida"),
 
             showCancelButton: true,
 
@@ -669,11 +690,7 @@ function tratarErroDoVideo(evento) {
 
     fecharModalVideoaula();
 
-    mostrarMensagem(
-        "Não foi possível abrir o vídeo",
-        "Confira se o vídeo permite reprodução em outros sites.",
-        "error"
-    );
+    mostrarMensagem("Não foi possível abrir o vídeo", "Confira se o vídeo permite reprodução em outros sites.", "error", "erro-player");
 }
 
 
@@ -746,11 +763,7 @@ function abrirTeste(numero, destino) {
         numero >
         progresso.etapaLiberada
     ) {
-        mostrarMensagem(
-            "Etapa bloqueada",
-            "Assista à videoaula anterior até o final para liberar esta etapa.",
-            "warning"
-        );
+        mostrarMensagem("Etapa bloqueada", "Assista à videoaula anterior até o final para liberar esta etapa.", "warning", "exercicio-bloqueado");
 
         return;
     }
@@ -760,11 +773,7 @@ function abrirTeste(numero, destino) {
             numero
         )
     ) {
-        mostrarMensagem(
-            "Assista primeiro à aula",
-            "O teste será liberado quando o vídeo terminar.",
-            "warning"
-        );
+        mostrarMensagem("Assista primeiro à aula", "O teste será liberado quando o vídeo terminar.", "warning", "assista-primeiro-aula");
 
         return;
     }
@@ -775,11 +784,7 @@ function abrirTeste(numero, destino) {
         destino.includes("youtube.com") ||
         destino.includes("youtu.be")
     ) {
-        mostrarMensagem(
-            "Teste indisponível",
-            "O jogo desta etapa ainda não foi cadastrado.",
-            "info"
-        );
+        mostrarMensagem("Teste indisponível", "O jogo desta etapa ainda não foi cadastrado.", "info", "teste-nao-cadastrado");
 
         return;
     }
@@ -802,11 +807,7 @@ function abrirTesteNovamente(
     botaoTeste
 ) {
     if (!botaoTeste) {
-        mostrarMensagem(
-            "Teste indisponível",
-            "O jogo desta aula ainda não foi cadastrado.",
-            "info"
-        );
+        mostrarMensagem("Teste indisponível", "O jogo desta aula ainda não foi cadastrado.", "info", "teste-revisao-nao-cadastrado");
 
         return;
     }
@@ -826,11 +827,7 @@ function abrirTesteNovamente(
             "youtu.be"
         )
     ) {
-        mostrarMensagem(
-            "Teste indisponível",
-            "O jogo desta aula ainda não foi cadastrado.",
-            "info"
-        );
+        mostrarMensagem("Teste indisponível", "O jogo desta aula ainda não foi cadastrado.", "info", "teste-revisao-link-invalido");
 
         return;
     }
@@ -957,7 +954,8 @@ function concluirEtapaPotenciacao(numero) {
 function mostrarMensagem(
     titulo,
     texto,
-    icone
+    icone,
+    chaveVideo
 ) {
     if (
         typeof Swal !== "undefined"
@@ -965,7 +963,7 @@ function mostrarMensagem(
         return Swal.fire({
             icon: icone,
             title: titulo,
-            html: conteudoAlertaComLibras(texto),
+            html: conteudoAlertaComLibras(texto, chaveVideo),
             confirmButtonColor:
                 "#1d3557",
             confirmButtonText:
@@ -1518,20 +1516,15 @@ function configurarJanelaLibrasDaTrilha() {
         return;
     }
 
-    const enderecoOriginal = video.src;
+    const enderecoOriginal = normalizarVideoYouTube(video.getAttribute('src'));
+    if (!enderecoOriginal) { video.removeAttribute('src'); video.hidden = true; return; }
+    video.src = enderecoOriginal;
 
     botao.addEventListener("click", function () {
         video.src = "";
 
         setTimeout(function () {
-            const separador = enderecoOriginal.includes("?")
-                ? "&"
-                : "?";
-
-            video.src =
-                enderecoOriginal +
-                separador +
-                "autoplay=1";
+            video.src = normalizarVideoYouTube(enderecoOriginal, true);
         }, 100);
     });
 }

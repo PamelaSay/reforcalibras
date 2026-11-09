@@ -77,19 +77,19 @@ function salvarComentario() {
     const texto = textarea.value.trim();
 
     if (notaSelecionada === 0) {
-        alert("Por favor, clique em uma das estrelas para avaliar.");
+        avisoComentarioYouTube("warning", "Atenção", "Por favor, clique em uma das estrelas para avaliar.", "comentario-sem-estrelas");
         return;
     }
 
     if (texto === "") {
-        alert("Escreva um comentário antes de enviar.");
+        avisoComentarioYouTube("warning", "Atenção", "Escreva um comentário antes de enviar.", "comentario-sem-texto");
         return;
     }
 
     const comentarioMinusculo = texto.toLowerCase();
     for (let palavra of palavrasProibidas) {
         if (comentarioMinusculo.includes(palavra)) {
-            alert("Seu comentário possui palavras inadequadas.");
+            avisoComentarioYouTube("warning", "Atenção", "Seu comentário possui palavras inadequadas.", "comentario-linguagem-inadequada");
             return;
         }
     }
@@ -97,10 +97,9 @@ function salvarComentario() {
     enviarComentarioComPrivacidade(texto, notaSelecionada)
         .then(() => {
             textarea.value = ""; notaSelecionada = 0; atualizarEstrelas(0);
-            if (typeof Swal !== 'undefined') Swal.fire({icon:'success',title:'Obrigado!',text:'Sua avaliação foi enviada com sucesso!',timer:1800,showConfirmButton:false});
-            else alert("Obrigado pela sua avaliação!");
+            avisoComentarioYouTube('success', 'Obrigado!', 'Sua avaliação foi enviada com sucesso!', "comentario-enviado");
         })
-        .catch(erro => { console.error("Erro ao salvar comentário:", erro); alert("Erro ao enviar comentário. Tente novamente!"); });
+        .catch(erro => { console.error("Erro ao salvar comentário:", erro); avisoComentarioYouTube("error", "Erro ao enviar", "Erro ao enviar comentário. Tente novamente!", "comentario-erro-envio"); });
 }
 
 // 5. OUVINTE EM TEMPO REAL (Carrega lista geral e últimos comentários)
@@ -227,4 +226,9 @@ if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", inicializar);
 } else {
     inicializar();
+}
+
+function avisoComentarioYouTube(icon, titulo, texto, chaveVideo) {
+    if (typeof exibirAlerta === 'function') return exibirAlerta(icon, titulo, texto, null, null, chaveVideo);
+    alert(titulo + ': ' + texto);
 }
