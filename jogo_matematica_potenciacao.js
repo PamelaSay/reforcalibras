@@ -965,7 +965,7 @@ const bancoDeQuestoes = {
             videoDica:
                 "https://www.youtube.com/embed/xn1DayHwMrA",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/rTtjWG5t5Ww"
         }),
 
         criarQuestao({
