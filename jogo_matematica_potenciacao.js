@@ -486,12 +486,12 @@ const bancoDeQuestoes = {
             topico: "Expoente zero",
             nivel: 2,
             pergunta: "Se a ≠ 0, -1 e 1, qual das igualdades está correta?",
-            representacao: "a⁰ = 1 , a⁰ = 0, a⁰ = a ou a⁰ = −a",
+            representacao: "a⁰ = 1 , a⁰ = 0, a⁰ = a ou a⁰ = -a",
             alternativas: [
                 "a⁰ = 1",
                 "a⁰ = 0",
                 "a⁰ = a",
-                "a⁰ = −a"
+                "a⁰ = -a"
             ],
             correta: "a⁰ = 1",
             dica:
