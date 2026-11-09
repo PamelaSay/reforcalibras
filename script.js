@@ -24,13 +24,13 @@ const concordarTermos = document.getElementById("concordarTermos");
 const fecharSemConcordar = document.getElementById("fecharSemConcordar");
 
 const VIDEOS_LIBRAS_INTERFACE = {
-    login: "https://www.youtube.com/embed/r9AoQVkUUvU",
-    cadastro: "https://www.youtube.com/embed/r9AoQVkUUvU",
-    termo: "https://www.youtube.com/embed/r9AoQVkUUvU",
+    login: "https://www.youtube.com/embed/DNm2CRhWCK0",
+    cadastro: "https://www.youtube.com/embed/QnVvV0ECgpk",
+    termo: "https://www.youtube.com/embed/kcQAr7_WMVI",
     alerta: "videos/libras/alerta-geral.mp4",
-    "excluir-conta": "videos/libras/excluir-conta.mp4",
+    "excluir-conta": "https://www.youtube.com/embed/AnEFltlubiM",
     "conta-excluida": "videos/libras/conta-excluida.mp4",
-    "recuperar-senha": "videos/libras/recuperar-senha.mp4"
+    "recuperar-senha": "https://www.youtube.com/embed/IJ88LcEX1TM"
 };
 
 
