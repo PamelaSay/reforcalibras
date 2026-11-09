@@ -940,7 +940,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Subtraímos os expoentes: x⁶ ÷ x² = x⁶⁻² = x⁴.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/9aAzZDbAqpI",
             videoDica:
                 "https://www.youtube.com/embed/YarXV2Fv5Qg",
             videoExplicacao:
