@@ -24,9 +24,9 @@ const concordarTermos = document.getElementById("concordarTermos");
 const fecharSemConcordar = document.getElementById("fecharSemConcordar");
 
 const VIDEOS_LIBRAS_INTERFACE = {
-    login: "videos/libras/login.mp4",
-    cadastro: "videos/libras/cadastro.mp4",
-    termo: "videos/libras/termo-consentimento.mp4",
+    login: "https://www.youtube.com/embed/r9AoQVkUUvU",
+    cadastro: "https://www.youtube.com/embed/r9AoQVkUUvU",
+    termo: "https://www.youtube.com/embed/r9AoQVkUUvU",
     alerta: "videos/libras/alerta-geral.mp4",
     "excluir-conta": "videos/libras/excluir-conta.mp4",
     "conta-excluida": "videos/libras/conta-excluida.mp4",

@@ -1,3 +1,1793 @@
+/* ==========================
+   VARIÁVEIS DE ESTILO
+========================== */
+:root {
+    --gold-primary: gold;
+    --gold-hover-gradient: linear-gradient(101deg, darkgoldenrod, khaki, peru, sandybrown);
+    --blue-primary: #2f80ed;
+    --blue-soft: #A0C4DF;
+    --navy-dark: #1d3557;
+    --dark-bg: #000000;
+    --font-main: 'Nunito', sans-serif;
+}
+
+/* ==========================
+   RESET & BASE
+========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* ==========================
+   CONTAINER
+========================== */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* ==========================
+   MENU PRINCIPAL
+========================== */
+.menu {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: var(--dark-bg);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}
+
+.menu-content {
+    max-width: 1400px;
+    margin: auto;
+    padding: 12px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* LOGO */
+.logo-area img {
+    height: 70px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-area img:hover {
+    transform: scale(1.05);
+}
+
+/* LINKS DO MENU */
+#menu-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex: 1;
+}
+
+#menu-links > a,
+#menu-links .dropbtn,
+#menu-links .item-menu,
+#menu-links .submenu-content a {
+    background: var(--dark-bg);
+    color: white;
+    border: 2px solid var(--gold-primary);
+    border-radius: 20px 60px;
+    padding: 12px 20px;
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+/* Remove o visual cinza padrão dos elementos button. */
+#menu-links button.dropbtn,
+#menu-links button.item-menu {
+    appearance: none;
+    -webkit-appearance: none;
+    line-height: normal;
+}
+#menu-links > a:hover,
+#menu-links .dropbtn:hover,
+#menu-links .item-menu:hover,
+#menu-links .submenu-content a:hover {
+    transform: translateY(-5px);
+    background: var(--gold-hover-gradient);
+    color: black;
+}
+
+/* Os botões internos ocupam toda a largura do menu suspenso. */
+#menu-links .item-menu,
+#menu-links .submenu-content a {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+/* BOTÃO LOGIN */
+.login-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: var(--blue-primary);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 50px;
+}
+
+.login-btn:hover {
+    transform: scale(1.1);
+}
+
+
+/* ==========================================
+   MENU DISCIPLINAS EM COLUNA (DROPDOWN)
+========================================== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 210px;
+    padding: 10px 0;
+    flex-direction: column;
+    gap: 8px;
+    background: transparent;
+    z-index: 1000;
+}
+
+.dropdown:hover > .dropdown-content,
+.dropdown:focus-within > .dropdown-content {
+    display: flex;
+}
+
+.submenu {
+    position: relative;
+    width: 100%;
+}
+
+.submenu-content {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 250px;
+    padding-left: 10px;
+    flex-direction: column;
+    gap: 8px;
+    background: transparent;
+    z-index: 1001;
+}
+
+.submenu:hover > .submenu-content,
+.submenu:focus-within > .submenu-content {
+    display: flex;
+}
+
+.submenu-content a.ler-mais {
+    color: white;
+}
+
+
+
+
+/* ==========================
+   HERO / BANNER PRINCIPAL
+========================== */
+.hero-img {
+    max-width: 1400px;
+    margin: 10px auto 25px auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-img img {
+    width: 100%;
+    max-width: 1400px;
+    height: 250px;
+    border-radius: 25px;
+    display: block;
+    object-fit: cover;
+}
+
+/* ==========================
+   PESQUISA
+========================== */
+.pesquisa-box {
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 2px solid var(--blue-soft);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 320px;
+    height: 38px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pesquisa-box:focus-within {
+    border-color: #D4AF37;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+}
+
+.pesquisa-box img {
+    width: 18px;
+    height: 18px;
+    margin-left: 12px;
+    margin-right: 6px;
+    object-fit: contain;
+}
+
+#campoPesquisa {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #4A4A4A;
+    padding: 0 6px;
+    height: 100%;
+}
+
+#campoPesquisa::placeholder {
+    color: #A0A0A0;
+}
+
+.pesquisa-box button {
+    border: none;
+    background-color: var(--blue-soft);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0 16px;
+    height: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pesquisa-box button:hover {
+    background-color: #D4AF37;
+}
+
+
+/* ==========================
+   LAYOUT PRINCIPAL HOME
+========================== */
+.conteudo-home {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.em-alta {
+    flex: 70%;
+}
+
+.em-alta h2 {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 2px 2px 5px black;
+}
+
+.lateral {
+    width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* CARDS */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 35px;
+}
+
+.card {
+    width: 330px;
+    background: white;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 2px solid var(--gold-primary);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease;
+    margin: 15px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    color: var(--navy-dark);
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.buttons a,
+.buttons button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 20px 60px;
+    border: 2px solid var(--gold-primary);
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+
+.buttons a {
+    background: var(--dark-bg);
+    color: white;
+}
+
+.buttons button {
+    background: white;
+    color: black;
+}
+
+.buttons a:hover,
+.buttons button:hover {
+    transform: translateY(-5px);
+    background: var(--gold-hover-gradient);
+    color: black;
+}
+
+/* ==========================
+   RANKING E PROGRESSO
+========================== */
+.box {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--gold-primary);
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.box h3 {
+    text-align: center;
+    color: var(--navy-dark);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    background: #f5f5f5;
+    font-weight: bold;
+}
+
+.ranking-item:first-child {
+    background: var(--gold-primary);
+}
+
+.progresso-text {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.barra {
+    width: 100%;
+    height: 20px;
+    background: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.barra div {
+    height: 100%;
+    width: 65%;
+    background: linear-gradient(90deg, gold, darkgoldenrod);
+}
+
+/* ==========================
+   MODAIS (LOGIN E CADASTRO)
+========================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 360px;
+    padding: 35px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+    border: 1px solid white;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    color: white;
+    position: relative;
+    box-shadow: 0 10px 30px black;
+}
+
+/* Título corrigido */
+.login-container h2 {
+    color: white;
+    margin-bottom: 25px;
+}
+
+.login-container img,
+.perfil-box img {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 120px;
+}
+
+.modal .perfil-box input,
+.login-container input {
+    width: 100%;
+    height: 48px;
+    margin: 10px 0;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-family: var(--font-main);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.modal .perfil-box input::placeholder,
+.login-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.modal .perfil-box input:focus,
+.login-container input:focus {
+    border-color: var(--gold-primary);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+.modal .perfil-box button,
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 30px;
+    border: none;
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.modal .perfil-box button:hover,
+.login-container button:hover {
+    background: var(--gold-primary);
+    color: black;
+}
+
+#fecharLogin,
+#fecharPerfil,
+#fecharCadastro {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+}
+
+/* CAMPO DE SENHA COM OLHO */
+.campo-senha {
+    position: relative;
+    width: 100%;
+}
+
+.campo-senha input {
+    width: 100%;
+    padding-right: 45px !important;
+}
+
+.icone-olho {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.icone-olho:hover {
+    opacity: 1;
+}
+
+.esqueceu-senha {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    margin: -4px 5px 12px 0;
+    transition: color 0.2s;
+}
+
+.esqueceu-senha:hover {
+    color: var(--gold-primary);
+    text-decoration: underline;
+}
+
+/* DIVISOR E GOOGLE */
+.divisor {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 15px 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.divisor::before,
+.divisor::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.divisor span {
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.g_id_signin {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.login-container a,
+.login-container a:link,
+.login-container a:visited {
+    color: rgb(145, 255, 0);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.login-container a:active {
+    color: red;
+}
+
+/* ==========================
+   PERFIL DO USUÁRIO
+========================== */
+.perfil-box {
+    width: 380px;
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 1px solid white;
+    border-radius: 25px;
+    padding: 35px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 10px 30px black;
+    position: relative;
+}
+
+.icone-usuario {
+    font-size: 80px;
+    margin-bottom: 15px;
+}
+
+.dados-perfil {
+    background: white;
+    color: #333;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.dados-perfil p {
+    margin: 10px;
+    font-weight: bold;
+}
+
+.excluir {
+    background: #b00020;
+    color: white;
+}
+
+.excluir:hover {
+    background: red !important;
+}
+
+/* ==========================
+   INTERFACE ACESSÍVEL EM LIBRAS
+========================== */
+.modal .modal-acessivel-box {
+    width: min(920px, 94vw);
+    max-height: 92vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(280px, 0.9fr);
+    align-items: start;
+    gap: 26px;
+    text-align: left;
+}
+
+.modal-formulario {
+    min-width: 0;
+}
+
+.modal-formulario h2,
+.janela-libras-interface h3 {
+    text-align: center;
+}
+
+.janela-libras-interface {
+    min-width: 0;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--navy-dark, #1d3557);
+    border: 3px solid var(--gold-primary, #ffd700);
+    border-radius: 22px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.janela-libras-interface h3 {
+    margin: 0 0 12px;
+    color: var(--navy-dark, #1d3557);
+}
+
+.libras-video-box {
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #101827;
+    border: 3px solid #5fa8d3;
+    border-radius: 18px;
+}
+
+.libras-video-box video,
+.video-libras-alerta {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    background: #000;
+    object-fit: contain;
+}
+
+.libras-video-pendente {
+    margin: 0;
+    padding: 22px;
+    color: #fff;
+    font-weight: 800;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.modal .perfil-box .repetir-video-interface,
+.repetir-video-interface {
+    width: 100%;
+    margin-top: 12px;
+    padding: 11px 16px;
+    background: #dff4ff;
+    color: #1d3557;
+    border: 2px solid #5fa8d3;
+    border-radius: 14px;
+    font-weight: 900;
+}
+
+.aviso-consentimento {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: rgba(223, 244, 255, 0.16);
+    border-left: 4px solid var(--gold-primary, #ffd700);
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.aceite-termos {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 12px;
+    line-height: 1.4;
+}
+
+.modal .perfil-box .aceite-termos input {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    margin: 2px 0 0;
+}
+
+.modal .perfil-box .link-termos {
+    width: auto;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: #b9ff66;
+    border: 0;
+    border-radius: 0;
+    text-decoration: underline;
+}
+
+#fecharTermos {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.modal .termos-box {
+    width: min(1120px, 96vw);
+    max-height: 94vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.termos-box > h2 {
+    padding-right: 34px;
+    text-align: center;
+}
+
+.termos-layout {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+    gap: 22px;
+    margin-top: 16px;
+}
+
+.texto-termos {
+    max-height: 57vh;
+    overflow-y: auto;
+    padding: 18px;
+    background: #fff;
+    color: #243247;
+    border: 2px solid #b9d9ea;
+    border-radius: 18px;
+    line-height: 1.55;
+}
+
+.texto-termos section + section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #d9e6ee;
+}
+
+.texto-termos h3 {
+    margin: 0 0 7px;
+    color: #1d3557;
+    font-size: 17px;
+}
+
+.texto-termos p {
+    margin: 0;
+}
+
+.texto-termos a {
+    color: #075e91;
+    font-weight: 900;
+}
+
+.janela-libras-termo {
+    align-self: start;
+}
+
+.termos-acoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal .perfil-box .termos-acoes button {
+    min-height: 48px;
+    border-radius: 16px;
+}
+
+#fecharSemConcordar {
+    background: #e7edf2;
+    color: #1d3557;
+}
+
+#concordarTermos {
+    background: var(--gold-primary, #ffd700);
+    color: #172033;
+}
+
+.alerta-reforca-acessivel {
+    width: min(94vw, 620px) !important;
+    border: 3px solid var(--gold-primary, #ffd700) !important;
+    border-radius: 24px !important;
+    font-family: var(--font-main, "Nunito", Arial, sans-serif) !important;
+}
+
+.alerta-conteudo-acessivel {
+    display: grid;
+    gap: 14px;
+    text-align: left;
+}
+
+.alerta-conteudo-acessivel > p {
+    margin: 0;
+    padding: 12px;
+    background: #f2fbff;
+    color: #172033;
+    border-left: 5px solid #5fa8d3;
+    border-radius: 12px;
+    line-height: 1.5;
+}
+
+.janela-libras-alerta {
+    display: grid;
+    gap: 10px;
+    overflow: hidden;
+    padding: 12px;
+    background: #101827;
+    color: #fff;
+    border: 3px solid #5fa8d3;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.janela-libras-alerta .libras-video-pendente {
+    min-height: 150px;
+    display: grid;
+    place-items: center;
+}
+
+.alerta-reforca-acessivel .swal2-actions button,
+.swal2-actions .swal2-styled {
+    min-height: 44px;
+    padding: 10px 22px;
+    border-radius: 14px !important;
+    font-weight: 900;
+}
+
+/* CONTADOR DE ACESSOS */
+.contador-visitas {
+    text-align: center;
+}
+
+.contador-visitas strong {
+    display: block;
+    margin: 8px 0 2px;
+    color: var(--navy-dark, #1d3557);
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 900;
+}
+
+.contador-visitas span {
+    color: #5b6573;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 760px) {
+    .modal .modal-acessivel-box,
+    .termos-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .modal .modal-acessivel-box,
+    .modal .termos-box {
+        width: 96vw;
+        max-height: 96vh;
+        padding: 25px 18px;
+        overflow-y: auto;
+    }
+
+    .janela-libras-interface {
+        order: -1;
+    }
+
+    .libras-video-box {
+        min-height: 180px;
+    }
+
+    .texto-termos {
+        max-height: none;
+    }
+
+    .termos-acoes {
+        grid-template-columns: 1fr;
+    }
+}
+
+#barraPerfil {
+    height: 100%;
+    width: 0%;
+    background: var(--gold-primary);
+    transition: width 0.5s ease;
+}
+
+/* ==========================
+   COMENTÁRIOS E AVALIAÇÃO
+========================== */
+.form-comentario-box {
+    background: white;
+    border: 2px solid var(--gold-primary);
+    border-radius: 18px;
+    padding: 18px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.form-comentario-box h2 {
+    color: var(--navy-dark);
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.form-comentario-box p {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+/* ==========================
+   COMENTÁRIOS E AVALIAÇÃO (CORRIGIDO)
+========================== */
+.estrela{
+    font-size:35px;
+    color: #ccc; /* Removido o !important daqui */
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+    user-select: none;
+}
+
+.estrela.ativa {
+    color: #FFD700 !important; /* Mantém o amarelo ouro quando ativa */
+}
+
+.form-comentario-box textarea {
+    width: 100%;
+    height: 50px;
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    margin-bottom: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-comentario-box textarea:focus {
+    border-color: var(--gold-primary);
+}
+
+.form-comentario-box button {
+    background: var(--dark-bg);
+    color: white;
+    border: 2px solid var(--gold-primary);
+    border-radius: 20px 60px;
+    padding: 8px 25px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+
+/* ==========================================
+   PERFIL DO ALUNO — COMPACTO
+========================================== */
+
+#modalPerfil {
+    padding: 15px;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(0, 0, 0, 0.65);
+
+    z-index: 9999;
+}
+
+
+#modalPerfil .perfil-painel {
+    position: relative;
+
+    width: min(760px, 96%);
+    max-height: 88vh;
+
+    overflow-y: auto;
+
+    border: 2px solid gold;
+    border-radius: 23px;
+
+    background: #f7fbfd;
+    color: #33475b;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.38);
+}
+.comentario-card {
+    width: 100%;
+    min-height: auto;
+
+    margin-bottom: 18px;
+    padding: 16px 20px;
+
+    background: #ffffff;
+
+    border: 2px solid gold;
+    border-radius: 18px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.comentario-linha {
+    width: 100%;
+
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+
+    gap: 5px 9px;
+
+    color: #000000;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.comentario-estrelas {
+    flex-shrink: 0;
+
+    color: gold;
+
+    font-size: 17px;
+    line-height: 1;
+
+    letter-spacing: -2px;
+}
+
+.comentario-conteudo {
+    min-width: 0;
+    flex: 1 1 250px;
+
+    margin: 0;
+
+    color: #000000;
+
+    overflow-wrap: anywhere;
+}
+
+.comentario-nome {
+    font-weight: 900;
+}
+
+.comentario-texto {
+    font-weight: 400;
+}
+
+.comentario-data {
+    flex-shrink: 0;
+
+    margin-left: auto;
+
+    color: #666666;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-align: right;
+}
+
+.comentario-card::after {
+    display: none !important;
+    content: none !important;
+}
+
+@media (max-width: 600px) {
+    .comentario-card {
+        padding: 14px;
+    }
+
+    .comentario-linha {
+        align-items: flex-start;
+    }
+
+    .comentario-conteudo {
+        flex-basis: 180px;
+    }
+
+    .comentario-data {
+        width: 100%;
+        margin-left: 0;
+
+        text-align: right;
+    }
+}
+
+/* ==========================================
+   BOTÃO FECHAR
+========================================== */
+
+#modalPerfil .fechar-perfil {
+    position: absolute;
+
+    top: 12px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.55);
+
+    border-radius: 50%;
+
+    background: transparent;
+    color: white;
+
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+    z-index: 10;
+}
+
+
+#modalPerfil .fechar-perfil:hover {
+    border-color: gold;
+    color: gold;
+}
+
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
+#modalPerfil .perfil-cabecalho {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding:
+        17px
+        58px
+        17px
+        20px;
+
+    border-bottom:
+        2px solid gold;
+
+    background: #1d3557;
+    color: white;
+
+    text-align: left;
+}
+
+
+#modalPerfil .icone-usuario {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid gold;
+    border-radius: 50%;
+
+    background: white;
+
+    font-size: 26px;
+}
+
+
+#modalPerfil .perfil-identificacao {
+    min-width: 0;
+}
+
+
+#modalPerfil
+.perfil-identificacao > span {
+    display: block;
+
+    margin: 0;
+
+    color: gold;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+
+#modalPerfil
+.perfil-identificacao h2 {
+    display: block;
+
+    margin: 2px 0;
+
+    color: white;
+
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+
+#modalPerfil
+.perfil-identificacao p {
+    display: block;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #e8f3f8;
+
+    font-size: 12px;
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   CARDS DO RESUMO
+========================================== */
+
+#modalPerfil .perfil-resumo {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 8px;
+
+    padding: 13px 16px;
+}
+
+
+#modalPerfil .resumo-card {
+    min-width: 0;
+    min-height: 62px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px;
+
+    border:
+        1px solid #d5e6ed;
+
+    border-radius: 13px;
+
+    background: white;
+    color: #33475b;
+
+    text-align: left;
+}
+
+
+#modalPerfil .resumo-icone {
+    display: block;
+
+    flex-shrink: 0;
+
+    color: #1d3557;
+
+    font-size: 20px;
+}
+
+
+#modalPerfil
+.resumo-card div {
+    min-width: 0;
+}
+
+
+#modalPerfil
+.resumo-card strong {
+    display: block;
+
+    margin: 0;
+
+    color: #1d3557;
+
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+
+#modalPerfil
+.resumo-card div span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #637582;
+
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+
+/* ==========================================
+   CONTEÚDO
+========================================== */
+
+#modalPerfil .perfil-conteudo {
+    display: grid;
+
+    grid-template-columns:
+        1.15fr 1fr;
+
+    align-items: start;
+
+    gap: 11px;
+
+    padding:
+        0
+        16px
+        13px;
+}
+
+
+#modalPerfil .perfil-secao {
+    min-width: 0;
+
+    padding: 14px;
+
+    border:
+        1px solid #d5e6ed;
+
+    border-radius: 16px;
+
+    background: white;
+    color: #33475b;
+
+    text-align: left;
+}
+
+
+#modalPerfil .perfil-titulo-secao {
+    margin-bottom: 11px;
+}
+
+
+#modalPerfil
+.perfil-titulo-secao span {
+    display: block;
+
+    margin: 0;
+
+    color: #5fa8d3;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+
+#modalPerfil
+.perfil-titulo-secao h3 {
+    display: block;
+
+    margin: 2px 0 0;
+
+    color: #1d3557;
+
+    font-size: 16px;
+    font-weight: 900;
+}
+
+
+/* ==========================================
+   TRILHAS
+========================================== */
+
+#modalPerfil .curso-perfil {
+    margin-bottom: 9px;
+    padding: 11px;
+
+    border:
+        1px solid #d5e6ed;
+
+    border-radius: 13px;
+
+    background: #f7fbfd;
+    color: #33475b;
+}
+
+
+#modalPerfil
+.curso-perfil:last-child {
+    margin-bottom: 0;
+}
+
+
+#modalPerfil
+.curso-perfil-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+#modalPerfil
+.curso-perfil-topo > div {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+#modalPerfil .curso-icone {
+    display: block;
+
+    color: #1d3557;
+
+    font-size: 18px;
+}
+
+
+#modalPerfil
+.curso-perfil-topo strong {
+    display: block;
+
+    color: #1d3557;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+
+#modalPerfil .curso-percentual {
+    display: block;
+
+    color: #1d3557;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+#modalPerfil .perfil-barra {
+    width: 100%;
+    height: 9px;
+
+    margin: 8px 0 5px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #dce9ef;
+}
+
+
+#modalPerfil
+.perfil-barra div {
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            gold,
+            #fff0a6
+        );
+
+    transition:
+        width 0.5s ease;
+}
+
+
+#modalPerfil .curso-perfil p {
+    display: block;
+
+    margin: 0 0 5px;
+
+    color: #637582;
+
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+
+#modalPerfil .curso-perfil a {
+    display: inline-block;
+
+    color: #1d3557;
+
+    font-size: 10px;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+
+#modalPerfil
+.curso-perfil a:hover {
+    text-decoration: underline;
+}
+
+
+/* ==========================================
+   RECOMENDAÇÕES
+========================================== */
+
+#modalPerfil
+.perfil-recomendacoes {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+#modalPerfil
+.recomendacao-item {
+    padding: 9px;
+
+    border-left:
+        3px solid gold;
+
+    border-radius: 9px;
+
+    background: #fffbea;
+    color: #33475b;
+}
+
+
+#modalPerfil
+.recomendacao-item strong {
+    display: block;
+
+    margin: 0 0 2px;
+
+    color: #1d3557;
+
+    font-size: 11px;
+    font-weight: 900;
+}
+
+
+#modalPerfil
+.recomendacao-item p {
+    display: block;
+
+    margin: 0;
+
+    color: #637582;
+
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+
+#modalPerfil
+.recomendacao-vazia {
+    padding: 12px;
+
+    color: #637582;
+
+    text-align: center;
+}
+
+
+#modalPerfil
+.recomendacao-vazia span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 21px;
+}
+
+
+#modalPerfil
+.recomendacao-vazia p {
+    display: block;
+
+    margin: 0;
+
+    color: #637582;
+
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   ÚLTIMA ATIVIDADE
+========================================== */
+
+#modalPerfil .ultima-atividade {
+    margin-top: 11px;
+    padding-top: 10px;
+
+    border-top:
+        1px solid #d5e6ed;
+}
+
+
+#modalPerfil
+.ultima-atividade h4 {
+    display: block;
+
+    margin: 0 0 4px;
+
+    color: #1d3557;
+
+    font-size: 12px;
+}
+
+
+#modalPerfil
+.ultima-atividade p {
+    display: block;
+
+    margin: 0;
+
+    color: #637582;
+
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+
+/* ==========================================
+   BOTÕES
+========================================== */
+
+#modalPerfil .perfil-acoes {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    padding: 11px 16px;
+
+    border-top:
+        1px solid #d5e6ed;
+
+    background: white;
+}
+
+
+#modalPerfil
+.perfil-acoes button {
+    width: auto;
+    min-width: 110px;
+
+    margin: 0;
+    padding: 8px 13px;
+
+    border-radius: 14px;
+
+    font:
+        900 11px
+        "Nunito",
+        sans-serif;
+
+    cursor: pointer;
+}
+
+
+#modalPerfil .btn-excluir-conta {
+    border:
+        1px solid #d9534f;
+
+    background: white;
+
+    color: #b52d29;
+}
+
+
+#modalPerfil .btn-sair-perfil {
+    border:
         2px solid gold;
 
     background: #1d3557;
