@@ -142,7 +142,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-07", topico: "Cálculo", nivel: 2,
-            pergunta: "Qual é o resultado de 3 × 6?", representacao: "3 × 6",
+            pergunta: "Qual é o resultado dessa multiplicação?", representacao: "3 × 6",
             alternativas: ["9", "12", "18", "21"], correta: "18",
             dica: "Some três parcelas iguais a 6.",
             explicacao: "6 + 6 + 6 = 18. Logo, 3 × 6 = 18.",
@@ -152,7 +152,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-08", topico: "Cálculo", nivel: 2,
-            pergunta: "Qual é o resultado de 8 × 4?", representacao: "8 × 4",
+            pergunta: "Qual é o resultado dessa multiplicação?", representacao: "8 × 4",
             alternativas: ["24", "28", "32", "36"], correta: "32",
             dica: "Some oito parcelas iguais a 4.",
             explicacao: "Oito grupos de quatro totalizam 32. Logo, 8 × 4 = 32.",
@@ -162,7 +162,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-09", topico: "Tabuada", nivel: 3,
-            pergunta: "Qual é o resultado de 9 × 3?", representacao: "9 × 3",
+            pergunta: "Qual é o resultado dessa multiplicação?", representacao: "9 × 3",
             alternativas: ["18", "21", "27", "30"], correta: "27",
             dica: "Some nove parcelas iguais a 3.",
             explicacao: "Nove grupos de três totalizam 27. Logo, 9 × 3 = 27.",
@@ -192,7 +192,7 @@ const bancoDeQuestoes = {
             id: "pot-01",
             topico: "Leitura de potência",
             nivel: 1,
-            pergunta: "Como se lê corretamente a potência 2³?",
+            pergunta: "Como se lê corretamente a potência abaixo?",
             representacao: "2³",
             alternativas: [ "Dois elevado ao cubo", "Dois vezes três", "Três elevado ao quadrado", "Dois elevado a um" ],
             correta: "Dois elevado ao cubo",
