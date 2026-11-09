@@ -879,7 +879,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "No produto de potências de mesma base, conservamos a base e somamos os expoentes: 2³ × 2⁴ = 2³⁺⁴ = 2⁷.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/LUo98Gn7_dY",
             videoDica:
                 "https://www.youtube.com/embed/kkAt8rUu0UE",
             videoExplicacao:
@@ -899,7 +899,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Conservamos a base a e somamos os expoentes: a⁵ × a² = a⁵⁺² = a⁷.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/v93pPi4Hmuo",
             videoDica:
                 "https://www.youtube.com/embed/R9RC1MVKvdM",
             videoExplicacao:
@@ -961,7 +961,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Na potência de potência, conservamos a base e multiplicamos os expoentes: (3²)⁴ = 3²·⁴ = 3⁸.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/tQSDwU9KEpA",
             videoDica:
                 "https://www.youtube.com/embed/xn1DayHwMrA",
             videoExplicacao:
@@ -982,7 +982,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Multiplicamos os expoentes: (a³)² = a³·² = a⁶.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/ITy9fMmeGXo",
             videoDica:
                 "https://www.youtube.com/embed/PEaeJW0SzzI",
             videoExplicacao:
@@ -1008,7 +1008,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Na potência de um produto, elevamos cada fator ao expoente: (2 × 5)³ = 2³ × 5³.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/E8zQL4cWWa0",
             videoDica:
                 "https://www.youtube.com/embed/lmBfOXMCsgA",
             videoExplicacao:
@@ -1034,7 +1034,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Na potência de um quociente, elevamos o dividendo e o divisor ao mesmo expoente: (6 ÷ 3)² = 6² ÷ 3².",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/roGHfuZsuZU",
             videoDica:
                 "https://www.youtube.com/embed/n1ORbGoqKek",
             videoExplicacao:
@@ -1055,7 +1055,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "(2³ × 2²) ÷ 2⁴ = 2³⁺²⁻⁴ = 2¹ = 2.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/nUbicZQY9do",
             videoDica:
                 "https://www.youtube.com/embed/ba7kWMY7psc",
             videoExplicacao:
@@ -1081,7 +1081,7 @@ const bancoDeQuestoes = {
             explicacao:
                 "Como as bases são iguais, conservamos a base 3 e somamos os expoentes: 3² × 3⁴ = 3²⁺⁴ = 3⁶.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/rWegQPS6T_0",
             videoDica:
                 "https://www.youtube.com/embed/4PIwQeTXyjY",
             videoExplicacao:
