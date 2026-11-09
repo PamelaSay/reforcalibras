@@ -680,11 +680,11 @@ body {
    INTERFACE ACESSÍVEL EM LIBRAS
 ========================== */
 .modal .modal-acessivel-box {
-    width: min(920px, 94vw);
+    width: min(1120px, 94vw);
     max-height: 92vh;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: minmax(280px, 1fr) minmax(280px, 0.9fr);
+    grid-template-columns: minmax(260px, 1fr) minmax(280px, 1.2fr);
     align-items: start;
     gap: 26px;
     text-align: left;
@@ -725,9 +725,11 @@ body {
 }
 
 .libras-video-box video,
+.libras-video-box iframe,
 .video-libras-alerta {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 260px;
+    aspect-ratio: auto;
     display: block;
     background: #000;
     object-fit: contain;
@@ -817,7 +819,7 @@ body {
 .termos-layout {
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 1.1fr);
     gap: 22px;
     margin-top: 16px;
 }
