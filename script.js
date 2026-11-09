@@ -57,7 +57,7 @@ const VIDEOS_LIBRAS_INTERFACE = {
     "cadastro-email-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "cadastro-senha-curta": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "cadastro-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "cadastro-concluido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-concluido": "https://www.youtube.com/embed/xZGu3c7eqow",
     "erro-cadastro": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "login-campos-ausentes": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "login-email-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
