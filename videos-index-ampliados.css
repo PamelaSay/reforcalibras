@@ -1,0 +1,113 @@
+/* Carregar por último no index, depois das outras folhas de estilo.
+   Ajusta somente a apresentação; não altera vídeos, textos ou ações. */
+.modal .modal-acessivel-box,
+.modal .termos-box {
+    width: min(1120px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.modal .modal-acessivel-box {
+    grid-template-columns: minmax(280px, 1fr) minmax(0, 530px);
+    gap: 24px;
+    align-items: start;
+}
+
+.modal .termos-layout {
+    grid-template-columns: minmax(280px, 1fr) minmax(0, 530px);
+    gap: 24px;
+    align-items: start;
+    min-height: 0;
+}
+
+.modal .modal-acessivel-box .janela-libras-interface,
+.modal .termos-box .janela-libras-interface {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+/* A moldura externa não deve diminuir a altura do player. */
+.modal .modal-acessivel-box .libras-video-box,
+.modal .termos-box .libras-video-box {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    aspect-ratio: auto;
+}
+
+.modal .modal-acessivel-box .libras-video-box video,
+.modal .modal-acessivel-box .libras-video-box iframe,
+.modal .termos-box .libras-video-box video,
+.modal .termos-box .libras-video-box iframe,
+.swal2-popup.alerta-reforca-acessivel .video-libras-alerta {
+    width: 100% !important;
+    max-width: none !important;
+    height: 260px !important;
+    min-height: 260px;
+    max-height: none;
+    aspect-ratio: auto;
+    margin: 0;
+    display: block;
+    object-fit: contain;
+    background: #000;
+    box-sizing: border-box;
+}
+
+/* Mantém vídeos ainda não carregados ocultos pelo código existente. */
+.modal .libras-video-box video[hidden],
+.modal .libras-video-box iframe[hidden],
+.swal2-popup.alerta-reforca-acessivel .video-libras-alerta[hidden] {
+    display: none !important;
+}
+
+/* Avisos simples ficam no formato vertical das explicações dos jogos. */
+.swal2-popup.alerta-reforca-acessivel {
+    width: min(570px, calc(100vw - 24px)) !important;
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    padding: 18px !important;
+    overflow-y: auto;
+}
+.swal2-popup.alerta-reforca-acessivel .swal2-html-container {
+    margin: 12px 0 0;
+    padding: 0;
+}
+.swal2-popup.alerta-reforca-acessivel .janela-libras-alerta {
+    padding: 0;
+    gap: 8px;
+}
+
+/* Evita comprimir o intérprete em uma coluna estreita. */
+@media (max-width: 1000px) {
+    .modal .modal-acessivel-box,
+    .modal .termos-box {
+        width: min(620px, calc(100vw - 24px));
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+        padding: 24px 16px 16px;
+    }
+    .modal .modal-acessivel-box,
+    .modal .termos-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+    .modal .modal-acessivel-box .janela-libras-interface,
+    .modal .termos-box .janela-libras-interface {
+        order: -1;
+        width: 100%;
+        max-width: 530px;
+        justify-self: center;
+    }
+    .modal .termos-box .texto-termos {
+        max-height: none;
+        overflow: visible;
+    }
+    .modal .termos-box .termos-acoes {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
