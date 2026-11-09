@@ -788,7 +788,7 @@ const bancoDeQuestoes = {
             topico: "Decomposição decimal",
             nivel: 3,
             pergunta:
-                "Qual é a decomposição correta do número 3.205?",
+                "Qual é a decomposição correta do número abaixo?",
             representacao: "3.205",
             alternativas: [
                 "3 × 10³ + 2 × 10² + 5 × 10⁰",
@@ -870,7 +870,7 @@ const bancoDeQuestoes = {
             topico: "Produto de potências",
             nivel: 1,
             pergunta:
-                "Qual é a forma simplificada de 2³ × 2⁴?",
+                "Qual é a forma simplificada da expressão abaixo?",
             representacao: "2³ × 2⁴",
             alternativas: ["2⁷", "4⁷", "2¹²", "4¹²"],
             correta: "2⁷",
@@ -890,7 +890,7 @@ const bancoDeQuestoes = {
             id: "pro-02",
             topico: "Produto de potências",
             nivel: 1,
-            pergunta: "Simplifique a⁵ × a².",
+            pergunta: "Simplifique a expressão:",
             representacao: "a⁵ × a²",
             alternativas: ["a⁷", "a¹⁰", "2a⁷", "a³"],
             correta: "a⁷",
@@ -911,7 +911,7 @@ const bancoDeQuestoes = {
             topico: "Quociente de potências",
             nivel: 1,
             pergunta:
-                "Qual é a forma simplificada de 5⁸ ÷ 5³?",
+                "Qual é a forma simplificada da expressão abaixo?",
             representacao: "5⁸ ÷ 5³",
             alternativas: ["5⁵", "5¹¹", "1⁵", "5²⁴"],
             correta: "5⁵",
@@ -931,7 +931,7 @@ const bancoDeQuestoes = {
             id: "pro-04",
             topico: "Quociente de potências",
             nivel: 1,
-            pergunta: "Simplifique x⁶ ÷ x².",
+            pergunta: "Simplifique:",
             representacao: "x⁶ ÷ x²",
             alternativas: ["x⁴", "x³", "x⁸", "x¹²"],
             correta: "x⁴",
@@ -952,7 +952,7 @@ const bancoDeQuestoes = {
             topico: "Potência de potência",
             nivel: 2,
             pergunta:
-                "Qual é a forma simplificada de (3²)⁴?",
+                "Qual é a forma simplificada da expressão a seguir?",
             representacao: "(3²)⁴",
             alternativas: ["3⁸", "3⁶", "3¹⁶", "12²"],
             correta: "3⁸",
@@ -973,7 +973,7 @@ const bancoDeQuestoes = {
             topico: "Potência de potência",
             nivel: 2,
             pergunta:
-                "Qual expressão é equivalente a (a³)²?",
+                "Qual alternativa é equivalente a expressão abaixo?",
             representacao: "(a³)²",
             alternativas: ["a⁶", "a⁵", "a⁹", "2a³"],
             correta: "a⁶",
@@ -994,7 +994,7 @@ const bancoDeQuestoes = {
             topico: "Potência de um produto",
             nivel: 2,
             pergunta:
-                "Qual expressão é equivalente a (2 × 5)³?",
+                "Qual expressão é equivalente a:",
             representacao: "(2 × 5)³",
             alternativas: [
                 "2³ × 5³",
@@ -1020,7 +1020,7 @@ const bancoDeQuestoes = {
             topico: "Potência de um quociente",
             nivel: 2,
             pergunta:
-                "Qual expressão é equivalente a (6 ÷ 3)²?",
+                "Qual expressão é equivalente a:",
             representacao: "(6 ÷ 3)²",
             alternativas: [
                 "6² ÷ 3²",
@@ -1046,7 +1046,7 @@ const bancoDeQuestoes = {
             topico: "Desafio combinado",
             nivel: 3,
             pergunta:
-                "Simplifique (2³ × 2²) ÷ 2⁴.",
+                "Simplifique :",
             representacao: "(2³ × 2²) ÷ 2⁴",
             alternativas: ["2", "2⁵", "2⁹", "1"],
             correta: "2",
@@ -1067,7 +1067,7 @@ const bancoDeQuestoes = {
             topico: "Análise de erro",
             nivel: 3,
             pergunta:
-                "Um aluno afirmou que 3² × 3⁴ = 9⁶. Qual é a correção adequada?",
+                "O aluno afirmou que 3² × 3⁴ = 9⁶. Qual é a correção adequada?",
             representacao: "3² × 3⁴",
             alternativas: [
                 "3² × 3⁴ = 3⁶",
