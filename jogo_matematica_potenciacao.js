@@ -258,10 +258,10 @@ const bancoDeQuestoes = {
             correta: "Dois elevado ao quadrado",
             dica:"O número pequeno indica o expoente da potência.",
             explicacao: "A expressão 2² é lida como dois elevado à segunda potência ou dois elevado ao quadrado.",
-            videoPergunta: "https://www.youtube.com/embed/WXg-gpmmP9I",
-            videoDica: "https://www.youtube.com/embed/DY8NyAlE6p4",
-            videoExplicacao: "https://www.youtube.com/embed/jI2KLNMggyg",
-            videoExplicacaoErro: "https://www.youtube.com/embed/jI2KLNMggyg"
+            videoPergunta: "https://www.youtube.com/embed/drgekX6BM1c",
+            videoDica: "https://www.youtube.com/embed/B80D2rHsCdE",
+            videoExplicacao: "https://www.youtube.com/embed/7F1QDO2vCJc",
+            videoExplicacaoErro: "https://www.youtube.com/embed/7F1QDO2vCJc"
         }),
 
         criarQuestao({
