@@ -231,7 +231,7 @@ const bancoDeQuestoes = {
         }),
         criarQuestao({
             id: "mult-10", topico: "Tabuada", nivel: 3,
-            pergunta: "Qual é o resultado de 10 × 7?", representacao: "10 × 7",
+            pergunta: "Qual é o resultado dessa multiplicação?", representacao: "10 × 7",
             alternativas: ["17", "60", "70", "80"], correta: "70",
             dica: "Observe o que acontece quando multiplicamos por 10.",
             explicacao: "Dez grupos de sete totalizam 70. Logo, 10 × 7 = 70.",
