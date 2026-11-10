@@ -76,7 +76,7 @@ const VIDEOS_LIBRAS_INTERFACE = {
     "comentario-sem-estrelas": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "comentario-sem-texto": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "comentario-linguagem-inadequada": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "comentario-enviado": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "comentario-enviado": "https://www.youtube.com/embed/xsSWJSPeiOg",
     "comentario-erro-envio": "https://www.youtube.com/embed/r9AoQVkUUvU"
 };
 
