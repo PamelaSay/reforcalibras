@@ -573,12 +573,12 @@ const bancoDeQuestoes = {
             explicacao:
                 "Para toda base a diferente de zero, temos a⁰ = 1.",
             videoPergunta:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/91JzwCSLGrs",
             videoDica:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
+                "https://www.youtube.com/embed/gDfDgcLsxe0",
             videoExplicacao:
-                "https://www.youtube.com/embed/r9AoQVkUUvU",
-            videoExplicacaoErro: "https://www.youtube.com/embed/r9AoQVkUUvU"
+                "https://www.youtube.com/embed/fMafw1f6uAI",
+            videoExplicacaoErro: "https://www.youtube.com/embed/fMafw1f6uAI"
         }),
 
         criarQuestao({
