@@ -64,7 +64,7 @@ const VIDEOS_LIBRAS_INTERFACE = {
     "login-senha-obrigatoria": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "login-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "boas-vindas-login": "https://www.youtube.com/embed/xZGu3c7eqow",
-    "erro-login": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "erro-login": "https://www.youtube.com/embed/-7ezU-XEo4M",
     "exclusao-sessao-ausente": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "erro-exclusao": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "recuperacao-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
