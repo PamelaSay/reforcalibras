@@ -71,7 +71,7 @@ const VIDEOS_LIBRAS_INTERFACE = {
     "email-enviado": "https://www.youtube.com/embed/3yRcnOu1pOM",
     "erro-envio-recuperacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "excluir-conta": "https://www.youtube.com/embed/AnEFltlubiM",
-    "conta-excluida": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "conta-excluida": "https://www.youtube.com/embed/S3Pa0YYU5xE",
     "recuperar-senha": "https://www.youtube.com/embed/IJ88LcEX1TM",
     "comentario-sem-estrelas": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "comentario-sem-texto": "https://www.youtube.com/embed/r9AoQVkUUvU",
