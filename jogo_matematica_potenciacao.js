@@ -32,9 +32,9 @@ function normalizarVideoYouTube(endereco, autoplay = false, permitirId = false) 
 
 
 const VIDEOS_ALERTAS_JOGO = {
-    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/SBvffSvPGmU",
+    "troca-permitida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "troca-permitida-partida-finalizada": "https://www.youtube.com/embed/SBvffSvPGmU",
-    "troca-bloqueada-partida-iniciada": "https://www.youtube.com/embed/SBvffSvPGmU", 
+    "troca-bloqueada-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU", 
     "troca-bloqueada-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-sem-respostas": "https://www.youtube.com/embed/r9AoQVkUUvU",
@@ -928,16 +928,16 @@ const bancoDeQuestoes = {
                 "Um arquivo possui 2 × 10⁶ bytes. Quantos bytes ele possui?",
             representacao: "2 × 10⁶ bytes",
             alternativas: [
-                "2 000 000 bytes",
-                "200 000 bytes",
-                "20 000 000 bytes",
-                "12 000 000 bytes"
+                "2.000.000 bytes",
+                "200.000 bytes",
+                "20.000.000 bytes",
+                "12.000.000 bytes"
             ],
-            correta: "2 000 000 bytes",
+            correta: "2.000.000 bytes",
             dica:
                 "10⁶ corresponde ao número 1 seguido de seis zeros.",
             explicacao:
-                "Como 10⁶ = 1 000 000, temos 2 × 10⁶ = 2 000 000 bytes.",
+                "Como 10⁶ = 1.000.000, temos 2 × 10⁶ = 2.000.000 bytes.",
             videoPergunta:
                 "https://www.youtube.com/embed/AOT5yHzOP7o",
             videoDica:
