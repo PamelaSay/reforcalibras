@@ -862,12 +862,12 @@ const bancoDeQuestoes = {
             explicacao:
                 "O número 6.000 pode ser escrito como 6 × 10³, pois 10³ = 1.000. Assim, 6 x 1.000 = 6.000.",
             videoPergunta:
-                "https://www.youtube.com/embed/4aR1n25ng6s",
+                "https://www.youtube.com/embed/IE5efrpUv1A",
             videoDica:
-                "https://www.youtube.com/embed/eC1ejo-K5vM",
+                "https://www.youtube.com/embed/nxHDnY7zI64",
             videoExplicacao:
-                "https://www.youtube.com/embed/d6muu2wfMR4",
-            videoExplicacaoErro: "https://www.youtube.com/embed/d6muu2wfMR4"
+                "https://www.youtube.com/embed/2E-phcYL7Jc",
+            videoExplicacaoErro: "https://www.youtube.com/embed/2E-phcYL7Jc"
         }),
 
         criarQuestao({
