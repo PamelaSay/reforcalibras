@@ -253,7 +253,7 @@ const bancoDeQuestoes = {
             topico: "Leitura de potência",
             nivel: 1,
             pergunta: "Como se lê corretamente a potência abaixo?",
-            representacao: "2³",
+            representacao: "2²",
             alternativas: [ "Dois elevado ao quadrado", "Dois vezes três", "Três elevado ao quadrado", "Dois elevado a um" ],
             correta: "Dois elevado ao quadrado",
             dica:"O número pequeno indica o expoente da potência.",
