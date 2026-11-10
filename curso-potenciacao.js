@@ -44,7 +44,7 @@ const VIDEOS_ALERTAS_TRILHA = {
     "teste-revisao-nao-cadastrado": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "teste-revisao-link-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "revisao-concluida": "https://www.youtube.com/embed/xpMGTTz0zMo",
-    "aula-concluida": "https://www.youtube.com/embed/r9AoQVkUUvU"
+    "aula-concluida": "https://www.youtube.com/embed/k67-0gB_zjA"
 };
 
 let playerVideoaula = null;
