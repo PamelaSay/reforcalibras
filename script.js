@@ -54,7 +54,7 @@ const fecharSemConcordar = document.getElementById("fecharSemConcordar");
 const VIDEOS_LIBRAS_INTERFACE = {
     "cadastro-campos-ausentes": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "cadastro-nome-obrigatorio": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "cadastro-email-invalido": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "cadastro-email-invalido": "https://www.youtube.com/embed/-7ezU-XEo4M",
     "cadastro-senha-curta": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "cadastro-servico-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "cadastro-concluido": "https://www.youtube.com/embed/xZGu3c7eqow",
