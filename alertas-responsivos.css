@@ -10,7 +10,7 @@
     max-height: min(540px, calc(100vh - 24px)) !important;
     max-height: min(540px, calc(100dvh - 24px)) !important;
     min-height: 0 !important;
-    padding: 10px !important;
+    padding: 8px !important;
     gap: 4px;
     border: 3px solid #e5bd27 !important;
     border-radius: 23px !important;
@@ -65,7 +65,7 @@
     font-size: 13px !important; line-height: 1.25;
 }
 .swal2-popup .janela-libras-alerta {
-    display: grid; gap: 5px; padding: 6px; min-width: 0;
+    display: grid; gap: 5px; padding: 4px; min-width: 0;
     border-width: 2px; border-radius: 12px;
 }
 .swal2-popup .janela-libras-alerta > strong { font-size: 12px; }
@@ -101,7 +101,7 @@
 @media (max-height: 500px) {
     .swal2-container { padding: 6px !important; }
     .swal2-popup:not(.swal2-toast) { max-height: calc(100dvh - 12px) !important; padding: 8px !important; gap: 4px; }
-    .swal2-popup .swal2-icon { font-size: 6px !important; }
+    .swal2-popup .swal2-icon { font-size: 4px !important; }
     .swal2-popup .swal2-title { font-size: 18px !important; }
     .swal2-popup .video-explicacao,
     .swal2-popup #videoAlertaVideoaula,
