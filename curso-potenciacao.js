@@ -35,7 +35,7 @@ function chaveDoProgressoAtual() { return chaveLocalDoUsuario(CHAVE_BASE_CURSO);
 const TOTAL_ETAPAS = 5;
 const VIDEOS_ALERTAS_TRILHA = {
     "aula-bloqueada": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "video-indisponivel": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "video-indisponivel": "https://www.youtube.com/embed/X7frMU4SSjc",
     "player-carregando": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "erro-player": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "exercicio-bloqueado": "https://www.youtube.com/embed/r9AoQVkUUvU",
