@@ -38,13 +38,13 @@ const VIDEOS_ALERTAS_JOGO = {
     "troca-bloqueada-partida-finalizada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-partida-iniciada": "https://www.youtube.com/embed/r9AoQVkUUvU",
     "saida-sem-respostas": "https://www.youtube.com/embed/r9AoQVkUUvU",
-    "concluido-revisaoMultiplicacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-revisaoMultiplicacao": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-revisaoMultiplicacao": "https://www.youtube.com/embed/iCGwqkRystQ",
-    "concluido-potenciacao": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-potenciacao": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-potenciacao": "https://www.youtube.com/embed/iCGwqkRystQ",
-    "concluido-casosEspeciais": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-casosEspeciais": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-casosEspeciais": "https://www.youtube.com/embed/iCGwqkRystQ",
-    "concluido-baseDez": "https://www.youtube.com/embed/r9AoQVkUUvU",
+    "concluido-baseDez": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-baseDez": "https://www.youtube.com/embed/iCGwqkRystQ",
     "concluido-propriedades": "https://www.youtube.com/embed/2ZdjO1qUIxc",
     "fim-vidas-propriedades": "https://www.youtube.com/embed/iCGwqkRystQ"
@@ -2381,7 +2381,7 @@ async function finalizarPartida(concluiu) {
         moduloAtual === "revisaoMultiplicacao" && concluiu;
 
     const titulo = revisaoConcluida
-        ? "Revisão de multiplicação concluída!"
+        ? "Exercício concluído!"
         : concluiu
         ? "Exercício concluído!"
         : "Suas vidas terminaram";
